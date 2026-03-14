@@ -219,11 +219,102 @@ var app = builder.Build();
 // Must be early in pipeline, before anything that relies on scheme/host (OpenAPI generation).
 app.UseForwardedHeaders();
 
+// ---------------------------------------------------------------------
+// Robust CORS preflight handling
+// ---------------------------------------------------------------------
+//
+// In some hosted preview/proxy environments, the built-in CORS middleware may not reliably
+// attach headers to preflight (OPTIONS) responses for certain paths (observed for
+// /api/auth/login). When that happens, browsers block the real request.
+//
+// This middleware explicitly handles CORS preflight early in the pipeline and guarantees
+// Access-Control-* headers are present for allowed origins.
+//
+// Notes:
+// - We intentionally keep this logic aligned with the existing CORS policy intent:
+//   * If CORS_ALLOWED_ORIGINS is set, only those origins are allowed
+//   * Otherwise, allow local-dev + kavia.ai preview hosts on :3000/:3001
+// - We echo requested headers/method where possible to satisfy strict browsers.
+static bool IsAllowedCorsOriginForPreflight(string origin)
+{
+    var allowedOriginsEnv = Environment.GetEnvironmentVariable("CORS_ALLOWED_ORIGINS");
+    var allowedOrigins = (allowedOriginsEnv ?? string.Empty)
+        .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+    if (allowedOrigins.Length > 0)
+    {
+        return allowedOrigins.Any(o => string.Equals(o, origin, StringComparison.OrdinalIgnoreCase));
+    }
+
+    if (!Uri.TryCreate(origin, UriKind.Absolute, out var uri))
+    {
+        return false;
+    }
+
+    // Local dev
+    if (string.Equals(uri.Host, "localhost", StringComparison.OrdinalIgnoreCase))
+    {
+        return uri.Port == 3000 || uri.Port == 3001 || uri.Port == 7038;
+    }
+
+    // Hosted preview (frontend typically :3000, backend typically :3001)
+    if (uri.Host.Contains("kavia.ai", StringComparison.OrdinalIgnoreCase) &&
+        (uri.Port == 3000 || uri.Port == 3001) &&
+        (string.Equals(uri.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase) ||
+         string.Equals(uri.Scheme, Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase)))
+    {
+        return true;
+    }
+
+    return false;
+}
+
+app.Use(async (context, next) =>
+{
+    // Only treat as CORS preflight when the browser includes Access-Control-Request-Method.
+    if (HttpMethods.IsOptions(context.Request.Method) &&
+        context.Request.Headers.ContainsKey("Origin") &&
+        context.Request.Headers.ContainsKey("Access-Control-Request-Method"))
+    {
+        var origin = context.Request.Headers.Origin.ToString();
+
+        if (IsAllowedCorsOriginForPreflight(origin))
+        {
+            // Required by browsers
+            context.Response.Headers["Access-Control-Allow-Origin"] = origin;
+            context.Response.Headers["Vary"] = "Origin";
+
+            // If the request asks for headers, echo them back; otherwise allow common headers.
+            var reqHeaders = context.Request.Headers["Access-Control-Request-Headers"].ToString();
+            context.Response.Headers["Access-Control-Allow-Headers"] =
+                string.IsNullOrWhiteSpace(reqHeaders) ? "Content-Type, Authorization" : reqHeaders;
+
+            // Echo requested method when provided; otherwise be permissive.
+            var reqMethod = context.Request.Headers["Access-Control-Request-Method"].ToString();
+            context.Response.Headers["Access-Control-Allow-Methods"] =
+                string.IsNullOrWhiteSpace(reqMethod) ? "GET, POST, PUT, DELETE, OPTIONS" : reqMethod;
+
+            // This backend's CORS policy allows credentials; mirror that here.
+            context.Response.Headers["Access-Control-Allow-Credentials"] = "true";
+
+            context.Response.StatusCode = StatusCodes.Status204NoContent;
+            return;
+        }
+
+        // Origin is present but not allowed: return 403 to make the failure explicit.
+        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+        return;
+    }
+
+    await next();
+});
+
 // Ensure endpoint routing runs before CORS so the CORS middleware can evaluate endpoint metadata
-// and consistently apply headers (including for preflight/OPTIONS requests).
+// and consistently apply headers (including for non-preflight CORS requests).
 app.UseRouting();
 
-// Use CORS
+// Use CORS (still applies to all non-preflight requests and to any OPTIONS requests not
+// handled by the explicit preflight middleware above).
 app.UseCors("DefaultCors");
 
 // Unified exception->HTTP mapping for all endpoints (assets, children, masters, copy lineage).

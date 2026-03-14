@@ -86,7 +86,6 @@ builder.Services.AddSingleton<DatabaseConfigProvider>();
 
 // Idempotency (BRD §10.3): in-memory store + middleware for X-Idempotency-Key.
 builder.Services.AddSingleton<IIdempotencyStore, InMemoryIdempotencyStore>();
-builder.Services.AddTransient<IdempotencyKeyMiddleware>();
 
  // Postgres data access services (Flyway V2 schema)
 builder.Services.AddSingleton<NpgsqlConnectionFactory>();

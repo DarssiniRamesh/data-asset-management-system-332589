@@ -454,7 +454,7 @@ internal static class MigrationDiscovery
         }
 
         var version = parts[0][1..]; // strip 'V'
-        var description = parts[1].Replace('_', ' ', StringComparison.Ordinal);
+        var description = parts[1].Replace('_', ' ');
 
         if (string.IsNullOrWhiteSpace(version))
         {

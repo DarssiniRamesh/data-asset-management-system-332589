@@ -186,6 +186,42 @@ public static class ApiErrorHandling
         {
             if (!string.IsNullOrWhiteSpace(pg.SqlState) && pg.SqlState.StartsWith("23", StringComparison.Ordinal))
             {
+                // 23505 = unique_violation. Provide a more actionable, client-friendly message.
+                // We intentionally avoid returning raw SQL statements or server internals; however,
+                // the violated constraint name is typically safe and helps clients fix requests.
+                if (string.Equals(pg.SqlState, PostgresErrorCodes.UniqueViolation, StringComparison.Ordinal))
+                {
+                    var constraint = pg.ConstraintName ?? string.Empty;
+
+                    // Best-effort mapping based on typical constraint naming / column naming conventions.
+                    // If DB migrations rename constraints, this still falls back to a generic unique message.
+                    if (constraint.Contains("global_unique_asset_id", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return (
+                            StatusCodes.Status409Conflict,
+                            "Duplicate Global Unique Asset ID",
+                            "globalUniqueAssetId must be unique. A non-deleted asset already exists with the provided globalUniqueAssetId."
+                        );
+                    }
+
+                    if (constraint.Contains("permit_eu_id", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return (
+                            StatusCodes.Status409Conflict,
+                            "Duplicate Permit EU ID",
+                            "permitEuId must be unique. A non-deleted asset already exists with the provided permitEuId."
+                        );
+                    }
+
+                    return (
+                        StatusCodes.Status409Conflict,
+                        "Duplicate resource",
+                        string.IsNullOrWhiteSpace(constraint)
+                            ? "A resource already exists with the provided unique fields."
+                            : $"A resource already exists. Unique constraint violated: {constraint}."
+                    );
+                }
+
                 return (
                     StatusCodes.Status409Conflict,
                     "Database constraint error",

@@ -53,6 +53,16 @@ public sealed class CreateAssetRequest : IValidatableObject
 
     public bool? StationaryFlag { get; set; }
 
+    /// <summary>
+    /// Explicit client intent flag indicating whether this asset requires a parent pseudo asset selection.
+    /// </summary>
+    /// <remarks>
+    /// BRD-safe contract: clients must explicitly provide this flag (true/false) so the API can apply the
+    /// conditional requirement on <see cref="ParentPseudoAssetId"/> deterministically.
+    /// </remarks>
+    [Required(ErrorMessage = "requiresParentPseudo is required")]
+    public bool? RequiresParentPseudo { get; set; }
+
     public long? ParentPseudoAssetId { get; set; }
 
     // BRD §6.11 audit/trace fields (required)
@@ -71,6 +81,15 @@ public sealed class CreateAssetRequest : IValidatableObject
             yield return new ValidationResult(
                 "processGroupOtherText is required when processGroup is 'Other'.",
                 new[] { nameof(ProcessGroupOtherText) });
+        }
+
+        // Explicit conditional requirement:
+        // When RequiresParentPseudo is true, parentPseudoAssetId must be provided.
+        if (RequiresParentPseudo is true && ParentPseudoAssetId is null)
+        {
+            yield return new ValidationResult(
+                "parentPseudoAssetId is required when requiresParentPseudo is true.",
+                new[] { nameof(ParentPseudoAssetId) });
         }
     }
 }
@@ -101,6 +120,16 @@ public sealed class UpdateAssetRequest : IValidatableObject
 
     public bool? StationaryFlag { get; set; }
 
+    /// <summary>
+    /// Explicit client intent flag indicating whether this asset requires a parent pseudo asset selection.
+    /// </summary>
+    /// <remarks>
+    /// BRD-safe contract: clients must explicitly provide this flag (true/false) so the API can apply the
+    /// conditional requirement on <see cref="ParentPseudoAssetId"/> deterministically.
+    /// </remarks>
+    [Required(ErrorMessage = "requiresParentPseudo is required")]
+    public bool? RequiresParentPseudo { get; set; }
+
     public long? ParentPseudoAssetId { get; set; }
 
     // BRD §6.11 audit/trace fields (required)
@@ -119,6 +148,15 @@ public sealed class UpdateAssetRequest : IValidatableObject
             yield return new ValidationResult(
                 "processGroupOtherText is required when processGroup is 'Other'.",
                 new[] { nameof(ProcessGroupOtherText) });
+        }
+
+        // Explicit conditional requirement:
+        // When RequiresParentPseudo is true, parentPseudoAssetId must be provided.
+        if (RequiresParentPseudo is true && ParentPseudoAssetId is null)
+        {
+            yield return new ValidationResult(
+                "parentPseudoAssetId is required when requiresParentPseudo is true.",
+                new[] { nameof(ParentPseudoAssetId) });
         }
     }
 }

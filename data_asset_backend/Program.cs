@@ -293,6 +293,7 @@ app.MapPost("/api/assets", async (
     .WithDescription("Creates an Asset (BRD §6.1 header fields) and persists it to Postgres using the Flyway V2 schema.")
     .Accepts<CreateAssetRequest>("application/json")
     .Produces<AssetDto>(StatusCodes.Status201Created)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
     .ProducesProblem(StatusCodes.Status409Conflict);
 
@@ -364,6 +365,7 @@ app.MapPut("/api/assets/{assetId:long}", async (
     .WithDescription("Updates an existing Asset (does not allow changing Global Unique Asset ID).")
     .Accepts<UpdateAssetRequest>("application/json")
     .Produces<AssetDto>(StatusCodes.Status200OK)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
     .Produces(StatusCodes.Status404NotFound)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
 

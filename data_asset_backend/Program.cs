@@ -173,9 +173,10 @@ builder.Services.AddCors(options =>
                 }
 
                 // Hosted preview environment (example host: vscode-internal-34811-beta.beta01.cloud.kavia.ai)
-                // Frontend is typically :3000, backend is typically :3001.
+                // In many cases frontend is :3000 and backend is :3001, but some preview/proxy setups
+                // present the same hosts on default ports (443/80) while routing internally.
                 if (uri.Host.Contains("kavia.ai", StringComparison.OrdinalIgnoreCase) &&
-                    (uri.Port == 3000 || uri.Port == 3001) &&
+                    (uri.Port == 3000 || uri.Port == 3001 || uri.Port == 443 || uri.Port == 80) &&
                     (string.Equals(uri.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase) ||
                      string.Equals(uri.Scheme, Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase)))
                 {
@@ -257,9 +258,11 @@ static bool IsAllowedCorsOriginForPreflight(string origin)
         return uri.Port == 3000 || uri.Port == 3001 || uri.Port == 7038;
     }
 
-    // Hosted preview (frontend typically :3000, backend typically :3001)
+    // Hosted preview (frontend typically :3000, backend typically :3001).
+    // Some proxy/preview environments surface the frontend origin on default ports (443/80)
+    // while still mapping to the same internal services.
     if (uri.Host.Contains("kavia.ai", StringComparison.OrdinalIgnoreCase) &&
-        (uri.Port == 3000 || uri.Port == 3001) &&
+        (uri.Port == 3000 || uri.Port == 3001 || uri.Port == 443 || uri.Port == 80) &&
         (string.Equals(uri.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase) ||
          string.Equals(uri.Scheme, Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase)))
     {

@@ -261,7 +261,16 @@ static bool IsAllowedCorsOriginForPreflight(string origin)
     // Hosted preview (frontend typically :3000, backend typically :3001).
     // Some proxy/preview environments surface the frontend origin on default ports (443/80)
     // while still mapping to the same internal services.
-    if (uri.Host.Contains("kavia.ai", StringComparison.OrdinalIgnoreCase) &&
+    //
+    // Note: preview hosts can be of the form:
+    // - *.beta01.cloud.kavia.ai
+    // - *.cloud.kavia.ai
+    // - *.kavia.ai
+    var isKaviaPreviewHost =
+        uri.Host.Contains("kavia.ai", StringComparison.OrdinalIgnoreCase) ||
+        uri.Host.Contains("cloud.kavia.ai", StringComparison.OrdinalIgnoreCase);
+
+    if (isKaviaPreviewHost &&
         (uri.Port == 3000 || uri.Port == 3001 || uri.Port == 443 || uri.Port == 80) &&
         (string.Equals(uri.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase) ||
          string.Equals(uri.Scheme, Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase)))
@@ -274,10 +283,13 @@ static bool IsAllowedCorsOriginForPreflight(string origin)
 
 app.Use(async (context, next) =>
 {
-    // Only treat as CORS preflight when the browser includes Access-Control-Request-Method.
+    // Treat any OPTIONS request with an Origin header as CORS preflight.
+    //
+    // Why: in some preview/proxy environments the browser's preflight can arrive without
+    // Access-Control-Request-Method being visible to the app. If we don't short-circuit here,
+    // the request can fall through into auth/authorization and be rejected with 403.
     if (HttpMethods.IsOptions(context.Request.Method) &&
-        context.Request.Headers.ContainsKey("Origin") &&
-        context.Request.Headers.ContainsKey("Access-Control-Request-Method"))
+        context.Request.Headers.ContainsKey("Origin"))
     {
         var origin = context.Request.Headers.Origin.ToString();
 

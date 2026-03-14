@@ -140,7 +140,7 @@ public static class LegacyObservedApiEndpoints
 
                 var deleted = await AssetFlows.DeleteAssetAsync(
                     new AssetFlows.DeleteAssetFlowRequest(
-                        request.AssetId,
+                        request.AssetId!.Value,
                         new DeleteAssetRequest { ModifiedBy = request.ModifiedBy, CorrelationId = request.CorrelationId }),
                     repository,
                     logger,
@@ -375,8 +375,13 @@ public sealed class RemoveSiteAssetRequest
     /// <summary>
     /// The asset id to soft-delete.
     /// </summary>
+    /// <remarks>
+    /// Kept nullable so JSON payloads like <c>{ "assetId": null }</c> bind successfully and are surfaced
+    /// as a 400 ValidationProblem (via <see cref="RequestValidation.ValidateAndThrow"/>) rather than a 500
+    /// due to JSON binding failure.
+    /// </remarks>
     [Required]
-    public long AssetId { get; set; }
+    public long? AssetId { get; set; }
 
     /// <summary>
     /// BRD §6.11 audit field.

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using System.Text.Json;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -104,6 +105,18 @@ public static class ApiErrorHandling
 
     private static (int Status, string Title, string Detail) MapException(Exception ex)
     {
+        // Request binding / JSON deserialization failures should be treated as a client error (400).
+        // These often occur before endpoint code runs (e.g., non-nullable numeric property receives null,
+        // or a property has the wrong JSON type), so they won't be caught by RequestValidation.
+        if (ex is BadHttpRequestException or JsonException)
+        {
+            return (
+                StatusCodes.Status400BadRequest,
+                "Bad request",
+                ex.Message
+            );
+        }
+
         // Validation failures (tab-level / cross-field)
         // Note: We return a 400 ValidationProblem result upstream; this mapping remains for title/detail fallback.
         if (ex is RequestValidationException rve)

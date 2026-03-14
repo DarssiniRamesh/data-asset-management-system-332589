@@ -24,30 +24,23 @@ public sealed class TestAppFactory : WebApplicationFactory<Program>
         // test-specific behaviors (e.g., disabling the strict auth fallback policy).
         builder.UseEnvironment("Testing");
 
-        // Ensure DB-dependent endpoints can run during tests.
+        // DB configuration:
+        // In Testing, we keep the host DB-independent by default.
         //
-        // The app resolves connection strings via DatabaseConfigProvider which prefers:
-        //   - ConnectionStrings:Default (aka env var ConnectionStrings__Default)
-        //   - DATABASE_URL
+        // Why:
+        // - CI environments for this kata often do not provide a running Postgres.
+        // - The API itself is designed to start even when DB isn't configured, returning
+        //   503 ("Database not configured") for DB-backed endpoints.
         //
-        // Several tests expect validation-driven 400 responses from endpoints that also
-        // touch the DB (e.g., CreateAsset flow validates parent pseudo asset existence).
-        // Without DB config, those endpoints return 503 "Database not configured".
+        // If a future pipeline wants DB-backed integration tests, it can set:
+        // - TEST_DATABASE_CONNECTION_STRING (preferred), or
+        // - ConnectionStrings__Default / DATABASE_URL
+        //
+        // and also update tests to expect DB-backed behavior.
         builder.ConfigureAppConfiguration((_, config) =>
         {
-            // Prefer a CI/local-provided env var. The orchestrator/CI can set this.
-            // NOTE: Do not hardcode real secrets here.
-            var cs = Environment.GetEnvironmentVariable("TEST_DATABASE_CONNECTION_STRING");
-
-            // Fallback for local dev runs: assumes a local postgres is available.
-            // If not available, tests may still fail due to connectivity, but they will
-            // no longer fail due to *missing* DB configuration.
-            cs ??= "Host=localhost;Port=5432;Database=data_asset_backend_test;Username=postgres;Password=postgres";
-
-            config.AddInMemoryCollection(new Dictionary<string, string?>
-            {
-                ["ConnectionStrings:Default"] = cs
-            });
+            // Intentionally no-op: do not inject a localhost connection string fallback.
+            // This prevents "connection refused" hard failures when Postgres is absent.
         });
 
         // IMPORTANT:

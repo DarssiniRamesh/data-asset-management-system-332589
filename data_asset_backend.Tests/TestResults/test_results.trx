@@ -1,145 +1,1186 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TestRun id="23a0b488-d9f8-4ff5-a936-82103df91e5d" name="@f4180c00c592 2026-03-14 22:41:09" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
-  <Times creation="2026-03-14T22:41:09.0413273+00:00" queuing="2026-03-14T22:41:09.0413274+00:00" start="2026-03-14T22:41:07.1410511+00:00" finish="2026-03-14T22:41:09.1658640+00:00" />
-  <TestSettings name="default" id="a34cf427-b090-4a26-84b1-4fefd7ce4875">
-    <Deployment runDeploymentRoot="_f4180c00c592_2026-03-14_22_41_09" />
+<TestRun id="6e1d4c60-38e0-4ecb-a490-8b6578eb0c3c" name="@f4180c00c592 2026-03-14 22:47:45" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-03-14T22:47:45.7890338+00:00" queuing="2026-03-14T22:47:45.7890339+00:00" start="2026-03-14T22:47:44.6259522+00:00" finish="2026-03-14T22:47:45.8514555+00:00" />
+  <TestSettings name="default" id="65ea1791-a53c-4bf6-b99b-0e0ebc867caf">
+    <Deployment runDeploymentRoot="_f4180c00c592_2026-03-14_22_47_45" />
   </TestSettings>
   <Results>
-    <UnitTestResult executionId="5b4a07ad-fd1a-43a8-8b72-a5c7eeea06b2" testId="4778574f-6af0-87b2-7664-55fe3572d973" testName="DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests.Legacy_manageSiteAssets_update_requires_assetId_and_update_payload" computerName="f4180c00c592" duration="00:00:00.0068883" startTime="2026-03-14T22:41:09.0065939+00:00" endTime="2026-03-14T22:41:09.0065939+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5b4a07ad-fd1a-43a8-8b72-a5c7eeea06b2" />
-    <UnitTestResult executionId="dbabf4fb-0e80-4cb9-ba43-821ec953f9f9" testId="6baa96e8-64cb-1c3a-b6a3-162fc2c29087" testName="DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests.Legacy_manageSiteAssets_requires_mode" computerName="f4180c00c592" duration="00:00:01.1577521" startTime="2026-03-14T22:41:08.9573172+00:00" endTime="2026-03-14T22:41:08.9573173+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dbabf4fb-0e80-4cb9-ba43-821ec953f9f9" />
-    <UnitTestResult executionId="9cde63ac-68b8-4bec-a9ac-1ede4c13bb89" testId="4a5d8b18-0ba2-1016-f32d-d5bd8e0d61c3" testName="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Root_health_returns_200" computerName="f4180c00c592" duration="00:00:00.0023976" startTime="2026-03-14T22:41:09.0065495+00:00" endTime="2026-03-14T22:41:09.0065496+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9cde63ac-68b8-4bec-a9ac-1ede4c13bb89" />
-    <UnitTestResult executionId="42596986-b0d3-4937-abea-21e3f8d6b766" testId="92d69c0b-5cae-d6e5-220a-e33caf6957cb" testName="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Validity_check_accepts_simple_value" computerName="f4180c00c592" duration="00:00:01.1457173" startTime="2026-03-14T22:41:08.9518222+00:00" endTime="2026-03-14T22:41:08.9518525+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="42596986-b0d3-4937-abea-21e3f8d6b766" />
-    <UnitTestResult executionId="39d0d97a-f168-4774-b2ba-5d811ad4c291" testId="b061f3bb-2690-dcdb-7561-0346ae7644fc" testName="DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests.Legacy_removeSiteAsset_requires_required_fields" computerName="f4180c00c592" duration="00:00:00.0130041" startTime="2026-03-14T22:41:08.9700303+00:00" endTime="2026-03-14T22:41:08.9700304+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="39d0d97a-f168-4774-b2ba-5d811ad4c291" />
-    <UnitTestResult executionId="0aef3abb-aae7-4a14-a18b-3cd7429ccfe3" testId="2631d6cb-a265-f1bb-5954-8ce72445909a" testName="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_rejects_parentPseudoAssetId_when_requiresParentPseudo_is_false" computerName="f4180c00c592" duration="00:00:00.0021631" startTime="2026-03-14T22:41:09.0136277+00:00" endTime="2026-03-14T22:41:09.0136278+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0aef3abb-aae7-4a14-a18b-3cd7429ccfe3">
+    <UnitTestResult executionId="d8fcf525-2fe1-4a2b-9aa6-4c4cd0562782" testId="4778574f-6af0-87b2-7664-55fe3572d973" testName="DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests.Legacy_manageSiteAssets_update_requires_assetId_and_update_payload" computerName="f4180c00c592" duration="00:00:00.0010000" startTime="2026-03-14T22:47:45.7556770+00:00" endTime="2026-03-14T22:47:45.7556770+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d8fcf525-2fe1-4a2b-9aa6-4c4cd0562782">
       <Output>
         <ErrorInfo>
-          <Message>Assert.Equal() Failure: Values differ
-Expected: BadRequest
-Actual:   ServiceUnavailable</Message>
-          <StackTrace>   at DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_rejects_parentPseudoAssetId_when_requiresParentPseudo_is_false() in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/AssetCreateValidationTests.cs:line 115
---- End of stack trace from previous location ---</StackTrace>
+          <Message>Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+---- System.Net.Sockets.SocketException : Connection refused</Message>
+          <StackTrace>   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 51
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 58
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 47
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 147
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;(String[] args)
+   at InvokeStub_Program.&lt;Main&gt;(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+   at DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests..ctor(TestAppFactory factory) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/LegacyObservedEndpointsValidationTests.cs:line 13
+   at InvokeStub_LegacyObservedEndpointsValidationTests..ctor(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+----- Inner Stack Trace -----
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)</StackTrace>
         </ErrorInfo>
       </Output>
     </UnitTestResult>
-    <UnitTestResult executionId="e8d470b2-a327-4953-9850-e2cdf4a5a8cb" testId="7d424f24-4c6d-c882-e7a1-1fb5dfe04239" testName="DataAssetBackend.Tests.IdempotencyCopyAssetTests.CopyAsset_with_same_idempotency_key_returns_same_response_on_retry" computerName="f4180c00c592" duration="00:00:01.1710309" startTime="2026-03-14T22:41:09.0061944+00:00" endTime="2026-03-14T22:41:09.0061946+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e8d470b2-a327-4953-9850-e2cdf4a5a8cb" />
-    <UnitTestResult executionId="36d99f03-6578-40a6-b905-b5e120f2c1a7" testId="3f488ea6-4a44-5a41-d5ae-5a900eb848fd" testName="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_requires_requiresParentPseudo_field" computerName="f4180c00c592" duration="00:00:01.1579405" startTime="2026-03-14T22:41:08.9578193+00:00" endTime="2026-03-14T22:41:08.9578194+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="36d99f03-6578-40a6-b905-b5e120f2c1a7" />
-    <UnitTestResult executionId="0e6e0902-fe41-4ca8-835f-f14e05eb7827" testId="98344893-0b44-4f54-d694-3a07bdac6449" testName="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_requires_parentPseudoAssetId_when_requiresParentPseudo_is_true" computerName="f4180c00c592" duration="00:00:00.0030131" startTime="2026-03-14T22:41:09.0131267+00:00" endTime="2026-03-14T22:41:09.0131268+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0e6e0902-fe41-4ca8-835f-f14e05eb7827" />
-    <UnitTestResult executionId="837d4d98-23c0-4468-9f83-fb9df66f083e" testId="94a26727-50d9-7d1c-a956-8c447e7efed8" testName="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Validity_check_rejects_empty_value" computerName="f4180c00c592" duration="00:00:00.0072352" startTime="2026-03-14T22:41:08.9609554+00:00" endTime="2026-03-14T22:41:08.9609555+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="837d4d98-23c0-4468-9f83-fb9df66f083e" />
-    <UnitTestResult executionId="f304dd14-bf01-4459-b50f-b7c45ab178db" testId="6e72a583-9e2c-856c-347e-a1a27fe737eb" testName="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_rejects_nonexistent_parentPseudoAssetId_with_400" computerName="f4180c00c592" duration="00:00:00.0137291" startTime="2026-03-14T22:41:09.0128378+00:00" endTime="2026-03-14T22:41:09.0128380+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f304dd14-bf01-4459-b50f-b7c45ab178db">
+    <UnitTestResult executionId="c239a615-caff-498b-b98c-1c1d961defb8" testId="c520d0c0-8b06-7c91-f0fa-2795e082a988" testName="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Healthz_returns_200_even_when_db_is_not_configured" computerName="f4180c00c592" duration="00:00:00.0010000" startTime="2026-03-14T22:47:45.7532644+00:00" endTime="2026-03-14T22:47:45.7532646+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c239a615-caff-498b-b98c-1c1d961defb8">
       <Output>
         <ErrorInfo>
-          <Message>Assert.Equal() Failure: Values differ
-Expected: BadRequest
-Actual:   ServiceUnavailable</Message>
-          <StackTrace>   at DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_rejects_nonexistent_parentPseudoAssetId_with_400() in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/AssetCreateValidationTests.cs:line 95
---- End of stack trace from previous location ---</StackTrace>
+          <Message>Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+---- System.Net.Sockets.SocketException : Connection refused</Message>
+          <StackTrace>   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 51
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 58
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 47
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 147
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;(String[] args)
+   at InvokeStub_Program.&lt;Main&gt;(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+   at DataAssetBackend.Tests.HealthAndValidationEndpointsTests..ctor(TestAppFactory factory) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/HealthAndValidationEndpointsTests.cs:line 13
+   at InvokeStub_HealthAndValidationEndpointsTests..ctor(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+----- Inner Stack Trace -----
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)</StackTrace>
         </ErrorInfo>
       </Output>
     </UnitTestResult>
-    <UnitTestResult executionId="9fd5de49-a270-4035-adb1-38b9570084d3" testId="c520d0c0-8b06-7c91-f0fa-2795e082a988" testName="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Healthz_returns_200_even_when_db_is_not_configured" computerName="f4180c00c592" duration="00:00:00.0105022" startTime="2026-03-14T22:41:09.0064786+00:00" endTime="2026-03-14T22:41:09.0064787+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9fd5de49-a270-4035-adb1-38b9570084d3" />
-    <UnitTestResult executionId="f7e7faa2-36b2-41a5-bfc8-e713308b2861" testId="9dc94cb5-9259-f153-7d0a-ad76274acc5d" testName="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_requires_processGroupOtherText_when_processGroup_is_other" computerName="f4180c00c592" duration="00:00:00.0120952" startTime="2026-03-14T22:41:08.9693886+00:00" endTime="2026-03-14T22:41:08.9693887+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f7e7faa2-36b2-41a5-bfc8-e713308b2861" />
+    <UnitTestResult executionId="daaf7202-02ae-41f7-815c-ae1d643fa229" testId="7d424f24-4c6d-c882-e7a1-1fb5dfe04239" testName="DataAssetBackend.Tests.IdempotencyCopyAssetTests.CopyAsset_with_same_idempotency_key_returns_same_response_on_retry" computerName="f4180c00c592" duration="00:00:00.0010000" startTime="2026-03-14T22:47:45.6802436+00:00" endTime="2026-03-14T22:47:45.6802437+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="daaf7202-02ae-41f7-815c-ae1d643fa229">
+      <Output>
+        <ErrorInfo>
+          <Message>Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+---- System.Net.Sockets.SocketException : Connection refused</Message>
+          <StackTrace>   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 51
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 58
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 47
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 147
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;(String[] args)
+   at InvokeStub_Program.&lt;Main&gt;(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+   at DataAssetBackend.Tests.IdempotencyCopyAssetTests..ctor(TestAppFactory factory) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/IdempotencyCopyAssetTests.cs:line 13
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+----- Inner Stack Trace -----
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="2cec326c-88d4-42df-be04-fe35925dede7" testId="6e72a583-9e2c-856c-347e-a1a27fe737eb" testName="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_rejects_nonexistent_parentPseudoAssetId_with_400" computerName="f4180c00c592" duration="00:00:00.0010000" startTime="2026-03-14T22:47:45.7545621+00:00" endTime="2026-03-14T22:47:45.7545623+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2cec326c-88d4-42df-be04-fe35925dede7">
+      <Output>
+        <ErrorInfo>
+          <Message>Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+---- System.Net.Sockets.SocketException : Connection refused</Message>
+          <StackTrace>   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 51
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 58
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 47
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 147
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;(String[] args)
+   at InvokeStub_Program.&lt;Main&gt;(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+   at DataAssetBackend.Tests.AssetCreateValidationTests..ctor(TestAppFactory factory) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/AssetCreateValidationTests.cs:line 13
+   at InvokeStub_AssetCreateValidationTests..ctor(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+----- Inner Stack Trace -----
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="7ccdaae0-5cdb-4bfc-9e53-4c807b5d660f" testId="3f488ea6-4a44-5a41-d5ae-5a900eb848fd" testName="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_requires_requiresParentPseudo_field" computerName="f4180c00c592" duration="00:00:00.0010000" startTime="2026-03-14T22:47:45.7008367+00:00" endTime="2026-03-14T22:47:45.7008369+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7ccdaae0-5cdb-4bfc-9e53-4c807b5d660f">
+      <Output>
+        <ErrorInfo>
+          <Message>Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+---- System.Net.Sockets.SocketException : Connection refused</Message>
+          <StackTrace>   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 51
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 58
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 47
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 147
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;(String[] args)
+   at InvokeStub_Program.&lt;Main&gt;(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+   at DataAssetBackend.Tests.AssetCreateValidationTests..ctor(TestAppFactory factory) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/AssetCreateValidationTests.cs:line 13
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+----- Inner Stack Trace -----
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="3f6d783c-e23f-48df-86a1-dafa19e61835" testId="98344893-0b44-4f54-d694-3a07bdac6449" testName="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_requires_parentPseudoAssetId_when_requiresParentPseudo_is_true" computerName="f4180c00c592" duration="00:00:00.0010000" startTime="2026-03-14T22:47:45.7567295+00:00" endTime="2026-03-14T22:47:45.7567296+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3f6d783c-e23f-48df-86a1-dafa19e61835">
+      <Output>
+        <ErrorInfo>
+          <Message>Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+---- System.Net.Sockets.SocketException : Connection refused</Message>
+          <StackTrace>   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 51
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 58
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 47
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 147
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;(String[] args)
+   at InvokeStub_Program.&lt;Main&gt;(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+   at DataAssetBackend.Tests.AssetCreateValidationTests..ctor(TestAppFactory factory) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/AssetCreateValidationTests.cs:line 13
+   at InvokeStub_AssetCreateValidationTests..ctor(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+----- Inner Stack Trace -----
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="f6c3ba4a-9965-40a8-88b7-62e2b151ef34" testId="9dc94cb5-9259-f153-7d0a-ad76274acc5d" testName="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_requires_processGroupOtherText_when_processGroup_is_other" computerName="f4180c00c592" duration="00:00:00.0010000" startTime="2026-03-14T22:47:45.7073507+00:00" endTime="2026-03-14T22:47:45.7073508+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f6c3ba4a-9965-40a8-88b7-62e2b151ef34">
+      <Output>
+        <ErrorInfo>
+          <Message>Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+---- System.Net.Sockets.SocketException : Connection refused</Message>
+          <StackTrace>   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 51
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 58
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 47
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 147
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;(String[] args)
+   at InvokeStub_Program.&lt;Main&gt;(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+   at DataAssetBackend.Tests.AssetCreateValidationTests..ctor(TestAppFactory factory) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/AssetCreateValidationTests.cs:line 13
+   at InvokeStub_AssetCreateValidationTests..ctor(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+----- Inner Stack Trace -----
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="da1c3891-ab5b-417a-abce-1cfeaae88ed6" testId="4a5d8b18-0ba2-1016-f32d-d5bd8e0d61c3" testName="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Root_health_returns_200" computerName="f4180c00c592" duration="00:00:00.0010000" startTime="2026-03-14T22:47:45.7577876+00:00" endTime="2026-03-14T22:47:45.7577877+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="da1c3891-ab5b-417a-abce-1cfeaae88ed6">
+      <Output>
+        <ErrorInfo>
+          <Message>Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+---- System.Net.Sockets.SocketException : Connection refused</Message>
+          <StackTrace>   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 51
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 58
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 47
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 147
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;(String[] args)
+   at InvokeStub_Program.&lt;Main&gt;(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+   at DataAssetBackend.Tests.HealthAndValidationEndpointsTests..ctor(TestAppFactory factory) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/HealthAndValidationEndpointsTests.cs:line 13
+   at InvokeStub_HealthAndValidationEndpointsTests..ctor(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+----- Inner Stack Trace -----
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c243242b-7c53-4d94-b567-1f5c0076af36" testId="6baa96e8-64cb-1c3a-b6a3-162fc2c29087" testName="DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests.Legacy_manageSiteAssets_requires_mode" computerName="f4180c00c592" duration="00:00:00.0010000" startTime="2026-03-14T22:47:45.6734013+00:00" endTime="2026-03-14T22:47:45.6734454+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c243242b-7c53-4d94-b567-1f5c0076af36">
+      <Output>
+        <ErrorInfo>
+          <Message>Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+---- System.Net.Sockets.SocketException : Connection refused</Message>
+          <StackTrace>   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 51
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 58
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 47
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 147
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;(String[] args)
+   at InvokeStub_Program.&lt;Main&gt;(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+   at DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests..ctor(TestAppFactory factory) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/LegacyObservedEndpointsValidationTests.cs:line 13
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+----- Inner Stack Trace -----
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="794e6928-1897-4287-84b6-c1afcc2e8199" testId="b061f3bb-2690-dcdb-7561-0346ae7644fc" testName="DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests.Legacy_removeSiteAsset_requires_required_fields" computerName="f4180c00c592" duration="00:00:00.0010000" startTime="2026-03-14T22:47:45.7046537+00:00" endTime="2026-03-14T22:47:45.7046539+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="794e6928-1897-4287-84b6-c1afcc2e8199">
+      <Output>
+        <ErrorInfo>
+          <Message>Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+---- System.Net.Sockets.SocketException : Connection refused</Message>
+          <StackTrace>   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 51
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 58
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 47
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 147
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;(String[] args)
+   at InvokeStub_Program.&lt;Main&gt;(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+   at DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests..ctor(TestAppFactory factory) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/LegacyObservedEndpointsValidationTests.cs:line 13
+   at InvokeStub_LegacyObservedEndpointsValidationTests..ctor(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+----- Inner Stack Trace -----
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="fcbb752c-8f96-44b4-a6aa-812b02a1af2d" testId="2631d6cb-a265-f1bb-5954-8ce72445909a" testName="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_rejects_parentPseudoAssetId_when_requiresParentPseudo_is_false" computerName="f4180c00c592" duration="00:00:00.0010000" startTime="2026-03-14T22:47:45.7589338+00:00" endTime="2026-03-14T22:47:45.7589339+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fcbb752c-8f96-44b4-a6aa-812b02a1af2d">
+      <Output>
+        <ErrorInfo>
+          <Message>Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+---- System.Net.Sockets.SocketException : Connection refused</Message>
+          <StackTrace>   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 51
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 58
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 47
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 147
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;(String[] args)
+   at InvokeStub_Program.&lt;Main&gt;(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+   at DataAssetBackend.Tests.AssetCreateValidationTests..ctor(TestAppFactory factory) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/AssetCreateValidationTests.cs:line 13
+   at InvokeStub_AssetCreateValidationTests..ctor(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+----- Inner Stack Trace -----
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="b977aed9-9156-4141-9b07-cb8b87b97190" testId="94a26727-50d9-7d1c-a956-8c447e7efed8" testName="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Validity_check_rejects_empty_value" computerName="f4180c00c592" duration="00:00:00.0010000" startTime="2026-03-14T22:47:45.7095113+00:00" endTime="2026-03-14T22:47:45.7095115+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b977aed9-9156-4141-9b07-cb8b87b97190">
+      <Output>
+        <ErrorInfo>
+          <Message>Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+---- System.Net.Sockets.SocketException : Connection refused</Message>
+          <StackTrace>   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 51
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 58
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 47
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 147
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;(String[] args)
+   at InvokeStub_Program.&lt;Main&gt;(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+   at DataAssetBackend.Tests.HealthAndValidationEndpointsTests..ctor(TestAppFactory factory) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/HealthAndValidationEndpointsTests.cs:line 13
+   at InvokeStub_HealthAndValidationEndpointsTests..ctor(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+----- Inner Stack Trace -----
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e0d4a55c-fd77-4332-829c-9623d4411aa7" testId="92d69c0b-5cae-d6e5-220a-e33caf6957cb" testName="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Validity_check_accepts_simple_value" computerName="f4180c00c592" duration="00:00:00.0010000" startTime="2026-03-14T22:47:45.6829633+00:00" endTime="2026-03-14T22:47:45.6829635+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e0d4a55c-fd77-4332-829c-9623d4411aa7">
+      <Output>
+        <ErrorInfo>
+          <Message>Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+---- System.Net.Sockets.SocketException : Connection refused</Message>
+          <StackTrace>   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 51
+   at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs:line 58
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 47
+   at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs:line 147
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;$(String[] args) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs:line 242
+   at Program.&lt;Main&gt;(String[] args)
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+   at DataAssetBackend.Tests.HealthAndValidationEndpointsTests..ctor(TestAppFactory factory) in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/HealthAndValidationEndpointsTests.cs:line 13
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+----- Inner Stack Trace -----
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
   </Results>
   <TestDefinitions>
     <UnitTest name="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_requires_parentPseudoAssetId_when_requiresParentPseudo_is_true" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="98344893-0b44-4f54-d694-3a07bdac6449">
-      <Execution id="0e6e0902-fe41-4ca8-835f-f14e05eb7827" />
+      <Execution id="3f6d783c-e23f-48df-86a1-dafa19e61835" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.AssetCreateValidationTests" name="Create_asset_requires_parentPseudoAssetId_when_requiresParentPseudo_is_true" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Healthz_returns_200_even_when_db_is_not_configured" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="c520d0c0-8b06-7c91-f0fa-2795e082a988">
-      <Execution id="9fd5de49-a270-4035-adb1-38b9570084d3" />
+      <Execution id="c239a615-caff-498b-b98c-1c1d961defb8" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.HealthAndValidationEndpointsTests" name="Healthz_returns_200_even_when_db_is_not_configured" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.IdempotencyCopyAssetTests.CopyAsset_with_same_idempotency_key_returns_same_response_on_retry" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="7d424f24-4c6d-c882-e7a1-1fb5dfe04239">
-      <Execution id="e8d470b2-a327-4953-9850-e2cdf4a5a8cb" />
+      <Execution id="daaf7202-02ae-41f7-815c-ae1d643fa229" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.IdempotencyCopyAssetTests" name="CopyAsset_with_same_idempotency_key_returns_same_response_on_retry" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests.Legacy_manageSiteAssets_update_requires_assetId_and_update_payload" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="4778574f-6af0-87b2-7664-55fe3572d973">
-      <Execution id="5b4a07ad-fd1a-43a8-8b72-a5c7eeea06b2" />
+      <Execution id="d8fcf525-2fe1-4a2b-9aa6-4c4cd0562782" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests" name="Legacy_manageSiteAssets_update_requires_assetId_and_update_payload" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Validity_check_rejects_empty_value" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="94a26727-50d9-7d1c-a956-8c447e7efed8">
-      <Execution id="837d4d98-23c0-4468-9f83-fb9df66f083e" />
+      <Execution id="b977aed9-9156-4141-9b07-cb8b87b97190" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.HealthAndValidationEndpointsTests" name="Validity_check_rejects_empty_value" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests.Legacy_removeSiteAsset_requires_required_fields" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="b061f3bb-2690-dcdb-7561-0346ae7644fc">
-      <Execution id="39d0d97a-f168-4774-b2ba-5d811ad4c291" />
+      <Execution id="794e6928-1897-4287-84b6-c1afcc2e8199" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests" name="Legacy_removeSiteAsset_requires_required_fields" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_rejects_parentPseudoAssetId_when_requiresParentPseudo_is_false" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="2631d6cb-a265-f1bb-5954-8ce72445909a">
-      <Execution id="0aef3abb-aae7-4a14-a18b-3cd7429ccfe3" />
+      <Execution id="fcbb752c-8f96-44b4-a6aa-812b02a1af2d" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.AssetCreateValidationTests" name="Create_asset_rejects_parentPseudoAssetId_when_requiresParentPseudo_is_false" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_rejects_nonexistent_parentPseudoAssetId_with_400" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="6e72a583-9e2c-856c-347e-a1a27fe737eb">
-      <Execution id="f304dd14-bf01-4459-b50f-b7c45ab178db" />
+      <Execution id="2cec326c-88d4-42df-be04-fe35925dede7" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.AssetCreateValidationTests" name="Create_asset_rejects_nonexistent_parentPseudoAssetId_with_400" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests.Legacy_manageSiteAssets_requires_mode" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="6baa96e8-64cb-1c3a-b6a3-162fc2c29087">
-      <Execution id="dbabf4fb-0e80-4cb9-ba43-821ec953f9f9" />
+      <Execution id="c243242b-7c53-4d94-b567-1f5c0076af36" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests" name="Legacy_manageSiteAssets_requires_mode" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_requires_requiresParentPseudo_field" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="3f488ea6-4a44-5a41-d5ae-5a900eb848fd">
-      <Execution id="36d99f03-6578-40a6-b905-b5e120f2c1a7" />
+      <Execution id="7ccdaae0-5cdb-4bfc-9e53-4c807b5d660f" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.AssetCreateValidationTests" name="Create_asset_requires_requiresParentPseudo_field" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Root_health_returns_200" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="4a5d8b18-0ba2-1016-f32d-d5bd8e0d61c3">
-      <Execution id="9cde63ac-68b8-4bec-a9ac-1ede4c13bb89" />
+      <Execution id="da1c3891-ab5b-417a-abce-1cfeaae88ed6" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.HealthAndValidationEndpointsTests" name="Root_health_returns_200" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Validity_check_accepts_simple_value" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="92d69c0b-5cae-d6e5-220a-e33caf6957cb">
-      <Execution id="42596986-b0d3-4937-abea-21e3f8d6b766" />
+      <Execution id="e0d4a55c-fd77-4332-829c-9623d4411aa7" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.HealthAndValidationEndpointsTests" name="Validity_check_accepts_simple_value" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_requires_processGroupOtherText_when_processGroup_is_other" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="9dc94cb5-9259-f153-7d0a-ad76274acc5d">
-      <Execution id="f7e7faa2-36b2-41a5-bfc8-e713308b2861" />
+      <Execution id="f6c3ba4a-9965-40a8-88b7-62e2b151ef34" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.AssetCreateValidationTests" name="Create_asset_requires_processGroupOtherText_when_processGroup_is_other" />
     </UnitTest>
   </TestDefinitions>
   <TestEntries>
-    <TestEntry testId="4778574f-6af0-87b2-7664-55fe3572d973" executionId="5b4a07ad-fd1a-43a8-8b72-a5c7eeea06b2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="6baa96e8-64cb-1c3a-b6a3-162fc2c29087" executionId="dbabf4fb-0e80-4cb9-ba43-821ec953f9f9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="4a5d8b18-0ba2-1016-f32d-d5bd8e0d61c3" executionId="9cde63ac-68b8-4bec-a9ac-1ede4c13bb89" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="92d69c0b-5cae-d6e5-220a-e33caf6957cb" executionId="42596986-b0d3-4937-abea-21e3f8d6b766" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="b061f3bb-2690-dcdb-7561-0346ae7644fc" executionId="39d0d97a-f168-4774-b2ba-5d811ad4c291" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="2631d6cb-a265-f1bb-5954-8ce72445909a" executionId="0aef3abb-aae7-4a14-a18b-3cd7429ccfe3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="7d424f24-4c6d-c882-e7a1-1fb5dfe04239" executionId="e8d470b2-a327-4953-9850-e2cdf4a5a8cb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="3f488ea6-4a44-5a41-d5ae-5a900eb848fd" executionId="36d99f03-6578-40a6-b905-b5e120f2c1a7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="98344893-0b44-4f54-d694-3a07bdac6449" executionId="0e6e0902-fe41-4ca8-835f-f14e05eb7827" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="94a26727-50d9-7d1c-a956-8c447e7efed8" executionId="837d4d98-23c0-4468-9f83-fb9df66f083e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="6e72a583-9e2c-856c-347e-a1a27fe737eb" executionId="f304dd14-bf01-4459-b50f-b7c45ab178db" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="c520d0c0-8b06-7c91-f0fa-2795e082a988" executionId="9fd5de49-a270-4035-adb1-38b9570084d3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="9dc94cb5-9259-f153-7d0a-ad76274acc5d" executionId="f7e7faa2-36b2-41a5-bfc8-e713308b2861" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4778574f-6af0-87b2-7664-55fe3572d973" executionId="d8fcf525-2fe1-4a2b-9aa6-4c4cd0562782" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c520d0c0-8b06-7c91-f0fa-2795e082a988" executionId="c239a615-caff-498b-b98c-1c1d961defb8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7d424f24-4c6d-c882-e7a1-1fb5dfe04239" executionId="daaf7202-02ae-41f7-815c-ae1d643fa229" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6e72a583-9e2c-856c-347e-a1a27fe737eb" executionId="2cec326c-88d4-42df-be04-fe35925dede7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3f488ea6-4a44-5a41-d5ae-5a900eb848fd" executionId="7ccdaae0-5cdb-4bfc-9e53-4c807b5d660f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="98344893-0b44-4f54-d694-3a07bdac6449" executionId="3f6d783c-e23f-48df-86a1-dafa19e61835" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9dc94cb5-9259-f153-7d0a-ad76274acc5d" executionId="f6c3ba4a-9965-40a8-88b7-62e2b151ef34" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4a5d8b18-0ba2-1016-f32d-d5bd8e0d61c3" executionId="da1c3891-ab5b-417a-abce-1cfeaae88ed6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6baa96e8-64cb-1c3a-b6a3-162fc2c29087" executionId="c243242b-7c53-4d94-b567-1f5c0076af36" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b061f3bb-2690-dcdb-7561-0346ae7644fc" executionId="794e6928-1897-4287-84b6-c1afcc2e8199" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2631d6cb-a265-f1bb-5954-8ce72445909a" executionId="fcbb752c-8f96-44b4-a6aa-812b02a1af2d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="94a26727-50d9-7d1c-a956-8c447e7efed8" executionId="b977aed9-9156-4141-9b07-cb8b87b97190" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="92d69c0b-5cae-d6e5-220a-e33caf6957cb" executionId="e0d4a55c-fd77-4332-829c-9623d4411aa7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
   </TestEntries>
   <TestLists>
     <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
     <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
   </TestLists>
   <ResultSummary outcome="Failed">
-    <Counters total="13" executed="13" passed="11" failed="2" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Counters total="13" executed="13" passed="0" failed="13" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
     <Output>
       <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.7+8f2703126a (64-bit .NET 8.0.22)
-[xUnit.net 00:00:00.10]   Discovering: DataAssetBackend.Tests
-[xUnit.net 00:00:00.14]   Discovered:  DataAssetBackend.Tests
-[xUnit.net 00:00:00.15]   Starting:    DataAssetBackend.Tests
-[xUnit.net 00:00:01.42]       Assert.Equal() Failure: Values differ
-[xUnit.net 00:00:01.42]       Expected: BadRequest
-[xUnit.net 00:00:01.42]       Actual:   ServiceUnavailable
-[xUnit.net 00:00:01.42]       Stack Trace:
-[xUnit.net 00:00:01.42]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/AssetCreateValidationTests.cs(95,0): at DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_rejects_nonexistent_parentPseudoAssetId_with_400()
-[xUnit.net 00:00:01.42]         --- End of stack trace from previous location ---
-[xUnit.net 00:00:01.42]       Assert.Equal() Failure: Values differ
-[xUnit.net 00:00:01.42]       Expected: BadRequest
-[xUnit.net 00:00:01.42]       Actual:   ServiceUnavailable
-[xUnit.net 00:00:01.42]       Stack Trace:
-[xUnit.net 00:00:01.42]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/AssetCreateValidationTests.cs(115,0): at DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_rejects_parentPseudoAssetId_when_requiresParentPseudo_is_false()
-[xUnit.net 00:00:01.42]         --- End of stack trace from previous location ---
-[xUnit.net 00:00:01.49]   Finished:    DataAssetBackend.Tests
+[xUnit.net 00:00:00.12]   Discovering: DataAssetBackend.Tests
+[xUnit.net 00:00:00.18]   Discovered:  DataAssetBackend.Tests
+[xUnit.net 00:00:00.18]   Starting:    DataAssetBackend.Tests
+[xUnit.net 00:00:00.55]       Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+[xUnit.net 00:00:00.55]       ---- System.Net.Sockets.SocketException : Connection refused
+[xUnit.net 00:00:00.55]       Stack Trace:
+[xUnit.net 00:00:00.55]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.55]            at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.55]            at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.55]            at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.55]            at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.55]            at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.55]            at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.55]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(51,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.55]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(58,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.55]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(47,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.55]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(147,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.55]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.55]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.55]            at Program.&lt;Main&gt;(String[] args)
+[xUnit.net 00:00:00.55]            at InvokeStub_Program.&lt;Main&gt;(Object, Span`1)
+[xUnit.net 00:00:00.55]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.55]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:00.55]            at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.55]            at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+[xUnit.net 00:00:00.55]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+[xUnit.net 00:00:00.55]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+[xUnit.net 00:00:00.55]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+[xUnit.net 00:00:00.55]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.55]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.55]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+[xUnit.net 00:00:00.55]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+[xUnit.net 00:00:00.55]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/LegacyObservedEndpointsValidationTests.cs(13,0): at DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests..ctor(TestAppFactory factory)
+[xUnit.net 00:00:00.55]            at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+[xUnit.net 00:00:00.55]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.55]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:00.55]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.55]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+[xUnit.net 00:00:00.55]            at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.55]            at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.55]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]       Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+[xUnit.net 00:00:00.56]       ---- System.Net.Sockets.SocketException : Connection refused
+[xUnit.net 00:00:00.56]       Stack Trace:
+[xUnit.net 00:00:00.56]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]            at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.56]            at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.56]            at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]            at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]            at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]            at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(51,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(58,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(47,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(147,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.56]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.56]            at Program.&lt;Main&gt;(String[] args)
+[xUnit.net 00:00:00.56]            at InvokeStub_Program.&lt;Main&gt;(Object, Span`1)
+[xUnit.net 00:00:00.56]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.56]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:00.56]            at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]            at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+[xUnit.net 00:00:00.56]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+[xUnit.net 00:00:00.56]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+[xUnit.net 00:00:00.56]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+[xUnit.net 00:00:00.56]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.56]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.56]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+[xUnit.net 00:00:00.56]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+[xUnit.net 00:00:00.56]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/IdempotencyCopyAssetTests.cs(13,0): at DataAssetBackend.Tests.IdempotencyCopyAssetTests..ctor(TestAppFactory factory)
+[xUnit.net 00:00:00.56]            at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+[xUnit.net 00:00:00.56]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.56]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:00.56]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+[xUnit.net 00:00:00.56]            at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]            at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]       Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+[xUnit.net 00:00:00.56]       ---- System.Net.Sockets.SocketException : Connection refused
+[xUnit.net 00:00:00.56]       Stack Trace:
+[xUnit.net 00:00:00.56]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]            at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.56]            at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.56]            at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]            at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]            at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]            at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(51,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(58,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(47,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(147,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.56]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.56]            at Program.&lt;Main&gt;(String[] args)
+[xUnit.net 00:00:00.56]            at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+[xUnit.net 00:00:00.56]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.56]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:00.56]            at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]            at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+[xUnit.net 00:00:00.56]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+[xUnit.net 00:00:00.56]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+[xUnit.net 00:00:00.56]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+[xUnit.net 00:00:00.56]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.56]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.56]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+[xUnit.net 00:00:00.56]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+[xUnit.net 00:00:00.56]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/HealthAndValidationEndpointsTests.cs(13,0): at DataAssetBackend.Tests.HealthAndValidationEndpointsTests..ctor(TestAppFactory factory)
+[xUnit.net 00:00:00.56]            at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+[xUnit.net 00:00:00.56]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.56]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:00.56]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+[xUnit.net 00:00:00.56]            at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]            at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]       Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+[xUnit.net 00:00:00.56]       ---- System.Net.Sockets.SocketException : Connection refused
+[xUnit.net 00:00:00.56]       Stack Trace:
+[xUnit.net 00:00:00.56]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.56]            at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.56]            at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.57]            at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.57]            at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.57]            at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.57]            at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.57]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(51,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.57]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(58,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.57]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(47,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.57]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(147,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.57]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.58]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.58]            at Program.&lt;Main&gt;(String[] args)
+[xUnit.net 00:00:00.58]            at InvokeStub_Program.&lt;Main&gt;(Object, Span`1)
+[xUnit.net 00:00:00.58]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.58]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:00.58]            at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.58]            at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+[xUnit.net 00:00:00.58]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+[xUnit.net 00:00:00.58]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+[xUnit.net 00:00:00.58]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+[xUnit.net 00:00:00.58]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.58]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.58]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+[xUnit.net 00:00:00.58]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+[xUnit.net 00:00:00.58]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/AssetCreateValidationTests.cs(13,0): at DataAssetBackend.Tests.AssetCreateValidationTests..ctor(TestAppFactory factory)
+[xUnit.net 00:00:00.58]            at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+[xUnit.net 00:00:00.58]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.58]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:00.58]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.58]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+[xUnit.net 00:00:00.58]            at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.58]            at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.58]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.58]       Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+[xUnit.net 00:00:00.58]       ---- System.Net.Sockets.SocketException : Connection refused
+[xUnit.net 00:00:00.58]       Stack Trace:
+[xUnit.net 00:00:00.58]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.58]            at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.58]            at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.58]            at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.58]            at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.58]            at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.58]            at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.58]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(51,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.58]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(58,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.58]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(47,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.58]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(147,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.58]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.58]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.58]            at Program.&lt;Main&gt;(String[] args)
+[xUnit.net 00:00:00.58]            at InvokeStub_Program.&lt;Main&gt;(Object, Span`1)
+[xUnit.net 00:00:00.58]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.58]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:00.58]            at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.58]            at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+[xUnit.net 00:00:00.58]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+[xUnit.net 00:00:00.59]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+[xUnit.net 00:00:00.59]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+[xUnit.net 00:00:00.59]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.59]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.59]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+[xUnit.net 00:00:00.59]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+[xUnit.net 00:00:00.59]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/LegacyObservedEndpointsValidationTests.cs(13,0): at DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests..ctor(TestAppFactory factory)
+[xUnit.net 00:00:00.59]            at InvokeStub_LegacyObservedEndpointsValidationTests..ctor(Object, Span`1)
+[xUnit.net 00:00:00.59]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.59]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:00.59]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+[xUnit.net 00:00:00.59]            at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]            at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]       Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+[xUnit.net 00:00:00.59]       ---- System.Net.Sockets.SocketException : Connection refused
+[xUnit.net 00:00:00.59]       Stack Trace:
+[xUnit.net 00:00:00.59]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]            at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.59]            at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.59]            at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]            at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]            at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]            at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(51,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(58,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(47,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(147,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.59]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.59]            at Program.&lt;Main&gt;(String[] args)
+[xUnit.net 00:00:00.59]            at InvokeStub_Program.&lt;Main&gt;(Object, Span`1)
+[xUnit.net 00:00:00.59]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.59]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:00.59]            at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]            at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+[xUnit.net 00:00:00.59]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+[xUnit.net 00:00:00.59]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+[xUnit.net 00:00:00.59]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+[xUnit.net 00:00:00.59]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.59]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.59]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+[xUnit.net 00:00:00.59]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+[xUnit.net 00:00:00.59]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/AssetCreateValidationTests.cs(13,0): at DataAssetBackend.Tests.AssetCreateValidationTests..ctor(TestAppFactory factory)
+[xUnit.net 00:00:00.59]            at InvokeStub_AssetCreateValidationTests..ctor(Object, Span`1)
+[xUnit.net 00:00:00.59]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.59]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:00.59]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+[xUnit.net 00:00:00.59]            at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]            at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]       Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+[xUnit.net 00:00:00.59]       ---- System.Net.Sockets.SocketException : Connection refused
+[xUnit.net 00:00:00.59]       Stack Trace:
+[xUnit.net 00:00:00.59]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]            at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.59]            at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.59]            at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]            at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]            at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]            at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(51,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(58,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(47,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(147,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.59]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.59]            at Program.&lt;Main&gt;(String[] args)
+[xUnit.net 00:00:00.59]            at InvokeStub_Program.&lt;Main&gt;(Object, Span`1)
+[xUnit.net 00:00:00.59]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.59]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:00.59]            at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]            at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+[xUnit.net 00:00:00.59]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+[xUnit.net 00:00:00.59]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+[xUnit.net 00:00:00.59]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+[xUnit.net 00:00:00.59]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.59]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.59]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+[xUnit.net 00:00:00.59]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+[xUnit.net 00:00:00.59]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/HealthAndValidationEndpointsTests.cs(13,0): at DataAssetBackend.Tests.HealthAndValidationEndpointsTests..ctor(TestAppFactory factory)
+[xUnit.net 00:00:00.59]            at InvokeStub_HealthAndValidationEndpointsTests..ctor(Object, Span`1)
+[xUnit.net 00:00:00.59]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.59]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:00.59]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+[xUnit.net 00:00:00.59]            at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]            at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.59]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.63]       Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+[xUnit.net 00:00:00.63]       ---- System.Net.Sockets.SocketException : Connection refused
+[xUnit.net 00:00:00.63]       Stack Trace:
+[xUnit.net 00:00:00.63]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.63]            at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.63]            at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.63]            at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.63]            at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.63]            at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.63]            at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.63]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(51,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.63]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(58,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.63]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(47,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.63]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(147,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.63]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.63]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.63]            at Program.&lt;Main&gt;(String[] args)
+[xUnit.net 00:00:00.63]            at InvokeStub_Program.&lt;Main&gt;(Object, Span`1)
+[xUnit.net 00:00:00.63]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.63]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:00.63]            at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.63]            at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+[xUnit.net 00:00:00.63]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+[xUnit.net 00:00:00.63]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+[xUnit.net 00:00:00.63]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+[xUnit.net 00:00:00.63]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.63]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.63]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+[xUnit.net 00:00:00.63]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+[xUnit.net 00:00:00.63]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/HealthAndValidationEndpointsTests.cs(13,0): at DataAssetBackend.Tests.HealthAndValidationEndpointsTests..ctor(TestAppFactory factory)
+[xUnit.net 00:00:00.63]            at InvokeStub_HealthAndValidationEndpointsTests..ctor(Object, Span`1)
+[xUnit.net 00:00:00.63]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.63]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:00.63]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.63]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+[xUnit.net 00:00:00.63]            at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.63]            at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.63]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.63]       Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+[xUnit.net 00:00:00.63]       ---- System.Net.Sockets.SocketException : Connection refused
+[xUnit.net 00:00:00.63]       Stack Trace:
+[xUnit.net 00:00:00.63]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.63]            at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.63]            at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.63]            at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.63]            at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.63]            at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.63]            at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.63]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(51,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.63]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(58,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.63]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(47,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(147,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.64]            at Program.&lt;Main&gt;(String[] args)
+[xUnit.net 00:00:00.64]            at InvokeStub_Program.&lt;Main&gt;(Object, Span`1)
+[xUnit.net 00:00:00.64]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.64]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/AssetCreateValidationTests.cs(13,0): at DataAssetBackend.Tests.AssetCreateValidationTests..ctor(TestAppFactory factory)
+[xUnit.net 00:00:00.64]            at InvokeStub_AssetCreateValidationTests..ctor(Object, Span`1)
+[xUnit.net 00:00:00.64]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.64]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:00.64]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+[xUnit.net 00:00:00.64]            at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]       Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+[xUnit.net 00:00:00.64]       ---- System.Net.Sockets.SocketException : Connection refused
+[xUnit.net 00:00:00.64]       Stack Trace:
+[xUnit.net 00:00:00.64]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.64]            at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.64]            at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(51,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(58,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(47,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(147,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.64]            at Program.&lt;Main&gt;(String[] args)
+[xUnit.net 00:00:00.64]            at InvokeStub_Program.&lt;Main&gt;(Object, Span`1)
+[xUnit.net 00:00:00.64]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.64]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/LegacyObservedEndpointsValidationTests.cs(13,0): at DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests..ctor(TestAppFactory factory)
+[xUnit.net 00:00:00.64]            at InvokeStub_LegacyObservedEndpointsValidationTests..ctor(Object, Span`1)
+[xUnit.net 00:00:00.64]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.64]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:00.64]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+[xUnit.net 00:00:00.64]            at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]       Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+[xUnit.net 00:00:00.64]       ---- System.Net.Sockets.SocketException : Connection refused
+[xUnit.net 00:00:00.64]       Stack Trace:
+[xUnit.net 00:00:00.64]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.64]            at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.64]            at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(51,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(58,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(47,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(147,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.64]            at Program.&lt;Main&gt;(String[] args)
+[xUnit.net 00:00:00.64]            at InvokeStub_Program.&lt;Main&gt;(Object, Span`1)
+[xUnit.net 00:00:00.64]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.64]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/AssetCreateValidationTests.cs(13,0): at DataAssetBackend.Tests.AssetCreateValidationTests..ctor(TestAppFactory factory)
+[xUnit.net 00:00:00.64]            at InvokeStub_AssetCreateValidationTests..ctor(Object, Span`1)
+[xUnit.net 00:00:00.64]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.64]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:00.64]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+[xUnit.net 00:00:00.64]            at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]       Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+[xUnit.net 00:00:00.64]       ---- System.Net.Sockets.SocketException : Connection refused
+[xUnit.net 00:00:00.64]       Stack Trace:
+[xUnit.net 00:00:00.64]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.64]            at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.64]            at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(51,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(58,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(47,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(147,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.64]            at Program.&lt;Main&gt;(String[] args)
+[xUnit.net 00:00:00.64]            at InvokeStub_Program.&lt;Main&gt;(Object, Span`1)
+[xUnit.net 00:00:00.64]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.64]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/HealthAndValidationEndpointsTests.cs(13,0): at DataAssetBackend.Tests.HealthAndValidationEndpointsTests..ctor(TestAppFactory factory)
+[xUnit.net 00:00:00.64]            at InvokeStub_HealthAndValidationEndpointsTests..ctor(Object, Span`1)
+[xUnit.net 00:00:00.64]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.64]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:00.64]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+[xUnit.net 00:00:00.64]            at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]       Npgsql.NpgsqlException : Failed to connect to 127.0.0.1:5432
+[xUnit.net 00:00:00.64]       ---- System.Net.Sockets.SocketException : Connection refused
+[xUnit.net 00:00:00.64]       Stack Trace:
+[xUnit.net 00:00:00.64]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.64]            at Npgsql.Internal.NpgsqlConnector.&lt;Open&gt;g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+[xUnit.net 00:00:00.64]            at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.PoolingDataSource.&lt;Get&gt;g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.NpgsqlConnection.&lt;Open&gt;g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(51,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/NpgsqlConnectionFactory.cs(58,0): at DataAssetBackend.Infrastructure.Database.NpgsqlConnectionFactory.OpenAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(47,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Infrastructure/Database/Section4SchemaBootstrapper.cs(147,0): at DataAssetBackend.Infrastructure.Database.Section4SchemaBootstrapper.EnsureCreatedAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend/Program.cs(242,0): at Program.&lt;Main&gt;$(String[] args)
+[xUnit.net 00:00:00.64]            at Program.&lt;Main&gt;(String[] args)
+[xUnit.net 00:00:00.64]            at InvokeStub_Program.&lt;Main&gt;(Object, Span`1)
+[xUnit.net 00:00:00.64]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.64]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StartAsync(CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Start(IHost host)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateHost(IHostBuilder builder)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.ConfigureHostBuilder(IHostBuilder hostBuilder)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.EnsureServer()
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateDefaultClient(Uri baseAddress, DelegatingHandler[] handlers)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient(WebApplicationFactoryClientOptions options)
+[xUnit.net 00:00:00.64]            at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.CreateClient()
+[xUnit.net 00:00:00.64]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/AssetCreateValidationTests.cs(13,0): at DataAssetBackend.Tests.AssetCreateValidationTests..ctor(TestAppFactory factory)
+[xUnit.net 00:00:00.64]            at InvokeStub_AssetCreateValidationTests..ctor(Object, Span`1)
+[xUnit.net 00:00:00.64]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.64]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:00.64]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+[xUnit.net 00:00:00.64]            at System.Net.Sockets.Socket.&lt;ConnectAsync&gt;g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.TaskTimeoutAndCancellation.ExecuteAsync(Func`2 getTaskFunc, NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]            at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+[xUnit.net 00:00:00.64]   Finished:    DataAssetBackend.Tests
 </StdOut>
     </Output>
     <RunInfos>
-      <RunInfo computerName="f4180c00c592" outcome="Error" timestamp="2026-03-14T22:41:09.0516689+00:00">
-        <Text>[xUnit.net 00:00:01.42]     DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_rejects_nonexistent_parentPseudoAssetId_with_400 [FAIL]</Text>
+      <RunInfo computerName="f4180c00c592" outcome="Error" timestamp="2026-03-14T22:47:45.6683194+00:00">
+        <Text>[xUnit.net 00:00:00.55]     DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests.Legacy_manageSiteAssets_requires_mode [FAIL]</Text>
       </RunInfo>
-      <RunInfo computerName="f4180c00c592" outcome="Error" timestamp="2026-03-14T22:41:09.0535020+00:00">
-        <Text>[xUnit.net 00:00:01.42]     DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_rejects_parentPseudoAssetId_when_requiresParentPseudo_is_false [FAIL]</Text>
+      <RunInfo computerName="f4180c00c592" outcome="Error" timestamp="2026-03-14T22:47:45.6789145+00:00">
+        <Text>[xUnit.net 00:00:00.56]     DataAssetBackend.Tests.IdempotencyCopyAssetTests.CopyAsset_with_same_idempotency_key_returns_same_response_on_retry [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="f4180c00c592" outcome="Error" timestamp="2026-03-14T22:47:45.6813326+00:00">
+        <Text>[xUnit.net 00:00:00.56]     DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Validity_check_accepts_simple_value [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="f4180c00c592" outcome="Error" timestamp="2026-03-14T22:47:45.6837995+00:00">
+        <Text>[xUnit.net 00:00:00.56]     DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_requires_requiresParentPseudo_field [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="f4180c00c592" outcome="Error" timestamp="2026-03-14T22:47:45.7030716+00:00">
+        <Text>[xUnit.net 00:00:00.58]     DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests.Legacy_removeSiteAsset_requires_required_fields [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="f4180c00c592" outcome="Error" timestamp="2026-03-14T22:47:45.7057185+00:00">
+        <Text>[xUnit.net 00:00:00.59]     DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_requires_processGroupOtherText_when_processGroup_is_other [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="f4180c00c592" outcome="Error" timestamp="2026-03-14T22:47:45.7077912+00:00">
+        <Text>[xUnit.net 00:00:00.59]     DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Validity_check_rejects_empty_value [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="f4180c00c592" outcome="Error" timestamp="2026-03-14T22:47:45.8015570+00:00">
+        <Text>[xUnit.net 00:00:00.63]     DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Healthz_returns_200_even_when_db_is_not_configured [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="f4180c00c592" outcome="Error" timestamp="2026-03-14T22:47:45.8017403+00:00">
+        <Text>[xUnit.net 00:00:00.63]     DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_rejects_nonexistent_parentPseudoAssetId_with_400 [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="f4180c00c592" outcome="Error" timestamp="2026-03-14T22:47:45.8019227+00:00">
+        <Text>[xUnit.net 00:00:00.64]     DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests.Legacy_manageSiteAssets_update_requires_assetId_and_update_payload [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="f4180c00c592" outcome="Error" timestamp="2026-03-14T22:47:45.8021227+00:00">
+        <Text>[xUnit.net 00:00:00.64]     DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_requires_parentPseudoAssetId_when_requiresParentPseudo_is_true [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="f4180c00c592" outcome="Error" timestamp="2026-03-14T22:47:45.8023483+00:00">
+        <Text>[xUnit.net 00:00:00.64]     DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Root_health_returns_200 [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="f4180c00c592" outcome="Error" timestamp="2026-03-14T22:47:45.8025313+00:00">
+        <Text>[xUnit.net 00:00:00.64]     DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_rejects_parentPseudoAssetId_when_requiresParentPseudo_is_false [FAIL]</Text>
       </RunInfo>
     </RunInfos>
   </ResultSummary>

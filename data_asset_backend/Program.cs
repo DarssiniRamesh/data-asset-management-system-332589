@@ -235,15 +235,23 @@ var app = builder.Build();
 
 // Best-effort boot-time schema ensure for Section 4 tables.
 // This prevents runtime 500s due to missing V3 tables in preview/dev environments.
-try
+//
+// IMPORTANT:
+// In the automated test host (Environment=Testing), we intentionally skip this step so
+// tests can run in DB-less CI environments. Section4SchemaBootstrapper opens a DB
+// connection, which would otherwise hard-fail startup if Postgres isn't available.
+if (!string.Equals(app.Environment.EnvironmentName, "Testing", StringComparison.OrdinalIgnoreCase))
 {
-    await using var scope = app.Services.CreateAsyncScope();
-    var bootstrapper = scope.ServiceProvider.GetRequiredService<Section4SchemaBootstrapper>();
-    await bootstrapper.EnsureCreatedAsync(CancellationToken.None);
-}
-catch (InvalidOperationException)
-{
-    // DB not configured: ignore (health checks will report).
+    try
+    {
+        await using var scope = app.Services.CreateAsyncScope();
+        var bootstrapper = scope.ServiceProvider.GetRequiredService<Section4SchemaBootstrapper>();
+        await bootstrapper.EnsureCreatedAsync(CancellationToken.None);
+    }
+    catch (InvalidOperationException)
+    {
+        // DB not configured: ignore (health checks will report).
+    }
 }
 
 // Must be early in pipeline, before anything that relies on scheme/host (OpenAPI generation).

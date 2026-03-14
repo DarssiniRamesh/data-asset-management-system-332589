@@ -83,6 +83,7 @@ builder.Services.AddSingleton<DatabaseConfigProvider>();
  // Postgres data access services (Flyway V2 schema)
 builder.Services.AddSingleton<NpgsqlConnectionFactory>();
 builder.Services.AddSingleton<AssetRepository>();
+builder.Services.AddSingleton<AssetCopyLineageRepository>();
 builder.Services.AddSingleton<MasterRepository>();
 
 var app = builder.Build();
@@ -378,6 +379,101 @@ app.MapGet("/api/assets", async (
     .WithSummary("Query assets")
     .WithDescription("Queries Assets with optional filters (siteId, assetGroup, processGroup, assetNameContains, permitEuId, globalUniqueAssetId).")
     .Produces<IReadOnlyList<AssetDto>>(StatusCodes.Status200OK)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+//
+// Copy lineage endpoints (BRD §6.13; table: asset_copy_lineage)
+//
+
+// Record a copy lineage row
+app.MapPost("/api/asset-copy-lineage", async (
+        CreateAssetCopyLineageRequest request,
+        AssetCopyLineageRepository lineageRepository,
+        AssetRepository assetRepository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("CreateAssetCopyLineage");
+
+        try
+        {
+            var created = await AssetCopyLineageFlows.CreateAsync(
+                request,
+                lineageRepository,
+                assetRepository,
+                logger,
+                cancellationToken);
+
+            return Results.Created($"/api/asset-copy-lineage/{created.AssetCopyLineageId}", created);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "CreateAssetCopyLineage failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            // Constraint violations can occur (e.g., FK violations) if DB is configured but references invalid.
+            logger.LogWarning(ex, "CreateAssetCopyLineage failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .WithName("CreateAssetCopyLineage")
+    .WithTags("Assets")
+    .WithSummary("Create asset copy lineage record")
+    .WithDescription("Records copy/lineage capture data for an asset copy operation (BRD §6.13; table: asset_copy_lineage).")
+    .Accepts<CreateAssetCopyLineageRequest>("application/json")
+    .Produces<AssetCopyLineageDto>(StatusCodes.Status201Created)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
+
+// Query lineage by supported filters
+app.MapGet("/api/asset-copy-lineage", async (
+        [AsParameters] QueryAssetCopyLineageRequest request,
+        AssetCopyLineageRepository lineageRepository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("QueryAssetCopyLineage");
+
+        try
+        {
+            var list = await AssetCopyLineageFlows.QueryAsync(request, lineageRepository, logger, cancellationToken);
+            return Results.Ok(list);
+        }
+        catch (AssetCopyLineageFlows.MissingFiltersException ex)
+        {
+            return Results.Problem(
+                title: "Missing filters",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status400BadRequest);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "QueryAssetCopyLineage failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .WithName("QueryAssetCopyLineage")
+    .WithTags("Assets")
+    .WithSummary("Query asset copy lineage")
+    .WithDescription("Queries copy lineage records by copyOperationId, sourceAssetId, and/or targetAssetId. Multiple filters are ANDed. At least one filter is required.")
+    .Produces<IReadOnlyList<AssetCopyLineageDto>>(StatusCodes.Status200OK)
+    .ProducesProblem(StatusCodes.Status400BadRequest)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
 
 

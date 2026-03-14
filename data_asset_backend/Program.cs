@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using DataAssetBackend.Features.Assets;
+using DataAssetBackend.Features.Masters;
 using DataAssetBackend.Infrastructure.Database;
 using Microsoft.AspNetCore.HttpOverrides;
 using Npgsql;
@@ -79,9 +80,10 @@ builder.Services.AddCors(options =>
 // - Side effects: none at startup (no eager DB connect); health endpoint may attempt connection when configured
 builder.Services.AddSingleton<DatabaseConfigProvider>();
 
-// Postgres data access services (Flyway V2 schema)
+ // Postgres data access services (Flyway V2 schema)
 builder.Services.AddSingleton<NpgsqlConnectionFactory>();
 builder.Services.AddSingleton<AssetRepository>();
+builder.Services.AddSingleton<MasterRepository>();
 
 var app = builder.Build();
 
@@ -376,6 +378,666 @@ app.MapGet("/api/assets", async (
     .WithSummary("Query assets")
     .WithDescription("Queries Assets with optional filters (siteId, assetGroup, processGroup, assetNameContains, permitEuId, globalUniqueAssetId).")
     .Produces<IReadOnlyList<AssetDto>>(StatusCodes.Status200OK)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+//
+// Master/reference endpoints (BRD §6.14)
+//
+
+// UOM Master
+app.MapPost("/api/masters/uoms", async (
+        CreateUomMasterRequest request,
+        MasterRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("CreateUomMaster");
+
+        try
+        {
+            var created = await MasterFlows.CreateUomAsync(request, repository, logger, cancellationToken);
+            return Results.Created($"/api/masters/uoms/{created.UomId}", created);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "CreateUomMaster failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            logger.LogWarning(ex, "CreateUomMaster failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .WithName("CreateUomMaster")
+    .WithTags("Masters")
+    .WithSummary("Create UOM master")
+    .WithDescription("Creates a UOM master row (BRD §6.14).")
+    .Accepts<CreateUomMasterRequest>("application/json")
+    .Produces<UomMasterDto>(StatusCodes.Status201Created)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
+
+app.MapGet("/api/masters/uoms", async (
+        [AsParameters] QueryMasterRequest request,
+        MasterRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("QueryUomMasters");
+
+        try
+        {
+            var list = await MasterFlows.QueryUomsAsync(request, repository, logger, cancellationToken);
+            return Results.Ok(list);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "QueryUomMasters failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .WithName("QueryUomMasters")
+    .WithTags("Masters")
+    .WithSummary("Query UOM masters")
+    .WithDescription("Queries UOM master rows (BRD §6.14). Optional: activeOnly.")
+    .Produces<IReadOnlyList<UomMasterDto>>(StatusCodes.Status200OK)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapGet("/api/masters/uoms/{uomId:long}", async (
+        long uomId,
+        MasterRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("GetUomMaster");
+
+        try
+        {
+            var uom = await repository.GetUomByIdAsync(uomId, cancellationToken);
+            return uom is null ? Results.NotFound() : Results.Ok(uom);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "GetUomMaster failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .WithName("GetUomMasterById")
+    .WithTags("Masters")
+    .WithSummary("Get UOM master by ID")
+    .WithDescription("Fetches a single UOM master row by ID (excluding soft-deleted).")
+    .Produces<UomMasterDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapPut("/api/masters/uoms/{uomId:long}", async (
+        long uomId,
+        UpdateUomMasterRequest request,
+        MasterRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("UpdateUomMaster");
+
+        try
+        {
+            var updated = await MasterFlows.UpdateUomAsync(uomId, request, repository, logger, cancellationToken);
+            return updated is null ? Results.NotFound() : Results.Ok(updated);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "UpdateUomMaster failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .WithName("UpdateUomMaster")
+    .WithTags("Masters")
+    .WithSummary("Update UOM master")
+    .WithDescription("Updates a UOM master row by ID (excluding soft-deleted).")
+    .Accepts<UpdateUomMasterRequest>("application/json")
+    .Produces<UomMasterDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+// Reporting Program Master
+app.MapPost("/api/masters/reporting-programs", async (
+        CreateReportingProgramMasterRequest request,
+        MasterRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("CreateReportingProgramMaster");
+
+        try
+        {
+            var created = await MasterFlows.CreateReportingProgramAsync(request, repository, logger, cancellationToken);
+            return Results.Created($"/api/masters/reporting-programs/{created.ReportingProgramId}", created);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "CreateReportingProgramMaster failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            logger.LogWarning(ex, "CreateReportingProgramMaster failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .WithName("CreateReportingProgramMaster")
+    .WithTags("Masters")
+    .WithSummary("Create reporting program master")
+    .WithDescription("Creates a reporting program master row (BRD §6.14).")
+    .Accepts<CreateReportingProgramMasterRequest>("application/json")
+    .Produces<ReportingProgramMasterDto>(StatusCodes.Status201Created)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
+
+app.MapGet("/api/masters/reporting-programs", async (
+        [AsParameters] QueryMasterRequest request,
+        MasterRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("QueryReportingProgramMasters");
+
+        try
+        {
+            var list = await MasterFlows.QueryReportingProgramsAsync(request, repository, logger, cancellationToken);
+            return Results.Ok(list);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "QueryReportingProgramMasters failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .WithName("QueryReportingProgramMasters")
+    .WithTags("Masters")
+    .WithSummary("Query reporting program masters")
+    .WithDescription("Queries reporting program master rows (BRD §6.14). Optional: activeOnly.")
+    .Produces<IReadOnlyList<ReportingProgramMasterDto>>(StatusCodes.Status200OK)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapGet("/api/masters/reporting-programs/{reportingProgramId:long}", async (
+        long reportingProgramId,
+        MasterRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("GetReportingProgramMaster");
+
+        try
+        {
+            var item = await repository.GetReportingProgramByIdAsync(reportingProgramId, cancellationToken);
+            return item is null ? Results.NotFound() : Results.Ok(item);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "GetReportingProgramMaster failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .WithName("GetReportingProgramMasterById")
+    .WithTags("Masters")
+    .WithSummary("Get reporting program master by ID")
+    .WithDescription("Fetches a single reporting program master row by ID (excluding soft-deleted).")
+    .Produces<ReportingProgramMasterDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapPut("/api/masters/reporting-programs/{reportingProgramId:long}", async (
+        long reportingProgramId,
+        UpdateReportingProgramMasterRequest request,
+        MasterRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("UpdateReportingProgramMaster");
+
+        try
+        {
+            var updated = await MasterFlows.UpdateReportingProgramAsync(reportingProgramId, request, repository, logger, cancellationToken);
+            return updated is null ? Results.NotFound() : Results.Ok(updated);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "UpdateReportingProgramMaster failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .WithName("UpdateReportingProgramMaster")
+    .WithTags("Masters")
+    .WithSummary("Update reporting program master")
+    .WithDescription("Updates a reporting program master row by ID (excluding soft-deleted).")
+    .Accepts<UpdateReportingProgramMasterRequest>("application/json")
+    .Produces<ReportingProgramMasterDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+// Control Device Master
+app.MapPost("/api/masters/control-devices", async (
+        CreateControlDeviceMasterRequest request,
+        MasterRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("CreateControlDeviceMaster");
+
+        try
+        {
+            var created = await MasterFlows.CreateControlDeviceAsync(request, repository, logger, cancellationToken);
+            return Results.Created($"/api/masters/control-devices/{created.ControlDeviceId}", created);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "CreateControlDeviceMaster failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            logger.LogWarning(ex, "CreateControlDeviceMaster failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .WithName("CreateControlDeviceMaster")
+    .WithTags("Masters")
+    .WithSummary("Create control device master")
+    .WithDescription("Creates a control device master row (BRD §6.14).")
+    .Accepts<CreateControlDeviceMasterRequest>("application/json")
+    .Produces<ControlDeviceMasterDto>(StatusCodes.Status201Created)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
+
+app.MapGet("/api/masters/control-devices", async (
+        string? siteId,
+        [AsParameters] QueryMasterRequest request,
+        MasterRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("QueryControlDeviceMasters");
+
+        try
+        {
+            var list = await MasterFlows.QueryControlDevicesAsync(siteId, request, repository, logger, cancellationToken);
+            return Results.Ok(list);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "QueryControlDeviceMasters failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .WithName("QueryControlDeviceMasters")
+    .WithTags("Masters")
+    .WithSummary("Query control device masters")
+    .WithDescription("Queries control device master rows (BRD §6.14). Optional: siteId, activeOnly.")
+    .Produces<IReadOnlyList<ControlDeviceMasterDto>>(StatusCodes.Status200OK)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapGet("/api/masters/control-devices/{controlDeviceId:long}", async (
+        long controlDeviceId,
+        MasterRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("GetControlDeviceMaster");
+
+        try
+        {
+            var item = await repository.GetControlDeviceByIdAsync(controlDeviceId, cancellationToken);
+            return item is null ? Results.NotFound() : Results.Ok(item);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "GetControlDeviceMaster failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .WithName("GetControlDeviceMasterById")
+    .WithTags("Masters")
+    .WithSummary("Get control device master by ID")
+    .WithDescription("Fetches a single control device master row by ID (excluding soft-deleted).")
+    .Produces<ControlDeviceMasterDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapPut("/api/masters/control-devices/{controlDeviceId:long}", async (
+        long controlDeviceId,
+        UpdateControlDeviceMasterRequest request,
+        MasterRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("UpdateControlDeviceMaster");
+
+        try
+        {
+            var updated = await MasterFlows.UpdateControlDeviceAsync(controlDeviceId, request, repository, logger, cancellationToken);
+            return updated is null ? Results.NotFound() : Results.Ok(updated);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "UpdateControlDeviceMaster failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .WithName("UpdateControlDeviceMaster")
+    .WithTags("Masters")
+    .WithSummary("Update control device master")
+    .WithDescription("Updates a control device master row by ID (excluding soft-deleted).")
+    .Accepts<UpdateControlDeviceMasterRequest>("application/json")
+    .Produces<ControlDeviceMasterDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+// Equation Master
+app.MapPost("/api/masters/equations", async (
+        CreateEquationMasterRequest request,
+        MasterRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("CreateEquationMaster");
+
+        try
+        {
+            var created = await MasterFlows.CreateEquationAsync(request, repository, logger, cancellationToken);
+            return Results.Created($"/api/masters/equations/{created.EquationMasterId}", created);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "CreateEquationMaster failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            logger.LogWarning(ex, "CreateEquationMaster failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .WithName("CreateEquationMaster")
+    .WithTags("Masters")
+    .WithSummary("Create equation master")
+    .WithDescription("Creates an equation master row (BRD §6.14).")
+    .Accepts<CreateEquationMasterRequest>("application/json")
+    .Produces<EquationMasterDto>(StatusCodes.Status201Created)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
+
+app.MapGet("/api/masters/equations", async (
+        [AsParameters] QueryMasterRequest request,
+        MasterRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("QueryEquationMasters");
+
+        try
+        {
+            var list = await MasterFlows.QueryEquationsAsync(request, repository, logger, cancellationToken);
+            return Results.Ok(list);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "QueryEquationMasters failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .WithName("QueryEquationMasters")
+    .WithTags("Masters")
+    .WithSummary("Query equation masters")
+    .WithDescription("Queries equation master rows (BRD §6.14).")
+    .Produces<IReadOnlyList<EquationMasterDto>>(StatusCodes.Status200OK)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapGet("/api/masters/equations/{equationMasterId:long}", async (
+        long equationMasterId,
+        MasterRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("GetEquationMaster");
+
+        try
+        {
+            var item = await repository.GetEquationByIdAsync(equationMasterId, cancellationToken);
+            return item is null ? Results.NotFound() : Results.Ok(item);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "GetEquationMaster failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .WithName("GetEquationMasterById")
+    .WithTags("Masters")
+    .WithSummary("Get equation master by ID")
+    .WithDescription("Fetches a single equation master row by ID (excluding soft-deleted).")
+    .Produces<EquationMasterDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapPut("/api/masters/equations/{equationMasterId:long}", async (
+        long equationMasterId,
+        UpdateEquationMasterRequest request,
+        MasterRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("UpdateEquationMaster");
+
+        try
+        {
+            var updated = await MasterFlows.UpdateEquationAsync(equationMasterId, request, repository, logger, cancellationToken);
+            return updated is null ? Results.NotFound() : Results.Ok(updated);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "UpdateEquationMaster failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .WithName("UpdateEquationMaster")
+    .WithTags("Masters")
+    .WithSummary("Update equation master")
+    .WithDescription("Updates an equation master row by ID (excluding soft-deleted).")
+    .Accepts<UpdateEquationMasterRequest>("application/json")
+    .Produces<EquationMasterDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+// Status Code Master
+app.MapPost("/api/masters/status-codes", async (
+        CreateStatusCodeMasterRequest request,
+        MasterRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("CreateStatusCodeMaster");
+
+        try
+        {
+            var created = await MasterFlows.CreateStatusCodeAsync(request, repository, logger, cancellationToken);
+            return Results.Created($"/api/masters/status-codes/{created.StatusCodeId}", created);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "CreateStatusCodeMaster failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            logger.LogWarning(ex, "CreateStatusCodeMaster failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .WithName("CreateStatusCodeMaster")
+    .WithTags("Masters")
+    .WithSummary("Create status code master")
+    .WithDescription("Creates a status code master row (BRD §6.14).")
+    .Accepts<CreateStatusCodeMasterRequest>("application/json")
+    .Produces<StatusCodeMasterDto>(StatusCodes.Status201Created)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
+
+app.MapGet("/api/masters/status-codes", async (
+        [AsParameters] QueryMasterRequest request,
+        MasterRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("QueryStatusCodeMasters");
+
+        try
+        {
+            var list = await MasterFlows.QueryStatusCodesAsync(request, repository, logger, cancellationToken);
+            return Results.Ok(list);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "QueryStatusCodeMasters failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .WithName("QueryStatusCodeMasters")
+    .WithTags("Masters")
+    .WithSummary("Query status code masters")
+    .WithDescription("Queries status code master rows (BRD §6.14). Optional: activeOnly.")
+    .Produces<IReadOnlyList<StatusCodeMasterDto>>(StatusCodes.Status200OK)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapGet("/api/masters/status-codes/{statusCodeId:long}", async (
+        long statusCodeId,
+        MasterRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("GetStatusCodeMaster");
+
+        try
+        {
+            var item = await repository.GetStatusCodeByIdAsync(statusCodeId, cancellationToken);
+            return item is null ? Results.NotFound() : Results.Ok(item);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "GetStatusCodeMaster failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .WithName("GetStatusCodeMasterById")
+    .WithTags("Masters")
+    .WithSummary("Get status code master by ID")
+    .WithDescription("Fetches a single status code master row by ID (excluding soft-deleted).")
+    .Produces<StatusCodeMasterDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapPut("/api/masters/status-codes/{statusCodeId:long}", async (
+        long statusCodeId,
+        UpdateStatusCodeMasterRequest request,
+        MasterRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("UpdateStatusCodeMaster");
+
+        try
+        {
+            var updated = await MasterFlows.UpdateStatusCodeAsync(statusCodeId, request, repository, logger, cancellationToken);
+            return updated is null ? Results.NotFound() : Results.Ok(updated);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "UpdateStatusCodeMaster failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .WithName("UpdateStatusCodeMaster")
+    .WithTags("Masters")
+    .WithSummary("Update status code master")
+    .WithDescription("Updates a status code master row by ID (excluding soft-deleted).")
+    .Accepts<UpdateStatusCodeMasterRequest>("application/json")
+    .Produces<StatusCodeMasterDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
 
 app.Run();

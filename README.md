@@ -28,6 +28,19 @@ dotnet format
 dotnet format --verify-no-changes
 ```
 
+## Database migrations (Neon) without Docker
+
+Docker is not available in this environment. To apply the repo’s Flyway-style SQL migrations (including **V2**) to Neon, use the
+built-in non-Docker migration runner:
+
+- See: `data_asset_backend/db/README.md` (section “Migrations (no Docker): .NET MigrationRunner”)
+
+Quick run (from `data_asset_backend/`):
+
+```bash
+dotnet run --project MigrationRunner --
+```
+
 ## Local run
 
 From `data_asset_backend/`:

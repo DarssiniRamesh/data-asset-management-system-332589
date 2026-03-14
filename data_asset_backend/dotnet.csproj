@@ -6,6 +6,15 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <!--
+    IMPORTANT:
+    MigrationRunner is a separate console project under data_asset_backend/MigrationRunner.
+    Exclude its sources from the main web project so we don't compile multiple entrypoints.
+  -->
+  <ItemGroup>
+    <Compile Remove="MigrationRunner/**/*.cs" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="NSwag.AspNetCore" Version="14.4.0" />
     <PackageReference Include="Npgsql" Version="8.0.5" />

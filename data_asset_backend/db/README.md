@@ -18,9 +18,49 @@ Migrations live in:
 - `data_asset_backend/db/migrations/`
   - `V1__init.sql` (baseline)
 
-## Flyway migrator (planned runtime)
+## Migrations (no Docker): .NET MigrationRunner (recommended in this environment)
 
-A containerized migrator is provided at:
+Docker is not available in this environment, so this repo provides a **non-Docker migration runner** that applies the existing
+Flyway-style SQL scripts under:
+
+- `data_asset_backend/db/migrations/` (`V1__*.sql`, `V2__*.sql`, ...)
+
+### How it works
+
+- Reads DB config from environment:
+  1) `DATABASE_URL` (preferred; e.g. `postgresql://user:pass@host:5432/db?sslmode=require`)
+  2) `ConnectionStrings__Default` (optional; .NET connection string)
+
+- Applies pending migrations in version order.
+- Tracks applied migrations in a history table:
+  - `__app_migration_history`
+
+This history table is **separate** from Flyway’s `flyway_schema_history` to avoid checksum/metadata compatibility issues when the
+official Flyway CLI is not used.
+
+### Run it
+
+From `data_asset_backend/`:
+
+```bash
+dotnet run --project MigrationRunner --
+```
+
+Dry run (shows pending versions without applying):
+
+```bash
+dotnet run --project MigrationRunner -- --dry-run
+```
+
+Optional: specify migrations directory explicitly:
+
+```bash
+dotnet run --project MigrationRunner -- --migrations ./db/migrations
+```
+
+## Flyway migrator (Docker, optional)
+
+If you have Docker available elsewhere, a containerized Flyway migrator is also provided at:
 
 - `data_asset_backend/flyway-migrator/Dockerfile`
 

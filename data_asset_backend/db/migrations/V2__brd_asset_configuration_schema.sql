@@ -1,15 +1,14 @@
 -- V2 BRD Asset Configuration schema
--- Source: attachments/BRD_-_Asset_Configuration_Feature.pdf
--- Authoritative plan/spec:
+-- Source: attachments/BRD_-_Asset_Configuration_Feature.pdf (dated 2026-02-27)
+-- Evidence-only spec:
 -- - db/brd-evidence-only-database-schema.md
+-- Plan:
 -- - db/brd-flyway-migration-plan.md
 --
--- Notes:
--- - BRD does not provide a technical data dictionary (types/lengths/domains). This migration uses
---   conservative Postgres types (TEXT, DATE, TIMESTAMPTZ, BOOLEAN) to avoid over-constraining.
--- - Uniqueness constraints are only applied where BRD indicates global uniqueness (Global Unique Asset ID).
--- - Some cross-row/business rules (e.g., status chronology, no cycles) are not enforced at DB level
---   because the BRD does not specify an enforceable technical rule shape.
+-- IMPORTANT (NO ASSUMPTIONS):
+-- This migration includes ONLY what is evidenced in the BRD for persistence entities and data elements.
+-- Where the BRD requires a rule but does not evidence a concrete DB-enforceable key/scope (e.g., uniqueness scope),
+-- it is documented inline and NOT enforced via constraints beyond what is explicitly evidenced.
 
 ------------------------------------------------------------
 -- Master / reference tables (BRD §6.14)
@@ -21,10 +20,12 @@ CREATE TABLE uom_master (
     display_label TEXT NOT NULL,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
 
+    -- BRD §6.11 audit/trace fields (required)
     created_by TEXT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     modified_by TEXT NOT NULL,
     modified_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    -- BRD: "Soft Delete Flag required if logical deletes are used" (whether used is not evidenced; field retained per plan)
     is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
     correlation_id TEXT NOT NULL
 );
@@ -113,13 +114,16 @@ CREATE TABLE asset (
     is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
     correlation_id TEXT NOT NULL,
 
+    -- BRD §6.1: "Global Unique Asset ID required" and described as unique system identifier.
     CONSTRAINT uq_asset_global_unique_asset_id UNIQUE (global_unique_asset_id),
+
+    -- BRD §6.1: pseudo/child mapping is conditional; FK supports link when used.
     CONSTRAINT fk_asset_parent_pseudo_asset
         FOREIGN KEY (parent_pseudo_asset_id) REFERENCES asset(asset_id)
 );
 
 ------------------------------------------------------------
--- Status log (BRD §6.2)
+-- StatusLog (BRD §6.2; §10.1)
 ------------------------------------------------------------
 
 CREATE TABLE asset_status_log (
@@ -139,19 +143,26 @@ CREATE TABLE asset_status_log (
     correlation_id TEXT NOT NULL,
 
     CONSTRAINT fk_asset_status_log_asset
-        FOREIGN KEY (asset_id) REFERENCES asset(asset_id)
+        FOREIGN KEY (asset_id) REFERENCES asset(asset_id),
+
+    -- BRD §6.2: "If present, [Status To Date] must be greater than Status From Date."
+    CONSTRAINT ck_asset_status_log_to_after_from
+        CHECK (status_to_date IS NULL OR status_to_date > status_from_date)
+
+    -- NOT EVIDENCED for DB enforcement:
+    -- - "Status Chronology Rule: Latest status from-date must be after previous to-date" (cross-row rule; not implemented in DDL)
 );
 
 ------------------------------------------------------------
--- AdditionalAssetID (BRD §10.1; no additional fields enumerated)
+-- AdditionalAssetID (BRD §10.1; fields not enumerated in BRD)
 ------------------------------------------------------------
 
 CREATE TABLE additional_asset_id (
-    additional_asset_id_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    additional_asset_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     asset_id BIGINT NOT NULL,
 
-    -- BRD mentions "Additional Asset IDs" but does not enumerate the fields.
-    -- Represent as a key/value pair without assuming specific identifiers.
+    -- BRD includes "Additional Asset IDs" but does not enumerate the persisted elements.
+    -- Minimal representation as a typed identifier pair (key + value) without inventing a specific taxonomy.
     id_type TEXT NOT NULL,
     id_value TEXT NOT NULL,
 
@@ -167,7 +178,7 @@ CREATE TABLE additional_asset_id (
 );
 
 ------------------------------------------------------------
--- AssetProperty (BRD §6.3)
+-- AssetProperty (BRD §6.3; §10.1)
 ------------------------------------------------------------
 
 CREATE TABLE asset_property (
@@ -179,9 +190,6 @@ CREATE TABLE asset_property (
     from_date DATE NOT NULL,
     notes TEXT NOT NULL,
 
-    -- In-use row context is a business rule; persisted explicitly for validation.
-    in_use_flag BOOLEAN NOT NULL DEFAULT TRUE,
-
     created_by TEXT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     modified_by TEXT NOT NULL,
@@ -191,18 +199,25 @@ CREATE TABLE asset_property (
 
     CONSTRAINT fk_asset_property_asset
         FOREIGN KEY (asset_id) REFERENCES asset(asset_id)
+
+    -- NOTE:
+    -- BRD §6.3 describes "Required (in-use row)" but does NOT evidence an "In Use Flag" field for Asset Properties.
+    -- Therefore no in_use_flag column is included here.
 );
 
 ------------------------------------------------------------
--- ControlDeviceMapping (BRD §6.4)
+-- ControlDeviceMapping (BRD §6.4; §10.1)
 ------------------------------------------------------------
 
 CREATE TABLE control_device_mapping (
     control_device_mapping_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     asset_id BIGINT NOT NULL,
 
-    -- BRD §6.4: mapping id reference + name/ref + in-use flag
-    control_device_id BIGINT NULL,
+    -- BRD §6.4
+    -- - Control Device Mapping ID: required reference to configured control-device context.
+    -- - Control Device Name/Ref: required.
+    -- - In Use Flag: required.
+    control_device_id BIGINT NOT NULL,
     control_device_name_or_ref TEXT NOT NULL,
     in_use_flag BOOLEAN NOT NULL,
 
@@ -220,13 +235,14 @@ CREATE TABLE control_device_mapping (
 );
 
 ------------------------------------------------------------
--- InputParameter (BRD §6.5)
+-- InputParameter (BRD §6.5; §10.1)
 ------------------------------------------------------------
 
 CREATE TABLE input_parameter (
     input_parameter_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     asset_id BIGINT NOT NULL,
 
+    -- BRD §6.5 data elements
     input_parameter_name TEXT NOT NULL,
     uom_id BIGINT NULL,
     reporting_program_id BIGINT NULL,
@@ -247,11 +263,28 @@ CREATE TABLE input_parameter (
     CONSTRAINT fk_input_parameter_uom
         FOREIGN KEY (uom_id) REFERENCES uom_master(uom_id),
     CONSTRAINT fk_input_parameter_reporting_program
-        FOREIGN KEY (reporting_program_id) REFERENCES reporting_program_master(reporting_program_id)
+        FOREIGN KEY (reporting_program_id) REFERENCES reporting_program_master(reporting_program_id),
+
+    -- BRD §6.5: in-use inputs require name, UOM, reporting program, input type, frequency.
+    -- Enforced as a conditional check on in_use_flag.
+    CONSTRAINT ck_input_parameter_in_use_requires_mandatory_fields
+        CHECK (
+            in_use_flag = FALSE
+            OR (
+                input_parameter_name IS NOT NULL
+                AND uom_id IS NOT NULL
+                AND reporting_program_id IS NOT NULL
+                AND input_type IS NOT NULL
+                AND data_entry_frequency IS NOT NULL
+            )
+        )
+
+    -- NOT EVIDENCED for DB enforcement:
+    -- - Fuel Mapping conditional logic ("Required when business type/fuel dependency applies") is not technically defined.
 );
 
 ------------------------------------------------------------
--- ParentInputMapping (BRD §6.6)
+-- ParentInputMapping (BRD §6.6; §10.1)
 ------------------------------------------------------------
 
 CREATE TABLE parent_input_mapping (
@@ -271,10 +304,13 @@ CREATE TABLE parent_input_mapping (
         FOREIGN KEY (child_input_parameter_id) REFERENCES input_parameter(input_parameter_id),
     CONSTRAINT fk_parent_input_mapping_parent
         FOREIGN KEY (parent_input_parameter_id) REFERENCES input_parameter(input_parameter_id)
+
+    -- NOT EVIDENCED for DB enforcement:
+    -- - "No cycles; parent-child consistency required" is a cross-row/graph constraint; not implemented in DDL.
 );
 
 ------------------------------------------------------------
--- ReportingAttributeMapping (BRD §6.7)
+-- ReportingAttributeMapping (BRD §6.7; §10.1)
 ------------------------------------------------------------
 
 CREATE TABLE reporting_attribute_mapping (
@@ -283,7 +319,9 @@ CREATE TABLE reporting_attribute_mapping (
 
     attribute_name TEXT NOT NULL,
     attribute_value TEXT NOT NULL,
-    reporting_program_id BIGINT NULL,
+
+    -- BRD §6.7: Reporting Program Link is required.
+    reporting_program_id BIGINT NOT NULL,
 
     created_by TEXT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -296,10 +334,14 @@ CREATE TABLE reporting_attribute_mapping (
         FOREIGN KEY (asset_id) REFERENCES asset(asset_id),
     CONSTRAINT fk_reporting_attribute_mapping_reporting_program
         FOREIGN KEY (reporting_program_id) REFERENCES reporting_program_master(reporting_program_id)
+
+    -- NOT EVIDENCED for DB enforcement:
+    -- - BRD §6.7 "Uniqueness Constraint: Duplicate attribute combinations prevented" but the composite uniqueness key is not specified.
+    --   Therefore, no UNIQUE constraint is added here.
 );
 
 ------------------------------------------------------------
--- EFSourceMapping (BRD §6.8)
+-- EFSourceMapping (BRD §6.8; §10.1)
 ------------------------------------------------------------
 
 CREATE TABLE ef_source_mapping (
@@ -309,7 +351,9 @@ CREATE TABLE ef_source_mapping (
     ef_source_set_or_table TEXT NOT NULL,
     equation_setup TEXT NULL,
     scalar_values TEXT NULL,
-    reporting_program_id BIGINT NULL,
+
+    -- BRD §6.8: Reporting Program Mapping required.
+    reporting_program_id BIGINT NOT NULL,
 
     created_by TEXT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -322,18 +366,26 @@ CREATE TABLE ef_source_mapping (
         FOREIGN KEY (input_parameter_id) REFERENCES input_parameter(input_parameter_id),
     CONSTRAINT fk_ef_source_mapping_reporting_program
         FOREIGN KEY (reporting_program_id) REFERENCES reporting_program_master(reporting_program_id)
+
+    -- NOT EVIDENCED for DB enforcement:
+    -- - Conditional requirements for equation_setup/scalar_values are not technically defined beyond business wording.
 );
 
 ------------------------------------------------------------
--- ThroughputEquation (BRD §6.9)
+-- ThroughputEquation (BRD §6.9; §10.1)
 ------------------------------------------------------------
 
 CREATE TABLE throughput_equation (
     throughput_equation_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     input_parameter_id BIGINT NOT NULL,
 
-    master_equation_id BIGINT NULL,
+    -- BRD §6.9: Master Equation ID required.
+    master_equation_id BIGINT NOT NULL,
+
+    -- BRD §6.9: Generated Equation required.
     generated_equation TEXT NOT NULL,
+
+    -- BRD §6.9: Reporting Year required.
     reporting_year INT NOT NULL,
 
     created_by TEXT NOT NULL,
@@ -350,13 +402,14 @@ CREATE TABLE throughput_equation (
 );
 
 ------------------------------------------------------------
--- ThroughputScalar (BRD §6.9)
+-- ThroughputScalar (BRD §6.9; §10.1)
 ------------------------------------------------------------
 
 CREATE TABLE throughput_scalar (
     throughput_scalar_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     throughput_equation_id BIGINT NOT NULL,
 
+    -- BRD §6.9 scalar elements
     scalar_type TEXT NOT NULL,
     scalar_table TEXT NULL,
     scalar_id TEXT NULL,
@@ -372,19 +425,29 @@ CREATE TABLE throughput_scalar (
 
     CONSTRAINT fk_throughput_scalar_equation
         FOREIGN KEY (throughput_equation_id) REFERENCES throughput_equation(throughput_equation_id)
+
+    -- NOTE:
+    -- BRD specifies "Equation Scalars required (if equation uses scalars)" but does not evidence
+    -- a DB flag to determine scalar usage; therefore, this table exists and rows are optional by design.
 );
 
 ------------------------------------------------------------
--- DataInputValue (BRD §6.10)
+-- DataInputValue (BRD §6.10; §10.1)
 ------------------------------------------------------------
 
 CREATE TABLE data_input_value (
     data_input_value_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     input_parameter_id BIGINT NOT NULL,
 
+    -- BRD §6.10:
+    -- - Input Parameter Value required by frequency/reporting scope (conditional; scope logic not evidenced).
     input_parameter_value TEXT NULL,
+
+    -- BRD §6.10: Reporting Year/Period required.
     reporting_year INT NOT NULL,
     reporting_period TEXT NOT NULL,
+
+    -- BRD §6.10: Calculated Throughput Output is system-generated.
     calculated_throughput_output TEXT NULL,
 
     created_by TEXT NOT NULL,
@@ -396,6 +459,9 @@ CREATE TABLE data_input_value (
 
     CONSTRAINT fk_data_input_value_input_parameter
         FOREIGN KEY (input_parameter_id) REFERENCES input_parameter(input_parameter_id)
+
+    -- NOT EVIDENCED for DB enforcement:
+    -- - "Captured per frequency and period" conditional requiredness for input_parameter_value is not technically specified.
 );
 
 ------------------------------------------------------------
@@ -410,6 +476,9 @@ CREATE TABLE asset_copy_lineage (
     target_asset_id BIGINT NOT NULL,
     copy_timestamp_utc TIMESTAMPTZ NOT NULL,
     copy_performed_by TEXT NOT NULL,
+
+    -- BRD §6.13: "Completed/Partial/Failed with reason code and impacted module list"
+    -- The exact coding scheme/structure is not evidenced; stored as free-form status + optional detail.
     replication_result_status TEXT NOT NULL,
     replication_result_detail TEXT NULL,
 

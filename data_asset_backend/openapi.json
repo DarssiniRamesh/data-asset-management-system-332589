@@ -17,17 +17,23 @@
         "tags": [
           "Health"
         ],
-        "operationId": "Health",
+        "operationId": "HealthRoot",
         "responses": {
           "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OfF__AnonymousType0OfString"
-                }
-              }
-            }
+            "description": ""
+          }
+        }
+      }
+    },
+    "/healthz": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "operationId": "Healthz",
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
@@ -67,16 +73,6 @@
   },
   "components": {
     "schemas": {
-      "OfF__AnonymousType0OfString": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "message": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
       "ValidityCheckResponse": {
         "type": "object",
         "additionalProperties": false,

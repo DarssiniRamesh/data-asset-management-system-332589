@@ -1,6 +1,7 @@
 using DataAssetBackend.Infrastructure.Database;
 using Microsoft.Extensions.Logging;
 using Npgsql;
+using NpgsqlTypes;
 
 namespace DataAssetBackend.Features.Assets;
 
@@ -121,13 +122,36 @@ public sealed class AssetRepository
         AddParam(cmd, "site_id", request.SiteId);
         AddParam(cmd, "asset_group", request.AssetGroup);
         AddParam(cmd, "process_group", request.ProcessGroup);
-        AddParam(cmd, "process_group_other_text", (object?)request.ProcessGroupOtherText ?? DBNull.Value);
+
+        // Nullable columns: always bind with explicit types to avoid Postgres “could not determine data type of parameter $N”.
+        AddParam(
+            cmd,
+            "process_group_other_text",
+            (object?)request.ProcessGroupOtherText ?? DBNull.Value,
+            NpgsqlDbType.Text);
+
         AddParam(cmd, "asset_name", request.AssetName);
         AddParam(cmd, "permit_eu_id", request.PermitEuId);
         AddParam(cmd, "global_unique_asset_id", request.GlobalUniqueAssetId);
-        AddParam(cmd, "asset_description", (object?)request.AssetDescription ?? DBNull.Value);
-        AddParam(cmd, "stationary_flag", request.StationaryFlag.HasValue ? request.StationaryFlag.Value : DBNull.Value);
-        AddParam(cmd, "parent_pseudo_asset_id", request.ParentPseudoAssetId.HasValue ? request.ParentPseudoAssetId.Value : DBNull.Value);
+
+        AddParam(
+            cmd,
+            "asset_description",
+            (object?)request.AssetDescription ?? DBNull.Value,
+            NpgsqlDbType.Text);
+
+        AddParam(
+            cmd,
+            "stationary_flag",
+            request.StationaryFlag.HasValue ? request.StationaryFlag.Value : DBNull.Value,
+            NpgsqlDbType.Boolean);
+
+        AddParam(
+            cmd,
+            "parent_pseudo_asset_id",
+            request.ParentPseudoAssetId.HasValue ? request.ParentPseudoAssetId.Value : DBNull.Value,
+            NpgsqlDbType.Bigint);
+
         AddParam(cmd, "created_by", request.CreatedBy);
         AddParam(cmd, "correlation_id", request.CorrelationId);
 
@@ -234,12 +258,35 @@ public sealed class AssetRepository
         AddParam(cmd, "site_id", request.SiteId);
         AddParam(cmd, "asset_group", request.AssetGroup);
         AddParam(cmd, "process_group", request.ProcessGroup);
-        AddParam(cmd, "process_group_other_text", (object?)request.ProcessGroupOtherText ?? DBNull.Value);
+
+        // Nullable columns: always bind with explicit types to avoid Postgres “could not determine data type of parameter $N”.
+        AddParam(
+            cmd,
+            "process_group_other_text",
+            (object?)request.ProcessGroupOtherText ?? DBNull.Value,
+            NpgsqlDbType.Text);
+
         AddParam(cmd, "asset_name", request.AssetName);
         AddParam(cmd, "permit_eu_id", request.PermitEuId);
-        AddParam(cmd, "asset_description", (object?)request.AssetDescription ?? DBNull.Value);
-        AddParam(cmd, "stationary_flag", request.StationaryFlag.HasValue ? request.StationaryFlag.Value : DBNull.Value);
-        AddParam(cmd, "parent_pseudo_asset_id", request.ParentPseudoAssetId.HasValue ? request.ParentPseudoAssetId.Value : DBNull.Value);
+
+        AddParam(
+            cmd,
+            "asset_description",
+            (object?)request.AssetDescription ?? DBNull.Value,
+            NpgsqlDbType.Text);
+
+        AddParam(
+            cmd,
+            "stationary_flag",
+            request.StationaryFlag.HasValue ? request.StationaryFlag.Value : DBNull.Value,
+            NpgsqlDbType.Boolean);
+
+        AddParam(
+            cmd,
+            "parent_pseudo_asset_id",
+            request.ParentPseudoAssetId.HasValue ? request.ParentPseudoAssetId.Value : DBNull.Value,
+            NpgsqlDbType.Bigint);
+
         AddParam(cmd, "modified_by", request.ModifiedBy);
         AddParam(cmd, "correlation_id", request.CorrelationId);
 
@@ -401,7 +448,11 @@ public sealed class AssetRepository
 
         await using var cmd = new NpgsqlCommand(sql, conn);
         AddParam(cmd, "permit_eu_id", normalized);
-        AddParam(cmd, "exclude_asset_id", excludeAssetId.HasValue ? excludeAssetId.Value : DBNull.Value);
+        AddParam(
+            cmd,
+            "exclude_asset_id",
+            excludeAssetId.HasValue ? excludeAssetId.Value : DBNull.Value,
+            NpgsqlDbType.Bigint);
 
         var scalar = await cmd.ExecuteScalarAsync(cancellationToken);
         return scalar is not null;
@@ -739,7 +790,11 @@ public sealed class AssetRepository
         await using var cmd = new NpgsqlCommand(sql, conn);
         AddParam(cmd, "start_node", proposedParentInputParameterId);
         AddParam(cmd, "target_node", childInputParameterId);
-        AddParam(cmd, "exclude_id", excludeParentInputMappingId.HasValue ? excludeParentInputMappingId.Value : DBNull.Value);
+        AddParam(
+            cmd,
+            "exclude_id",
+            excludeParentInputMappingId.HasValue ? excludeParentInputMappingId.Value : DBNull.Value,
+            NpgsqlDbType.Bigint);
 
         var scalar = await cmd.ExecuteScalarAsync(cancellationToken);
         return scalar is not null;
@@ -2947,10 +3002,20 @@ public sealed class AssetRepository
     // Readers
     // ---------------------------------------------------------------------
 
-    private static void AddParam(NpgsqlCommand cmd, string name, object value)
+    private static void AddParam(NpgsqlCommand cmd, string name, object value, NpgsqlDbType? dbType = null)
     {
-        var p = cmd.Parameters.AddWithValue(name, value);
-        _ = p;
+        // Npgsql cannot infer the SQL type from DBNull.Value. If we pass DBNull without specifying a type,
+        // PostgreSQL may fail with: “could not determine data type of parameter $N”.
+        if (dbType.HasValue)
+        {
+            var p = cmd.Parameters.Add(name, dbType.Value);
+            p.Value = value;
+            return;
+        }
+
+        // For non-null values we keep the original behavior (infer type from CLR value).
+        var inferred = cmd.Parameters.AddWithValue(name, value);
+        _ = inferred;
     }
 
     private static async Task<int> ExecuteNonQueryAsync(

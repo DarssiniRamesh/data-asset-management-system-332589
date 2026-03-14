@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using DataAssetBackend.Infrastructure.Database;
 using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -59,6 +60,17 @@ builder.Services.AddCors(options =>
         }
     });
 });
+
+// Database configuration
+//
+// Contract:
+// - Input: environment/config keys:
+//   - DATABASE_URL (preferred for platforms like Neon; URL form: postgresql://user:pass@host:5432/db?sslmode=require)
+//   - ConnectionStrings__Default (standard .NET config binding; typical "Host=...;Username=...;Password=...;Database=...;Ssl Mode=Require;")
+// - Output: a normalized Postgres connection string suitable for Npgsql
+// - Errors: parsing errors are logged and treated as "not configured" for health checks (API still starts)
+// - Side effects: none at startup (no eager DB connect); health endpoint may attempt connection when configured
+builder.Services.AddSingleton<DatabaseConfigProvider>();
 
 var app = builder.Build();
 
@@ -151,17 +163,36 @@ app.MapGet("/", () => Results.Ok(new { status = "ok" }))
    .WithSummary("Root health check")
    .WithDescription("Simple health check endpoint at the service root. Primarily for manual verification.");
 
-app.MapGet("/healthz", () => Results.Ok(new { status = "ok" }))
+// Healthz returns DB status *if* DB is configured.
+// This is intentionally tolerant: if the DB isn't configured, we still return 200 for platform probes.
+// (Production deployments should enforce migrations before API start via Flyway job/container.)
+app.MapGet("/healthz", async (DatabaseConfigProvider dbConfigProvider, ILoggerFactory loggerFactory) =>
+    {
+        var logger = loggerFactory.CreateLogger("Healthz");
+        var result = await DatabaseHealthCheckFlow.RunAsync(new DatabaseHealthCheckRequest(), dbConfigProvider, logger);
+
+        // Always return 200 for health probe; include DB diagnostics in body.
+        return Results.Ok(new
+        {
+            status = "ok",
+            db = new
+            {
+                configured = result.IsConfigured,
+                ok = result.IsHealthy,
+                error = result.Error
+            }
+        });
+    })
    .WithName("Healthz")
    .WithTags("Health")
    .WithSummary("Health check")
-   .WithDescription("Health probe endpoint. Returns 200 OK when the service is running.");
+   .WithDescription("Health probe endpoint. Returns 200 OK when the service is running. Includes Postgres connectivity status when configured.");
 
 // Validity check endpoint (lightweight utility for validating client-provided values)
 //
 // Route: POST /api/validity-check
-// Body:  { "value": "..." }
-// 200:   { "isValid": true, "reason": null }
+// Body:  { \"value\": \"...\" }
+// 200:   { \"isValid\": true, \"reason\": null }
 app.MapPost("/api/validity-check", (ValidityCheckRequest request) =>
     {
         // Baseline checks (safe and generic)

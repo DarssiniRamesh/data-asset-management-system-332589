@@ -208,7 +208,7 @@ builder.Services.AddSingleton<DatabaseConfigProvider>();
 // Idempotency (BRD §10.3): in-memory store + middleware for X-Idempotency-Key.
 builder.Services.AddSingleton<IIdempotencyStore, InMemoryIdempotencyStore>();
 
- // Postgres data access services (Flyway V2 schema)
+// Postgres data access services (Flyway V2 schema)
 builder.Services.AddSingleton<NpgsqlConnectionFactory>();
 builder.Services.AddSingleton<AssetRepository>();
 builder.Services.AddSingleton<AssetCopyRepository>();
@@ -396,6 +396,35 @@ app.UseOpenApi(settings =>
 app.UseSwaggerUi(config =>
 {
     config.Path = "/docs";
+});
+
+// ---------------------------------------------------------------------
+// Swagger UI anonymous access (static assets under /docs)
+// ---------------------------------------------------------------------
+//
+// NSwag serves Swagger UI assets via middleware which can still be subject to Authorization
+// fallback policy in some hosting/proxy setups. We explicitly bypass auth for /docs requests.
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path.StartsWithSegments("/docs", StringComparison.OrdinalIgnoreCase))
+    {
+        var currentEndpoint = context.GetEndpoint();
+        if (currentEndpoint is not null)
+        {
+            // Endpoint ctor expects EndpointMetadataCollection, not object[].
+            var metadata = new EndpointMetadataCollection(
+                currentEndpoint.Metadata.Concat(new object[] { new AllowAnonymousAttribute() }).ToArray());
+
+            var withAnon = new Endpoint(
+                currentEndpoint.RequestDelegate,
+                metadata,
+                currentEndpoint.DisplayName);
+
+            context.SetEndpoint(withAnon);
+        }
+    }
+
+    await next();
 });
 
 // AuthN/AuthZ

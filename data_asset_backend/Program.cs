@@ -84,6 +84,7 @@ builder.Services.AddSingleton<DatabaseConfigProvider>();
  // Postgres data access services (Flyway V2 schema)
 builder.Services.AddSingleton<NpgsqlConnectionFactory>();
 builder.Services.AddSingleton<AssetRepository>();
+builder.Services.AddSingleton<AssetCopyRepository>();
 builder.Services.AddSingleton<AssetCopyLineageRepository>();
 builder.Services.AddSingleton<MasterRepository>();
 
@@ -386,6 +387,60 @@ app.MapGet("/api/assets", async (
     .WithDescription("Queries Assets with optional filters (siteId, assetGroup, processGroup, assetNameContains, permitEuId, globalUniqueAssetId).")
     .Produces<IReadOnlyList<AssetDto>>(StatusCodes.Status200OK)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+// ---------------------------------------------------------------------
+// Copy Asset (BRD FR-03; Copy and Lineage Capture Requirements - BRD §6.13)
+// ---------------------------------------------------------------------
+app.MapPost("/api/assets/{assetId:long}/copy", async (
+        long assetId,
+        CopyAssetRequest request,
+        AssetCopyRepository copyRepository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("CopyAsset");
+
+        try
+        {
+            var result = await AssetCopyFlows.CopyAssetAsync(
+                new AssetCopyFlows.CopyAssetFlowRequest(assetId, request),
+                copyRepository,
+                logger,
+                cancellationToken);
+
+            return Results.Created($"/api/assets/{result.Response.TargetAsset.AssetId}", result.Response);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            // DB not configured
+            logger.LogWarning(ex, "CopyAsset failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            logger.LogWarning(ex, "CopyAsset failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .WithName("CopyAsset")
+    .WithTags("Assets")
+    .WithSummary("Copy asset")
+    .WithDescription("Copies an asset and BRD-evidenced related records into a new target asset, recording lineage (BRD §6.13; table: asset_copy_lineage).")
+    .Accepts<CopyAssetRequest>("application/json")
+    .Produces<CopyAssetResponse>(StatusCodes.Status201Created)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
 
 //
 // Copy lineage endpoints (BRD §6.13; table: asset_copy_lineage)

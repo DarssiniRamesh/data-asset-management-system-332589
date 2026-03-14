@@ -3,6 +3,7 @@ using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -22,6 +23,32 @@ public sealed class TestAppFactory : WebApplicationFactory<Program>
         // Run the app under a dedicated environment so Program.cs can apply
         // test-specific behaviors (e.g., disabling the strict auth fallback policy).
         builder.UseEnvironment("Testing");
+
+        // Ensure DB-dependent endpoints can run during tests.
+        //
+        // The app resolves connection strings via DatabaseConfigProvider which prefers:
+        //   - ConnectionStrings:Default (aka env var ConnectionStrings__Default)
+        //   - DATABASE_URL
+        //
+        // Several tests expect validation-driven 400 responses from endpoints that also
+        // touch the DB (e.g., CreateAsset flow validates parent pseudo asset existence).
+        // Without DB config, those endpoints return 503 "Database not configured".
+        builder.ConfigureAppConfiguration((_, config) =>
+        {
+            // Prefer a CI/local-provided env var. The orchestrator/CI can set this.
+            // NOTE: Do not hardcode real secrets here.
+            var cs = Environment.GetEnvironmentVariable("TEST_DATABASE_CONNECTION_STRING");
+
+            // Fallback for local dev runs: assumes a local postgres is available.
+            // If not available, tests may still fail due to connectivity, but they will
+            // no longer fail due to *missing* DB configuration.
+            cs ??= "Host=localhost;Port=5432;Database=data_asset_backend_test;Username=postgres;Password=postgres";
+
+            config.AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["ConnectionStrings:Default"] = cs
+            });
+        });
 
         // IMPORTANT:
         // Many tests are request-validation tests that expect 400 responses.

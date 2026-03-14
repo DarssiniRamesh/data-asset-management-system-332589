@@ -333,6 +333,73 @@
         }
       }
     },
+    "/api/assets/{assetId}/copy": {
+      "post": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "CopyAsset",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CopyAssetRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CopyAssetResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/asset-copy-lineage": {
       "post": {
         "tags": [
@@ -4362,6 +4429,31 @@
           }
         }
       },
+      "CopyAssetResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "targetAsset": {
+            "$ref": "#/components/schemas/AssetDto"
+          },
+          "lineage": {
+            "$ref": "#/components/schemas/AssetCopyLineageDto"
+          },
+          "replicationResultStatus": {
+            "type": "string"
+          },
+          "replicationResultDetail": {
+            "type": "string",
+            "nullable": true
+          },
+          "moduleResults": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CopyAssetModuleReplicationResult"
+            }
+          }
+        }
+      },
       "AssetCopyLineageDto": {
         "type": "object",
         "additionalProperties": false,
@@ -4414,6 +4506,112 @@
           },
           "correlationId": {
             "type": "string"
+          }
+        }
+      },
+      "CopyAssetModuleReplicationResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "moduleName": {
+            "type": "string"
+          },
+          "copiedCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "skippedCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "status": {
+            "type": "string"
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CopyAssetRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "copyOperationId",
+          "copyPerformedBy",
+          "correlationId",
+          "targetAsset"
+        ],
+        "properties": {
+          "copyOperationId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "copyPerformedBy": {
+            "type": "string",
+            "minLength": 1
+          },
+          "correlationId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "targetAsset": {
+            "$ref": "#/components/schemas/CopyAssetTargetAsset"
+          }
+        }
+      },
+      "CopyAssetTargetAsset": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "siteId",
+          "assetGroup",
+          "processGroup",
+          "assetName",
+          "permitEuId",
+          "globalUniqueAssetId"
+        ],
+        "properties": {
+          "siteId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "assetGroup": {
+            "type": "string",
+            "minLength": 1
+          },
+          "processGroup": {
+            "type": "string",
+            "minLength": 1
+          },
+          "processGroupOtherText": {
+            "type": "string",
+            "nullable": true
+          },
+          "assetName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "permitEuId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "globalUniqueAssetId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "assetDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "stationaryFlag": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "parentPseudoAssetId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
           }
         }
       },

@@ -39,6 +39,7 @@ Data elements evidenced:
   - If "Other", free-text process group must be captured (Conditional)
 - Asset Name (Required)
 - Permit EU ID (Required) — Uniqueness constraint mentioned, but **scope is NOT EVIDENCED**
+  - Implementation note (evidence-safe): uniqueness is enforced conservatively at the API layer across non-deleted assets, returning HTTP 409 on duplicates (no DB UNIQUE constraint is added without a scoped key).
 - Global Unique Asset ID (Required) — “immutable once created” (immutability enforcement mechanism is **NOT EVIDENCED** at DB level)
 - Asset Description (Optional)
 - Stationary Flag (Optional)

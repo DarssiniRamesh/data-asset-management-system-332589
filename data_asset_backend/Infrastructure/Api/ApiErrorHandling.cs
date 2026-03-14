@@ -134,6 +134,16 @@ public static class ApiErrorHandling
             );
         }
 
+        // Domain-level uniqueness conflicts
+        if (ex is DataAssetBackend.Features.Assets.AssetFlows.DuplicatePermitEuIdException)
+        {
+            return (
+                StatusCodes.Status409Conflict,
+                "Duplicate Permit EU ID",
+                ex.Message
+            );
+        }
+
         // Bad request (query contract violation)
         if (ex is DataAssetBackend.Features.Assets.AssetCopyLineageFlows.MissingFiltersException)
         {

@@ -9,6 +9,31 @@ namespace DataAssetBackend.Features.Assets;
 public static class AssetFlows
 {
     /// <summary>
+    /// Thrown when an attempt is made to create/update an asset with a Permit EU ID that already exists.
+    /// </summary>
+    /// <remarks>
+    /// Contract:
+    /// - Mapped to HTTP 409 Conflict by the unified API exception handler.
+    /// - Message is safe to show to clients (no secrets).
+    /// </remarks>
+    public sealed class DuplicatePermitEuIdException : Exception
+    {
+        /// <summary>
+        /// Initializes a new instance of <see cref="DuplicatePermitEuIdException"/>.
+        /// </summary>
+        public DuplicatePermitEuIdException(string permitEuId)
+            : base($"Permit EU ID must be unique. A non-deleted asset already exists with permitEuId='{permitEuId}'.")
+        {
+            PermitEuId = permitEuId;
+        }
+
+        /// <summary>
+        /// The conflicting Permit EU ID (as provided by the caller).
+        /// </summary>
+        public string PermitEuId { get; }
+    }
+
+    /// <summary>
     /// Request for the create asset flow.
     /// </summary>
     public sealed record CreateAssetFlowRequest(CreateAssetRequest Payload);
@@ -41,6 +66,18 @@ public static class AssetFlows
             "AssetFlows.CreateAsset starting. site_id={SiteId}, global_unique_asset_id={GlobalUniqueAssetId}",
             request.Payload.SiteId,
             request.Payload.GlobalUniqueAssetId);
+
+        // Permit EU ID uniqueness (BRD mentions uniqueness but does not evidence scope).
+        // Conservative enforcement: disallow duplicates across all non-deleted assets.
+        var permitEuIdNormalized = request.Payload.PermitEuId.Trim();
+        if (await repository.PermitEuIdExistsAsync(permitEuIdNormalized, excludeAssetId: null, cancellationToken))
+        {
+            logger.LogWarning(
+                "AssetFlows.CreateAsset rejected due to duplicate permit_eu_id. permit_eu_id={PermitEuId}",
+                permitEuIdNormalized);
+
+            throw new DuplicatePermitEuIdException(permitEuIdNormalized);
+        }
 
         var created = await repository.CreateAsync(request.Payload, cancellationToken);
 
@@ -103,6 +140,19 @@ public static class AssetFlows
         CancellationToken cancellationToken = default)
     {
         logger.LogInformation("AssetFlows.UpdateAsset starting. asset_id={AssetId}", request.AssetId);
+
+        // Permit EU ID uniqueness (BRD mentions uniqueness but does not evidence scope).
+        // Conservative enforcement: disallow duplicates across all non-deleted assets, excluding this asset id.
+        var permitEuIdNormalized = request.Payload.PermitEuId.Trim();
+        if (await repository.PermitEuIdExistsAsync(permitEuIdNormalized, excludeAssetId: request.AssetId, cancellationToken))
+        {
+            logger.LogWarning(
+                "AssetFlows.UpdateAsset rejected due to duplicate permit_eu_id. asset_id={AssetId}, permit_eu_id={PermitEuId}",
+                request.AssetId,
+                permitEuIdNormalized);
+
+            throw new DuplicatePermitEuIdException(permitEuIdNormalized);
+        }
 
         var updated = await repository.UpdateAsync(request.AssetId, request.Payload, cancellationToken);
 

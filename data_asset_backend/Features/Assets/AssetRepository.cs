@@ -364,6 +364,51 @@ public sealed class AssetRepository
 
     // PUBLIC_INTERFACE
     /// <summary>
+    /// Checks whether a non-deleted asset already exists with the given Permit EU ID.
+    /// </summary>
+    /// <remarks>
+    /// BRD evidence: BRD §6.1 marks Permit EU ID as required and mentions uniqueness, but does not evidence
+    /// the uniqueness scope (e.g., per site vs global).
+    ///
+    /// Therefore this method implements a conservative, evidence-safe check:
+    /// - It checks for duplicates across all non-deleted assets.
+    /// - It allows excluding a specific asset id (for updates).
+    ///
+    /// If a future BRD revision clarifies the scope, this method is the single place to adjust the predicate.
+    /// </remarks>
+    public async Task<bool> PermitEuIdExistsAsync(
+        string permitEuId,
+        long? excludeAssetId,
+        CancellationToken cancellationToken)
+    {
+        // Defensive normalization: API models already require non-empty, but keep this safe for internal callers.
+        var normalized = (permitEuId ?? string.Empty).Trim();
+        if (normalized.Length == 0)
+        {
+            return false;
+        }
+
+        await using var conn = await _connectionFactory.OpenAsync(cancellationToken);
+
+        const string sql = """
+            SELECT 1
+            FROM asset
+            WHERE permit_eu_id = @permit_eu_id
+              AND is_deleted = FALSE
+              AND (@exclude_asset_id IS NULL OR asset_id <> @exclude_asset_id)
+            LIMIT 1;
+            """;
+
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        AddParam(cmd, "permit_eu_id", normalized);
+        AddParam(cmd, "exclude_asset_id", excludeAssetId.HasValue ? excludeAssetId.Value : DBNull.Value);
+
+        var scalar = await cmd.ExecuteScalarAsync(cancellationToken);
+        return scalar is not null;
+    }
+
+    // PUBLIC_INTERFACE
+    /// <summary>
     /// Checks whether a non-deleted asset exists.
     /// </summary>
     public async Task<bool> AssetExistsAsync(long assetId, CancellationToken cancellationToken)

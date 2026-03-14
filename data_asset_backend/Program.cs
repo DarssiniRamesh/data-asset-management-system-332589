@@ -324,7 +324,8 @@ app.MapGet("/api/assets/{assetId:long}", async (
     .WithDescription("Fetches an Asset by its database ID (excluding soft-deleted rows).")
     .Produces<AssetDto>(StatusCodes.Status200OK)
     .Produces(StatusCodes.Status404NotFound)
-    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
 
 app.MapPut("/api/assets/{assetId:long}", async (
         long assetId,

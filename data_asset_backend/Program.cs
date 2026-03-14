@@ -321,6 +321,12 @@ app.UseAuthorization();
 // Idempotency (BRD §10.3): handles X-Idempotency-Key for asset operations (e.g., Copy Asset).
 app.UseMiddleware<IdempotencyKeyMiddleware>();
 
+// IMPORTANT: Because this app explicitly calls UseRouting(), we also explicitly register
+// the endpoint middleware (UseEndpoints) to ensure endpoint routing is fully active.
+// Without this, CORS headers can be missing (notably on preflight/OPTIONS requests) in
+// some proxy/hosting configurations.
+app.UseEndpoints(_ => { });
+
 //
 // Auth endpoints
 //

@@ -27,7 +27,7 @@ public sealed record AssetDto(
 /// <summary>
 /// Request payload for creating an asset.
 /// </summary>
-public sealed class CreateAssetRequest
+public sealed class CreateAssetRequest : IValidatableObject
 {
     [Required(AllowEmptyStrings = false)]
     public string SiteId { get; set; } = string.Empty;
@@ -61,12 +61,24 @@ public sealed class CreateAssetRequest
 
     [Required(AllowEmptyStrings = false)]
     public string CorrelationId { get; set; } = string.Empty;
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        // BRD §6.1: Process Group - If "Other", free-text process group must be captured (Conditional).
+        if (string.Equals(ProcessGroup?.Trim(), "Other", StringComparison.OrdinalIgnoreCase) &&
+            string.IsNullOrWhiteSpace(ProcessGroupOtherText))
+        {
+            yield return new ValidationResult(
+                "processGroupOtherText is required when processGroup is 'Other'.",
+                new[] { nameof(ProcessGroupOtherText) });
+        }
+    }
 }
 
 /// <summary>
 /// Request payload for updating an asset (BRD: Global Unique Asset ID is immutable once created).
 /// </summary>
-public sealed class UpdateAssetRequest
+public sealed class UpdateAssetRequest : IValidatableObject
 {
     [Required(AllowEmptyStrings = false)]
     public string SiteId { get; set; } = string.Empty;
@@ -97,6 +109,18 @@ public sealed class UpdateAssetRequest
 
     [Required(AllowEmptyStrings = false)]
     public string CorrelationId { get; set; } = string.Empty;
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        // BRD §6.1: Process Group - If "Other", free-text process group must be captured (Conditional).
+        if (string.Equals(ProcessGroup?.Trim(), "Other", StringComparison.OrdinalIgnoreCase) &&
+            string.IsNullOrWhiteSpace(ProcessGroupOtherText))
+        {
+            yield return new ValidationResult(
+                "processGroupOtherText is required when processGroup is 'Other'.",
+                new[] { nameof(ProcessGroupOtherText) });
+        }
+    }
 }
 
 /// <summary>

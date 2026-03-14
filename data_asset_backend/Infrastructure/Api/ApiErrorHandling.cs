@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
@@ -62,6 +63,18 @@ public static class ApiErrorHandling
     /// </summary>
     public static IResult ToResult(Exception ex, HttpContext httpContext, ILogger logger)
     {
+        // Special-case: return ValidationProblem with field errors for request validation failures.
+        if (ex is RequestValidationException rve)
+        {
+            logger.LogWarning(ex, "API validation failure. path={Path}", httpContext.Request.Path);
+
+            return Results.ValidationProblem(
+                new Dictionary<string, string[]>(rve.Errors, StringComparer.OrdinalIgnoreCase),
+                statusCode: StatusCodes.Status400BadRequest,
+                title: "Validation failed",
+                instance: httpContext.Request.Path);
+        }
+
         var (status, title, detail) = MapException(ex);
 
         // Log level is part of the contract: expected/handled failures are warnings; unexpected are errors.
@@ -91,6 +104,26 @@ public static class ApiErrorHandling
 
     private static (int Status, string Title, string Detail) MapException(Exception ex)
     {
+        // Validation failures (tab-level / cross-field)
+        // Note: We return a 400 ValidationProblem result upstream; this mapping remains for title/detail fallback.
+        if (ex is RequestValidationException rve)
+        {
+            return (
+                StatusCodes.Status400BadRequest,
+                "Validation failed",
+                rve.Message
+            );
+        }
+
+        if (ex is ValidationException ve)
+        {
+            return (
+                StatusCodes.Status400BadRequest,
+                "Validation failed",
+                ve.Message
+            );
+        }
+
         // Not found (domain-level existence validation)
         if (ex is DataAssetBackend.Features.Assets.AssetRepository.EntityNotFoundException notFound)
         {

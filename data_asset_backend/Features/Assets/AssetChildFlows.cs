@@ -1,3 +1,4 @@
+using DataAssetBackend.Infrastructure.Api;
 using Microsoft.Extensions.Logging;
 
 namespace DataAssetBackend.Features.Assets;
@@ -25,6 +26,20 @@ public static class AssetChildFlows
         {
             logger.LogInformation("AssetChildFlows.CreateAssetStatusLog asset not found. asset_id={AssetId}", assetId);
             throw new AssetRepository.EntityNotFoundException("asset", assetId);
+        }
+
+        // BRD §6.2 chronology rule: “Latest status from-date must be after previous to-date”.
+        // Evidence-based implementation: compare this row's from-date to the most recent prior row's to-date (when present).
+        var previousToDate = await repository.GetLatestStatusToDateAsync(assetId, excludeAssetStatusLogId: null, cancellationToken);
+        if (previousToDate.HasValue && request.StatusFromDate <= previousToDate.Value)
+        {
+            throw new RequestValidationException(new Dictionary<string, string[]>
+            {
+                [nameof(request.StatusFromDate)] = new[]
+                {
+                    $"statusFromDate must be after the previous statusToDate ({previousToDate.Value:yyyy-MM-dd})."
+                }
+            });
         }
 
         var created = await repository.CreateAssetStatusLogAsync(assetId, request, cancellationToken);
@@ -103,6 +118,19 @@ public static class AssetChildFlows
         if (!await repository.AssetExistsAsync(assetId, cancellationToken))
         {
             throw new AssetRepository.EntityNotFoundException("asset", assetId);
+        }
+
+        // BRD §6.2 chronology rule: “Latest status from-date must be after previous to-date”.
+        var previousToDate = await repository.GetLatestStatusToDateAsync(assetId, excludeAssetStatusLogId: assetStatusLogId, cancellationToken);
+        if (previousToDate.HasValue && request.StatusFromDate <= previousToDate.Value)
+        {
+            throw new RequestValidationException(new Dictionary<string, string[]>
+            {
+                [nameof(request.StatusFromDate)] = new[]
+                {
+                    $"statusFromDate must be after the previous statusToDate ({previousToDate.Value:yyyy-MM-dd})."
+                }
+            });
         }
 
         return await repository.UpdateAssetStatusLogAsync(assetId, assetStatusLogId, request, cancellationToken);

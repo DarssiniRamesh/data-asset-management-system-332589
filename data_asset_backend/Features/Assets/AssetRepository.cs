@@ -650,6 +650,42 @@ public sealed class AssetRepository
 
     // PUBLIC_INTERFACE
     /// <summary>
+    /// Gets the most recent (latest by status_from_date) status_to_date for an asset, excluding soft-deleted rows.
+    /// </summary>
+    /// <remarks>
+    /// BRD §6.2 chronology rule evidence: “Latest status from-date must be after previous to-date”.
+    /// This method supports that validation by retrieving the prior row’s <c>status_to_date</c> (if any).
+    /// </remarks>
+    public async Task<DateOnly?> GetLatestStatusToDateAsync(long assetId, long? excludeAssetStatusLogId, CancellationToken cancellationToken)
+    {
+        await using var conn = await _connectionFactory.OpenAsync(cancellationToken);
+
+        const string sql = """
+            SELECT status_to_date
+            FROM asset_status_log
+            WHERE asset_id = @asset_id
+              AND is_deleted = FALSE
+              AND (@exclude_id IS NULL OR asset_status_log_id <> @exclude_id)
+            ORDER BY status_from_date DESC, asset_status_log_id DESC
+            LIMIT 1;
+            """;
+
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        AddParam(cmd, "asset_id", assetId);
+        AddParam(cmd, "exclude_id", excludeAssetStatusLogId.HasValue ? excludeAssetStatusLogId.Value : DBNull.Value);
+
+        var scalar = await cmd.ExecuteScalarAsync(cancellationToken);
+        if (scalar is null || scalar is DBNull)
+        {
+            return null;
+        }
+
+        // Stored as date (mapped to DateTime by Npgsql); normalize to DateOnly.
+        return DateOnly.FromDateTime((DateTime)scalar);
+    }
+
+    // PUBLIC_INTERFACE
+    /// <summary>
     /// Creates a status log row for an asset.
     /// </summary>
     public async Task<AssetStatusLogDto> CreateAssetStatusLogAsync(long assetId, CreateAssetStatusLogRequest request, CancellationToken cancellationToken)

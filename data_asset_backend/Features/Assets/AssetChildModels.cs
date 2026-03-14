@@ -290,7 +290,7 @@ public sealed record InputParameterDto(
 /// <summary>
 /// Request payload for creating an input parameter row.
 /// </summary>
-public sealed class CreateInputParameterRequest
+public sealed class CreateInputParameterRequest : IValidatableObject
 {
     [Required(AllowEmptyStrings = false)]
     public string InputParameterName { get; set; } = string.Empty;
@@ -315,12 +315,34 @@ public sealed class CreateInputParameterRequest
 
     [Required(AllowEmptyStrings = false)]
     public string CorrelationId { get; set; } = string.Empty;
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        // BRD §6.5 (tab-level rule): When an input parameter row is "in-use", UOM and Reporting Program are required.
+        // Domain resolution/activeness checks are NOT evidenced here; we only enforce presence.
+        if (InUseFlag)
+        {
+            if (!UomId.HasValue)
+            {
+                yield return new ValidationResult(
+                    "uomId is required when inUseFlag is true.",
+                    new[] { nameof(UomId) });
+            }
+
+            if (!ReportingProgramId.HasValue)
+            {
+                yield return new ValidationResult(
+                    "reportingProgramId is required when inUseFlag is true.",
+                    new[] { nameof(ReportingProgramId) });
+            }
+        }
+    }
 }
 
 /// <summary>
 /// Request payload for updating an input parameter row.
 /// </summary>
-public sealed class UpdateInputParameterRequest
+public sealed class UpdateInputParameterRequest : IValidatableObject
 {
     [Required(AllowEmptyStrings = false)]
     public string InputParameterName { get; set; } = string.Empty;
@@ -345,6 +367,28 @@ public sealed class UpdateInputParameterRequest
 
     [Required(AllowEmptyStrings = false)]
     public string CorrelationId { get; set; } = string.Empty;
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        // BRD §6.5 (tab-level rule): When an input parameter row is "in-use", UOM and Reporting Program are required.
+        // Domain resolution/activeness checks are NOT evidenced here; we only enforce presence.
+        if (InUseFlag)
+        {
+            if (!UomId.HasValue)
+            {
+                yield return new ValidationResult(
+                    "uomId is required when inUseFlag is true.",
+                    new[] { nameof(UomId) });
+            }
+
+            if (!ReportingProgramId.HasValue)
+            {
+                yield return new ValidationResult(
+                    "reportingProgramId is required when inUseFlag is true.",
+                    new[] { nameof(ReportingProgramId) });
+            }
+        }
+    }
 }
 
 // ------------------------------------------------------------

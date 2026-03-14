@@ -254,6 +254,9 @@ app.MapPost("/api/assets", async (
     {
         var logger = loggerFactory.CreateLogger("CreateAsset");
 
+        // BRD FR-05 tab-level validations (cross-field/conditional)
+        RequestValidation.ValidateAndThrow(request, nameof(CreateAssetRequest));
+
         try
         {
             var result = await AssetFlows.CreateAssetAsync(
@@ -330,6 +333,9 @@ app.MapPut("/api/assets/{assetId:long}", async (
         CancellationToken cancellationToken) =>
     {
         var logger = loggerFactory.CreateLogger("UpdateAsset");
+
+        // BRD FR-05 tab-level validations (cross-field/conditional)
+        RequestValidation.ValidateAndThrow(request, nameof(UpdateAssetRequest));
 
         try
         {
@@ -1398,6 +1404,9 @@ app.MapPost("/api/assets/{assetId:long}/input-parameters", async (
     {
         var logger = loggerFactory.CreateLogger("CreateInputParameter");
 
+        // BRD FR-05 tab-level validations (cross-field/conditional)
+        RequestValidation.ValidateAndThrow(request, nameof(CreateInputParameterRequest));
+
         try
         {
             var created = await AssetChildFlows.CreateInputParameterAsync(assetId, request, repository, logger, cancellationToken);
@@ -1512,6 +1521,9 @@ app.MapPut("/api/assets/{assetId:long}/input-parameters/{inputParameterId:long}"
         CancellationToken cancellationToken) =>
     {
         var logger = loggerFactory.CreateLogger("UpdateInputParameter");
+
+        // BRD FR-05 tab-level validations (cross-field/conditional)
+        RequestValidation.ValidateAndThrow(request, nameof(UpdateInputParameterRequest));
 
         try
         {

@@ -142,10 +142,20 @@ app.UseSwaggerUi(config =>
     config.Path = "/docs";
 });
 
-// Health check endpoint
-app.MapGet("/", () => new { message = "Healthy" })
-   .WithName("Health")
-   .WithTags("Health");
+ // Health check endpoints
+// Note: the platform/preview health probe expects `/healthz`.
+// We keep `/` as a friendly default while ensuring `/healthz` returns HTTP 200.
+app.MapGet("/", () => Results.Ok(new { status = "ok" }))
+   .WithName("HealthRoot")
+   .WithTags("Health")
+   .WithSummary("Root health check")
+   .WithDescription("Simple health check endpoint at the service root. Primarily for manual verification.");
+
+app.MapGet("/healthz", () => Results.Ok(new { status = "ok" }))
+   .WithName("Healthz")
+   .WithTags("Health")
+   .WithSummary("Health check")
+   .WithDescription("Health probe endpoint. Returns 200 OK when the service is running.");
 
 // Validity check endpoint (lightweight utility for validating client-provided values)
 //

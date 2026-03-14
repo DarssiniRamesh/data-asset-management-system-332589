@@ -8,7 +8,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3001"
+      "url": "http://localhost:5999"
     }
   ],
   "paths": {
@@ -17,12 +17,10 @@
         "tags": [
           "Health"
         ],
-        "summary": "Root health check",
-        "description": "Simple health check endpoint at the service root. Primarily for manual verification.",
         "operationId": "HealthRoot",
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
@@ -39,12 +37,10 @@
         "tags": [
           "Health"
         ],
-        "summary": "Health check",
-        "description": "Health probe endpoint. Returns 200 OK when the service is running. Includes Postgres connectivity status when configured.",
         "operationId": "Healthz",
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
@@ -61,8 +57,6 @@
         "tags": [
           "Validation"
         ],
-        "summary": "Validity check utility",
-        "description": "Performs a basic validity check on an input value. This endpoint can be extended as asset/tab validation rules are implemented.",
         "operationId": "ValidityCheck",
         "requestBody": {
           "x-name": "request",
@@ -78,7 +72,7 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
@@ -95,8 +89,6 @@
         "tags": [
           "Assets"
         ],
-        "summary": "Create asset",
-        "description": "Creates an Asset (BRD §6.1 header fields) and persists it to Postgres using the Flyway V2 schema.",
         "operationId": "CreateAsset",
         "requestBody": {
           "x-name": "request",
@@ -112,7 +104,7 @@
         },
         "responses": {
           "201": {
-            "description": "Created",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
@@ -121,8 +113,8 @@
               }
             }
           },
-          "409": {
-            "description": "Conflict",
+          "503": {
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
@@ -131,8 +123,8 @@
               }
             }
           },
-          "503": {
-            "description": "Service Unavailable",
+          "409": {
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
@@ -147,8 +139,6 @@
         "tags": [
           "Assets"
         ],
-        "summary": "Query assets",
-        "description": "Queries Assets with optional filters (siteId, assetGroup, processGroup, assetNameContains, permitEuId, globalUniqueAssetId).",
         "operationId": "QueryAssets",
         "parameters": [
           {
@@ -218,7 +208,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
@@ -231,7 +221,7 @@
             }
           },
           "503": {
-            "description": "Service Unavailable",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
@@ -248,8 +238,6 @@
         "tags": [
           "Assets"
         ],
-        "summary": "Get asset by ID",
-        "description": "Fetches an Asset by its database ID (excluding soft-deleted rows).",
         "operationId": "GetAssetById",
         "parameters": [
           {
@@ -265,7 +253,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
@@ -275,10 +263,10 @@
             }
           },
           "404": {
-            "description": "Not Found"
+            "description": ""
           },
           "503": {
-            "description": "Service Unavailable",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
@@ -293,8 +281,6 @@
         "tags": [
           "Assets"
         ],
-        "summary": "Update asset",
-        "description": "Updates an existing Asset (does not allow changing Global Unique Asset ID).",
         "operationId": "UpdateAsset",
         "parameters": [
           {
@@ -322,7 +308,7 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
@@ -332,10 +318,10 @@
             }
           },
           "404": {
-            "description": "Not Found"
+            "description": ""
           },
           "503": {
-            "description": "Service Unavailable",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
@@ -350,6 +336,43 @@
   },
   "components": {
     "schemas": {
+      "HealthRootResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "HealthzResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "db": {
+            "$ref": "#/components/schemas/HealthzDbStatus"
+          }
+        }
+      },
+      "HealthzDbStatus": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "configured": {
+            "type": "boolean"
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "ValidityCheckResponse": {
         "type": "object",
         "additionalProperties": false,
@@ -373,56 +396,6 @@
           "value": {
             "type": "string",
             "minLength": 1
-          }
-        }
-      },
-      "HealthRootResponse": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "status"
-        ],
-        "properties": {
-          "status": {
-            "type": "string",
-            "minLength": 1
-          }
-        }
-      },
-      "HealthzDbStatus": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "configured",
-          "ok"
-        ],
-        "properties": {
-          "configured": {
-            "type": "boolean"
-          },
-          "ok": {
-            "type": "boolean"
-          },
-          "error": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "HealthzResponse": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "status",
-          "db"
-        ],
-        "properties": {
-          "status": {
-            "type": "string",
-            "minLength": 1
-          },
-          "db": {
-            "$ref": "#/components/schemas/HealthzDbStatus"
           }
         }
       },

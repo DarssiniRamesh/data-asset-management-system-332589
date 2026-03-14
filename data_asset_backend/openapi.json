@@ -1,0 +1,650 @@
+{
+  "x-generator": "NSwag v14.4.0.0 (NJsonSchema v11.3.2.0 (Newtonsoft.Json v13.0.0.0))",
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Data Asset Backend API",
+    "description": "Backend API for data asset management (POC). Includes validation utilities for asset configuration workflows.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Root health check",
+        "description": "Simple health check endpoint at the service root. Primarily for manual verification.",
+        "operationId": "HealthRoot",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthRootResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/healthz": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Health check",
+        "description": "Health probe endpoint. Returns 200 OK when the service is running. Includes Postgres connectivity status when configured.",
+        "operationId": "Healthz",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthzResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/validity-check": {
+      "post": {
+        "tags": [
+          "Validation"
+        ],
+        "summary": "Validity check utility",
+        "description": "Performs a basic validity check on an input value. This endpoint can be extended as asset/tab validation rules are implemented.",
+        "operationId": "ValidityCheck",
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidityCheckRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidityCheckResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/assets": {
+      "post": {
+        "tags": [
+          "Assets"
+        ],
+        "summary": "Create asset",
+        "description": "Creates an Asset (BRD §6.1 header fields) and persists it to Postgres using the Flyway V2 schema.",
+        "operationId": "CreateAsset",
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAssetRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssetDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "summary": "Query assets",
+        "description": "Queries Assets with optional filters (siteId, assetGroup, processGroup, assetNameContains, permitEuId, globalUniqueAssetId).",
+        "operationId": "QueryAssets",
+        "parameters": [
+          {
+            "name": "SiteId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "AssetGroup",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 2
+          },
+          {
+            "name": "ProcessGroup",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 3
+          },
+          {
+            "name": "AssetNameContains",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 4
+          },
+          {
+            "name": "PermitEuId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 5
+          },
+          {
+            "name": "GlobalUniqueAssetId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 6
+          },
+          {
+            "name": "Limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            },
+            "x-position": 7
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AssetDto"
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/assets/{assetId}": {
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "summary": "Get asset by ID",
+        "description": "Fetches an Asset by its database ID (excluding soft-deleted rows).",
+        "operationId": "GetAssetById",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssetDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Assets"
+        ],
+        "summary": "Update asset",
+        "description": "Updates an existing Asset (does not allow changing Global Unique Asset ID).",
+        "operationId": "UpdateAsset",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAssetRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssetDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ValidityCheckResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isValid": {
+            "type": "boolean"
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ValidityCheckRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "value"
+        ],
+        "properties": {
+          "value": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "HealthRootResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "HealthzDbStatus": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "configured",
+          "ok"
+        ],
+        "properties": {
+          "configured": {
+            "type": "boolean"
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "HealthzResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "status",
+          "db"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "minLength": 1
+          },
+          "db": {
+            "$ref": "#/components/schemas/HealthzDbStatus"
+          }
+        }
+      },
+      "AssetDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "assetId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "siteId": {
+            "type": "string"
+          },
+          "assetGroup": {
+            "type": "string"
+          },
+          "processGroup": {
+            "type": "string"
+          },
+          "processGroupOtherText": {
+            "type": "string",
+            "nullable": true
+          },
+          "assetName": {
+            "type": "string"
+          },
+          "permitEuId": {
+            "type": "string"
+          },
+          "globalUniqueAssetId": {
+            "type": "string"
+          },
+          "assetDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "stationaryFlag": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "parentPseudoAssetId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "modifiedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "correlationId": {
+            "type": "string"
+          }
+        }
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "additionalProperties": {
+          "nullable": true
+        },
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateAssetRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "siteId",
+          "assetGroup",
+          "processGroup",
+          "assetName",
+          "permitEuId",
+          "globalUniqueAssetId",
+          "createdBy",
+          "correlationId"
+        ],
+        "properties": {
+          "siteId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "assetGroup": {
+            "type": "string",
+            "minLength": 1
+          },
+          "processGroup": {
+            "type": "string",
+            "minLength": 1
+          },
+          "processGroupOtherText": {
+            "type": "string",
+            "nullable": true
+          },
+          "assetName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "permitEuId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "globalUniqueAssetId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "assetDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "stationaryFlag": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "parentPseudoAssetId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "minLength": 1
+          },
+          "correlationId": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "UpdateAssetRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "siteId",
+          "assetGroup",
+          "processGroup",
+          "assetName",
+          "permitEuId",
+          "modifiedBy",
+          "correlationId"
+        ],
+        "properties": {
+          "siteId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "assetGroup": {
+            "type": "string",
+            "minLength": 1
+          },
+          "processGroup": {
+            "type": "string",
+            "minLength": 1
+          },
+          "processGroupOtherText": {
+            "type": "string",
+            "nullable": true
+          },
+          "assetName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "permitEuId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "assetDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "stationaryFlag": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "parentPseudoAssetId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "modifiedBy": {
+            "type": "string",
+            "minLength": 1
+          },
+          "correlationId": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

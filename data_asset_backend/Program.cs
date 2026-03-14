@@ -168,11 +168,16 @@ app.UseSwaggerUi(config =>
  // Health check endpoints
 // Note: the platform/preview health probe expects `/healthz`.
 // We keep `/` as a friendly default while ensuring `/healthz` returns HTTP 200.
-app.MapGet("/", () => Results.Ok(new { status = "ok" }))
+app.MapGet("/", () =>
+    {
+        // Use a typed response so OpenAPI accurately documents the response shape.
+        return Results.Ok(new HealthRootResponse(Status: "ok"));
+    })
    .WithName("HealthRoot")
    .WithTags("Health")
    .WithSummary("Root health check")
-   .WithDescription("Simple health check endpoint at the service root. Primarily for manual verification.");
+   .WithDescription("Simple health check endpoint at the service root. Primarily for manual verification.")
+   .Produces<HealthRootResponse>(StatusCodes.Status200OK);
 
 // Healthz returns DB status *if* DB is configured.
 // This is intentionally tolerant: if the DB isn't configured, we still return 200 for platform probes.
@@ -183,21 +188,18 @@ app.MapGet("/healthz", async (DatabaseConfigProvider dbConfigProvider, ILoggerFa
         var result = await DatabaseHealthCheckFlow.RunAsync(new DatabaseHealthCheckRequest(), dbConfigProvider, logger);
 
         // Always return 200 for health probe; include DB diagnostics in body.
-        return Results.Ok(new
-        {
-            status = "ok",
-            db = new
-            {
-                configured = result.IsConfigured,
-                ok = result.IsHealthy,
-                error = result.Error
-            }
-        });
+        return Results.Ok(new HealthzResponse(
+            Status: "ok",
+            Db: new HealthzDbStatus(
+                Configured: result.IsConfigured,
+                Ok: result.IsHealthy,
+                Error: result.Error)));
     })
    .WithName("Healthz")
    .WithTags("Health")
    .WithSummary("Health check")
-   .WithDescription("Health probe endpoint. Returns 200 OK when the service is running. Includes Postgres connectivity status when configured.");
+   .WithDescription("Health probe endpoint. Returns 200 OK when the service is running. Includes Postgres connectivity status when configured.")
+   .Produces<HealthzResponse>(StatusCodes.Status200OK);
 
 // Validity check endpoint (lightweight utility for validating client-provided values)
 //
@@ -468,3 +470,24 @@ public sealed class ValidityCheckResponse
     /// </summary>
     public string? Reason { get; set; }
 }
+
+/// <summary>
+/// Response payload for the root health endpoint.
+/// </summary>
+/// <param name="Status">Overall service status.</param>
+public sealed record HealthRootResponse(string Status);
+
+/// <summary>
+/// DB status portion of the health probe response.
+/// </summary>
+/// <param name="Configured">True when a DB connection string is configured.</param>
+/// <param name="Ok">True when DB connectivity check succeeded.</param>
+/// <param name="Error">Optional DB error message when unhealthy/unconfigured.</param>
+public sealed record HealthzDbStatus(bool Configured, bool Ok, string? Error);
+
+/// <summary>
+/// Response payload for the /healthz health probe.
+/// </summary>
+/// <param name="Status">Overall service status.</param>
+/// <param name="Db">Database diagnostics.</param>
+public sealed record HealthzResponse(string Status, HealthzDbStatus Db);

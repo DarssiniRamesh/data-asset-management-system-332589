@@ -217,7 +217,23 @@ builder.Services.AddSingleton<AssetCopyLineageRepository>();
 builder.Services.AddSingleton<MasterRepository>();
 builder.Services.AddSingleton<Section4Repository>();
 
+// Section 4 schema bootstrap (safety net for environments where Flyway/migrations were not executed).
+builder.Services.AddSingleton<Section4SchemaBootstrapper>();
+
 var app = builder.Build();
+
+// Best-effort boot-time schema ensure for Section 4 tables.
+// This prevents runtime 500s due to missing V3 tables in preview/dev environments.
+try
+{
+    await using var scope = app.Services.CreateAsyncScope();
+    var bootstrapper = scope.ServiceProvider.GetRequiredService<Section4SchemaBootstrapper>();
+    await bootstrapper.EnsureCreatedAsync(CancellationToken.None);
+}
+catch (InvalidOperationException)
+{
+    // DB not configured: ignore (health checks will report).
+}
 
 // Must be early in pipeline, before anything that relies on scheme/host (OpenAPI generation).
 app.UseForwardedHeaders();

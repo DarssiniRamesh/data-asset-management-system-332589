@@ -3,6 +3,7 @@ using System.Security.Claims;
 using DataAssetBackend.Features.Assets;
 using DataAssetBackend.Features.Legacy;
 using DataAssetBackend.Features.Masters;
+using DataAssetBackend.Features.Section4;
 using DataAssetBackend.Infrastructure.Api;
 using DataAssetBackend.Infrastructure.Auth;
 using DataAssetBackend.Infrastructure.Database;
@@ -214,6 +215,7 @@ builder.Services.AddSingleton<AssetRepository>();
 builder.Services.AddSingleton<AssetCopyRepository>();
 builder.Services.AddSingleton<AssetCopyLineageRepository>();
 builder.Services.AddSingleton<MasterRepository>();
+builder.Services.AddSingleton<Section4Repository>();
 
 var app = builder.Build();
 
@@ -3218,10 +3220,756 @@ app.MapPut("/api/masters/status-codes/{statusCodeId:long}", async (
     .Produces(StatusCodes.Status404NotFound)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
 
-// ---------------------------------------------------------------------
-// BRD §9 Legacy/Observed API inventory endpoints (compatibility shims)
-// ---------------------------------------------------------------------
-app.MapLegacyObservedApiEndpoints();
+ // ---------------------------------------------------------------------
+ // BRD §4 Required Pages / Modules (Section 4 modules)
+ // ---------------------------------------------------------------------
+ //
+ // IMPORTANT (NO ASSUMPTIONS):
+ // BRD names these modules but does not evidence detailed field lists beyond module identity.
+ // Endpoints therefore implement CRUD over minimal schema (see Flyway V3), with standard audit fields.
+
+ // Site Profile Information
+ app.MapGet("/api/section4/site-profiles", async (
+         string? siteId,
+         int? limit,
+         Section4Repository repository,
+         ILoggerFactory loggerFactory,
+         CancellationToken cancellationToken) =>
+     {
+         var logger = loggerFactory.CreateLogger("ListSiteProfiles");
+         try
+         {
+             var list = await Section4Flows.ListSiteProfilesAsync(siteId, limit, repository, logger, cancellationToken);
+             return Results.Ok(list);
+         }
+         catch (InvalidOperationException ex)
+         {
+             logger.LogWarning(ex, "ListSiteProfiles failed: DB not configured.");
+             return Results.Problem(title: "Database not configured", detail: ex.Message, statusCode: StatusCodes.Status503ServiceUnavailable);
+         }
+     })
+     .RequireAuthorization("CanRead")
+     .WithName("ListSiteProfiles")
+     .WithTags("Section4")
+     .WithSummary("List site profiles")
+     .WithDescription("Lists Site Profile Information records (BRD §4). Optional filter: siteId.")
+     .Produces<IReadOnlyList<SiteProfileDto>>(StatusCodes.Status200OK)
+     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+ app.MapPost("/api/section4/site-profiles", async (
+         CreateSiteProfileRequest request,
+         Section4Repository repository,
+         ILoggerFactory loggerFactory,
+         CancellationToken cancellationToken) =>
+     {
+         var logger = loggerFactory.CreateLogger("CreateSiteProfile");
+         try
+         {
+             RequestValidation.ValidateAndThrow(request, nameof(CreateSiteProfileRequest));
+             var created = await repository.CreateSiteProfileAsync(request, cancellationToken);
+             return Results.Created($"/api/section4/site-profiles/{created.SiteProfileId}", created);
+         }
+         catch (InvalidOperationException ex)
+         {
+             logger.LogWarning(ex, "CreateSiteProfile failed: DB not configured.");
+             return Results.Problem(title: "Database not configured", detail: ex.Message, statusCode: StatusCodes.Status503ServiceUnavailable);
+         }
+         catch (PostgresException ex)
+         {
+             logger.LogWarning(ex, "CreateSiteProfile failed due to database constraint error.");
+             return Results.Problem(title: "Database constraint error", detail: ex.MessageText, statusCode: StatusCodes.Status409Conflict);
+         }
+     })
+     .RequireAuthorization("CanWrite")
+     .WithName("CreateSiteProfile")
+     .WithTags("Section4")
+     .WithSummary("Create site profile")
+     .WithDescription("Creates a Site Profile record (BRD §4).")
+     .Accepts<CreateSiteProfileRequest>("application/json")
+     .Produces<SiteProfileDto>(StatusCodes.Status201Created)
+     .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+     .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+     .ProducesProblem(StatusCodes.Status409Conflict);
+
+ app.MapPut("/api/section4/site-profiles/{siteProfileId:long}", async (
+         long siteProfileId,
+         UpdateSiteProfileRequest request,
+         Section4Repository repository,
+         ILoggerFactory loggerFactory,
+         CancellationToken cancellationToken) =>
+     {
+         var logger = loggerFactory.CreateLogger("UpdateSiteProfile");
+         try
+         {
+             RequestValidation.ValidateAndThrow(request, nameof(UpdateSiteProfileRequest));
+             var updated = await repository.UpdateSiteProfileAsync(siteProfileId, request, cancellationToken);
+             return updated is null ? Results.NotFound() : Results.Ok(updated);
+         }
+         catch (InvalidOperationException ex)
+         {
+             logger.LogWarning(ex, "UpdateSiteProfile failed: DB not configured.");
+             return Results.Problem(title: "Database not configured", detail: ex.Message, statusCode: StatusCodes.Status503ServiceUnavailable);
+         }
+     })
+     .RequireAuthorization("CanWrite")
+     .WithName("UpdateSiteProfile")
+     .WithTags("Section4")
+     .WithSummary("Update site profile")
+     .WithDescription("Updates a Site Profile record (BRD §4).")
+     .Accepts<UpdateSiteProfileRequest>("application/json")
+     .Produces<SiteProfileDto>(StatusCodes.Status200OK)
+     .Produces(StatusCodes.Status404NotFound)
+     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+ app.MapDelete("/api/section4/site-profiles/{siteProfileId:long}", async (
+         long siteProfileId,
+         [FromBody] DeleteAssetRequest request,
+         Section4Repository repository,
+         ILoggerFactory loggerFactory,
+         CancellationToken cancellationToken) =>
+     {
+         var logger = loggerFactory.CreateLogger("DeleteSiteProfile");
+         try
+         {
+             RequestValidation.ValidateAndThrow(request, nameof(DeleteAssetRequest));
+             var deleted = await repository.DeleteSiteProfileAsync(siteProfileId, request.ModifiedBy, request.CorrelationId, cancellationToken);
+             return deleted ? Results.NoContent() : Results.NotFound();
+         }
+         catch (InvalidOperationException ex)
+         {
+             logger.LogWarning(ex, "DeleteSiteProfile failed: DB not configured.");
+             return Results.Problem(title: "Database not configured", detail: ex.Message, statusCode: StatusCodes.Status503ServiceUnavailable);
+         }
+     })
+     .RequireAuthorization("AdminOnly")
+     .WithName("DeleteSiteProfile")
+     .WithTags("Section4")
+     .WithSummary("Delete site profile")
+     .WithDescription("Soft-deletes a Site Profile record (BRD §4).")
+     .Accepts<DeleteAssetRequest>("application/json")
+     .Produces(StatusCodes.Status204NoContent)
+     .Produces(StatusCodes.Status404NotFound)
+     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+ // WWTS Process Stream (conditional)
+ app.MapGet("/api/section4/wwts-process-streams", async (
+         string? siteId,
+         int? limit,
+         Section4Repository repository,
+         ILoggerFactory loggerFactory,
+         CancellationToken cancellationToken) =>
+     {
+         var logger = loggerFactory.CreateLogger("ListWwtsProcessStreams");
+         try
+         {
+             var list = await Section4Flows.ListWwtsProcessStreamsAsync(siteId, limit, repository, logger, cancellationToken);
+             return Results.Ok(list);
+         }
+         catch (InvalidOperationException ex)
+         {
+             logger.LogWarning(ex, "ListWwtsProcessStreams failed: DB not configured.");
+             return Results.Problem(title: "Database not configured", detail: ex.Message, statusCode: StatusCodes.Status503ServiceUnavailable);
+         }
+     })
+     .RequireAuthorization("CanRead")
+     .WithName("ListWwtsProcessStreams")
+     .WithTags("Section4")
+     .WithSummary("List WWTS process streams")
+     .WithDescription("Lists WWTS Process Stream configuration rows (BRD §4 conditional). Optional filter: siteId.")
+     .Produces<IReadOnlyList<WwtsProcessStreamDto>>(StatusCodes.Status200OK)
+     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+ app.MapPost("/api/section4/wwts-process-streams", async (
+         CreateWwtsProcessStreamRequest request,
+         Section4Repository repository,
+         ILoggerFactory loggerFactory,
+         CancellationToken cancellationToken) =>
+     {
+         var logger = loggerFactory.CreateLogger("CreateWwtsProcessStream");
+         try
+         {
+             RequestValidation.ValidateAndThrow(request, nameof(CreateWwtsProcessStreamRequest));
+             var created = await repository.CreateWwtsProcessStreamAsync(request, cancellationToken);
+             return Results.Created($"/api/section4/wwts-process-streams/{created.WwtsProcessStreamId}", created);
+         }
+         catch (InvalidOperationException ex)
+         {
+             logger.LogWarning(ex, "CreateWwtsProcessStream failed: DB not configured.");
+             return Results.Problem(title: "Database not configured", detail: ex.Message, statusCode: StatusCodes.Status503ServiceUnavailable);
+         }
+         catch (PostgresException ex)
+         {
+             logger.LogWarning(ex, "CreateWwtsProcessStream failed due to database constraint error.");
+             return Results.Problem(title: "Database constraint error", detail: ex.MessageText, statusCode: StatusCodes.Status409Conflict);
+         }
+     })
+     .RequireAuthorization("CanWrite")
+     .WithName("CreateWwtsProcessStream")
+     .WithTags("Section4")
+     .WithSummary("Create WWTS process stream")
+     .WithDescription("Creates a WWTS Process Stream configuration row (BRD §4 conditional).")
+     .Accepts<CreateWwtsProcessStreamRequest>("application/json")
+     .Produces<WwtsProcessStreamDto>(StatusCodes.Status201Created)
+     .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+     .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+     .ProducesProblem(StatusCodes.Status409Conflict);
+
+ app.MapPut("/api/section4/wwts-process-streams/{wwtsProcessStreamId:long}", async (
+         long wwtsProcessStreamId,
+         UpdateWwtsProcessStreamRequest request,
+         Section4Repository repository,
+         ILoggerFactory loggerFactory,
+         CancellationToken cancellationToken) =>
+     {
+         var logger = loggerFactory.CreateLogger("UpdateWwtsProcessStream");
+         try
+         {
+             RequestValidation.ValidateAndThrow(request, nameof(UpdateWwtsProcessStreamRequest));
+             var updated = await repository.UpdateWwtsProcessStreamAsync(wwtsProcessStreamId, request, cancellationToken);
+             return updated is null ? Results.NotFound() : Results.Ok(updated);
+         }
+         catch (InvalidOperationException ex)
+         {
+             logger.LogWarning(ex, "UpdateWwtsProcessStream failed: DB not configured.");
+             return Results.Problem(title: "Database not configured", detail: ex.Message, statusCode: StatusCodes.Status503ServiceUnavailable);
+         }
+     })
+     .RequireAuthorization("CanWrite")
+     .WithName("UpdateWwtsProcessStream")
+     .WithTags("Section4")
+     .WithSummary("Update WWTS process stream")
+     .WithDescription("Updates a WWTS Process Stream configuration row (BRD §4 conditional).")
+     .Accepts<UpdateWwtsProcessStreamRequest>("application/json")
+     .Produces<WwtsProcessStreamDto>(StatusCodes.Status200OK)
+     .Produces(StatusCodes.Status404NotFound)
+     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+ app.MapDelete("/api/section4/wwts-process-streams/{wwtsProcessStreamId:long}", async (
+         long wwtsProcessStreamId,
+         [FromBody] DeleteAssetRequest request,
+         Section4Repository repository,
+         ILoggerFactory loggerFactory,
+         CancellationToken cancellationToken) =>
+     {
+         var logger = loggerFactory.CreateLogger("DeleteWwtsProcessStream");
+         try
+         {
+             RequestValidation.ValidateAndThrow(request, nameof(DeleteAssetRequest));
+             var deleted = await repository.DeleteWwtsProcessStreamAsync(wwtsProcessStreamId, request.ModifiedBy, request.CorrelationId, cancellationToken);
+             return deleted ? Results.NoContent() : Results.NotFound();
+         }
+         catch (InvalidOperationException ex)
+         {
+             logger.LogWarning(ex, "DeleteWwtsProcessStream failed: DB not configured.");
+             return Results.Problem(title: "Database not configured", detail: ex.Message, statusCode: StatusCodes.Status503ServiceUnavailable);
+         }
+     })
+     .RequireAuthorization("AdminOnly")
+     .WithName("DeleteWwtsProcessStream")
+     .WithTags("Section4")
+     .WithSummary("Delete WWTS process stream")
+     .WithDescription("Soft-deletes a WWTS Process Stream configuration row (BRD §4 conditional).")
+     .Accepts<DeleteAssetRequest>("application/json")
+     .Produces(StatusCodes.Status204NoContent)
+     .Produces(StatusCodes.Status404NotFound)
+     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+ // Chemical Raw Material
+ app.MapGet("/api/section4/chemical-raw-materials", async (
+         string? siteId,
+         int? limit,
+         Section4Repository repository,
+         ILoggerFactory loggerFactory,
+         CancellationToken cancellationToken) =>
+     {
+         var logger = loggerFactory.CreateLogger("ListChemicalRawMaterials");
+         try
+         {
+             var list = await Section4Flows.ListChemicalRawMaterialsAsync(siteId, limit, repository, logger, cancellationToken);
+             return Results.Ok(list);
+         }
+         catch (InvalidOperationException ex)
+         {
+             logger.LogWarning(ex, "ListChemicalRawMaterials failed: DB not configured.");
+             return Results.Problem(title: "Database not configured", detail: ex.Message, statusCode: StatusCodes.Status503ServiceUnavailable);
+         }
+     })
+     .RequireAuthorization("CanRead")
+     .WithName("ListChemicalRawMaterials")
+     .WithTags("Section4")
+     .WithSummary("List chemical raw materials")
+     .WithDescription("Lists Chemical Raw Material configuration rows (BRD §4). Optional filter: siteId.")
+     .Produces<IReadOnlyList<ChemicalRawMaterialDto>>(StatusCodes.Status200OK)
+     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+ app.MapPost("/api/section4/chemical-raw-materials", async (
+         CreateChemicalRawMaterialRequest request,
+         Section4Repository repository,
+         ILoggerFactory loggerFactory,
+         CancellationToken cancellationToken) =>
+     {
+         var logger = loggerFactory.CreateLogger("CreateChemicalRawMaterial");
+         try
+         {
+             RequestValidation.ValidateAndThrow(request, nameof(CreateChemicalRawMaterialRequest));
+             var created = await repository.CreateChemicalRawMaterialAsync(request, cancellationToken);
+             return Results.Created($"/api/section4/chemical-raw-materials/{created.ChemicalRawMaterialId}", created);
+         }
+         catch (InvalidOperationException ex)
+         {
+             logger.LogWarning(ex, "CreateChemicalRawMaterial failed: DB not configured.");
+             return Results.Problem(title: "Database not configured", detail: ex.Message, statusCode: StatusCodes.Status503ServiceUnavailable);
+         }
+         catch (PostgresException ex)
+         {
+             logger.LogWarning(ex, "CreateChemicalRawMaterial failed due to database constraint error.");
+             return Results.Problem(title: "Database constraint error", detail: ex.MessageText, statusCode: StatusCodes.Status409Conflict);
+         }
+     })
+     .RequireAuthorization("CanWrite")
+     .WithName("CreateChemicalRawMaterial")
+     .WithTags("Section4")
+     .WithSummary("Create chemical raw material")
+     .WithDescription("Creates a Chemical Raw Material configuration row (BRD §4).")
+     .Accepts<CreateChemicalRawMaterialRequest>("application/json")
+     .Produces<ChemicalRawMaterialDto>(StatusCodes.Status201Created)
+     .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+     .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+     .ProducesProblem(StatusCodes.Status409Conflict);
+
+ app.MapPut("/api/section4/chemical-raw-materials/{chemicalRawMaterialId:long}", async (
+         long chemicalRawMaterialId,
+         UpdateChemicalRawMaterialRequest request,
+         Section4Repository repository,
+         ILoggerFactory loggerFactory,
+         CancellationToken cancellationToken) =>
+     {
+         var logger = loggerFactory.CreateLogger("UpdateChemicalRawMaterial");
+         try
+         {
+             RequestValidation.ValidateAndThrow(request, nameof(UpdateChemicalRawMaterialRequest));
+             var updated = await repository.UpdateChemicalRawMaterialAsync(chemicalRawMaterialId, request, cancellationToken);
+             return updated is null ? Results.NotFound() : Results.Ok(updated);
+         }
+         catch (InvalidOperationException ex)
+         {
+             logger.LogWarning(ex, "UpdateChemicalRawMaterial failed: DB not configured.");
+             return Results.Problem(title: "Database not configured", detail: ex.Message, statusCode: StatusCodes.Status503ServiceUnavailable);
+         }
+     })
+     .RequireAuthorization("CanWrite")
+     .WithName("UpdateChemicalRawMaterial")
+     .WithTags("Section4")
+     .WithSummary("Update chemical raw material")
+     .WithDescription("Updates a Chemical Raw Material configuration row (BRD §4).")
+     .Accepts<UpdateChemicalRawMaterialRequest>("application/json")
+     .Produces<ChemicalRawMaterialDto>(StatusCodes.Status200OK)
+     .Produces(StatusCodes.Status404NotFound)
+     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+ app.MapDelete("/api/section4/chemical-raw-materials/{chemicalRawMaterialId:long}", async (
+         long chemicalRawMaterialId,
+         [FromBody] DeleteAssetRequest request,
+         Section4Repository repository,
+         ILoggerFactory loggerFactory,
+         CancellationToken cancellationToken) =>
+     {
+         var logger = loggerFactory.CreateLogger("DeleteChemicalRawMaterial");
+         try
+         {
+             RequestValidation.ValidateAndThrow(request, nameof(DeleteAssetRequest));
+             var deleted = await repository.DeleteChemicalRawMaterialAsync(chemicalRawMaterialId, request.ModifiedBy, request.CorrelationId, cancellationToken);
+             return deleted ? Results.NoContent() : Results.NotFound();
+         }
+         catch (InvalidOperationException ex)
+         {
+             logger.LogWarning(ex, "DeleteChemicalRawMaterial failed: DB not configured.");
+             return Results.Problem(title: "Database not configured", detail: ex.Message, statusCode: StatusCodes.Status503ServiceUnavailable);
+         }
+     })
+     .RequireAuthorization("AdminOnly")
+     .WithName("DeleteChemicalRawMaterial")
+     .WithTags("Section4")
+     .WithSummary("Delete chemical raw material")
+     .WithDescription("Soft-deletes a Chemical Raw Material configuration row (BRD §4).")
+     .Accepts<DeleteAssetRequest>("application/json")
+     .Produces(StatusCodes.Status204NoContent)
+     .Produces(StatusCodes.Status404NotFound)
+     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+ // Chemical SDS
+ app.MapGet("/api/section4/chemical-sds", async (
+         string? siteId,
+         int? limit,
+         Section4Repository repository,
+         ILoggerFactory loggerFactory,
+         CancellationToken cancellationToken) =>
+     {
+         var logger = loggerFactory.CreateLogger("ListChemicalSds");
+         try
+         {
+             var list = await Section4Flows.ListChemicalSdsAsync(siteId, limit, repository, logger, cancellationToken);
+             return Results.Ok(list);
+         }
+         catch (InvalidOperationException ex)
+         {
+             logger.LogWarning(ex, "ListChemicalSds failed: DB not configured.");
+             return Results.Problem(title: "Database not configured", detail: ex.Message, statusCode: StatusCodes.Status503ServiceUnavailable);
+         }
+     })
+     .RequireAuthorization("CanRead")
+     .WithName("ListChemicalSds")
+     .WithTags("Section4")
+     .WithSummary("List chemical SDS")
+     .WithDescription("Lists Chemical SDS configuration rows (BRD §4). Optional filter: siteId.")
+     .Produces<IReadOnlyList<ChemicalSdsDto>>(StatusCodes.Status200OK)
+     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+ app.MapPost("/api/section4/chemical-sds", async (
+         CreateChemicalSdsRequest request,
+         Section4Repository repository,
+         ILoggerFactory loggerFactory,
+         CancellationToken cancellationToken) =>
+     {
+         var logger = loggerFactory.CreateLogger("CreateChemicalSds");
+         try
+         {
+             RequestValidation.ValidateAndThrow(request, nameof(CreateChemicalSdsRequest));
+             var created = await repository.CreateChemicalSdsAsync(request, cancellationToken);
+             return Results.Created($"/api/section4/chemical-sds/{created.ChemicalSdsId}", created);
+         }
+         catch (InvalidOperationException ex)
+         {
+             logger.LogWarning(ex, "CreateChemicalSds failed: DB not configured.");
+             return Results.Problem(title: "Database not configured", detail: ex.Message, statusCode: StatusCodes.Status503ServiceUnavailable);
+         }
+         catch (PostgresException ex)
+         {
+             logger.LogWarning(ex, "CreateChemicalSds failed due to database constraint error.");
+             return Results.Problem(title: "Database constraint error", detail: ex.MessageText, statusCode: StatusCodes.Status409Conflict);
+         }
+     })
+     .RequireAuthorization("CanWrite")
+     .WithName("CreateChemicalSds")
+     .WithTags("Section4")
+     .WithSummary("Create chemical SDS")
+     .WithDescription("Creates a Chemical SDS configuration row (BRD §4).")
+     .Accepts<CreateChemicalSdsRequest>("application/json")
+     .Produces<ChemicalSdsDto>(StatusCodes.Status201Created)
+     .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+     .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+     .ProducesProblem(StatusCodes.Status409Conflict);
+
+ app.MapPut("/api/section4/chemical-sds/{chemicalSdsId:long}", async (
+         long chemicalSdsId,
+         UpdateChemicalSdsRequest request,
+         Section4Repository repository,
+         ILoggerFactory loggerFactory,
+         CancellationToken cancellationToken) =>
+     {
+         var logger = loggerFactory.CreateLogger("UpdateChemicalSds");
+         try
+         {
+             RequestValidation.ValidateAndThrow(request, nameof(UpdateChemicalSdsRequest));
+             var updated = await repository.UpdateChemicalSdsAsync(chemicalSdsId, request, cancellationToken);
+             return updated is null ? Results.NotFound() : Results.Ok(updated);
+         }
+         catch (InvalidOperationException ex)
+         {
+             logger.LogWarning(ex, "UpdateChemicalSds failed: DB not configured.");
+             return Results.Problem(title: "Database not configured", detail: ex.Message, statusCode: StatusCodes.Status503ServiceUnavailable);
+         }
+     })
+     .RequireAuthorization("CanWrite")
+     .WithName("UpdateChemicalSds")
+     .WithTags("Section4")
+     .WithSummary("Update chemical SDS")
+     .WithDescription("Updates a Chemical SDS configuration row (BRD §4).")
+     .Accepts<UpdateChemicalSdsRequest>("application/json")
+     .Produces<ChemicalSdsDto>(StatusCodes.Status200OK)
+     .Produces(StatusCodes.Status404NotFound)
+     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+ app.MapDelete("/api/section4/chemical-sds/{chemicalSdsId:long}", async (
+         long chemicalSdsId,
+         [FromBody] DeleteAssetRequest request,
+         Section4Repository repository,
+         ILoggerFactory loggerFactory,
+         CancellationToken cancellationToken) =>
+     {
+         var logger = loggerFactory.CreateLogger("DeleteChemicalSds");
+         try
+         {
+             RequestValidation.ValidateAndThrow(request, nameof(DeleteAssetRequest));
+             var deleted = await repository.DeleteChemicalSdsAsync(chemicalSdsId, request.ModifiedBy, request.CorrelationId, cancellationToken);
+             return deleted ? Results.NoContent() : Results.NotFound();
+         }
+         catch (InvalidOperationException ex)
+         {
+             logger.LogWarning(ex, "DeleteChemicalSds failed: DB not configured.");
+             return Results.Problem(title: "Database not configured", detail: ex.Message, statusCode: StatusCodes.Status503ServiceUnavailable);
+         }
+     })
+     .RequireAuthorization("AdminOnly")
+     .WithName("DeleteChemicalSds")
+     .WithTags("Section4")
+     .WithSummary("Delete chemical SDS")
+     .WithDescription("Soft-deletes a Chemical SDS configuration row (BRD §4).")
+     .Accepts<DeleteAssetRequest>("application/json")
+     .Produces(StatusCodes.Status204NoContent)
+     .Produces(StatusCodes.Status404NotFound)
+     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+ // Lab Data Configuration (conditional)
+ app.MapGet("/api/section4/lab-data-configurations", async (
+         string? siteId,
+         int? limit,
+         Section4Repository repository,
+         ILoggerFactory loggerFactory,
+         CancellationToken cancellationToken) =>
+     {
+         var logger = loggerFactory.CreateLogger("ListLabDataConfigurations");
+         try
+         {
+             var list = await Section4Flows.ListLabDataConfigurationsAsync(siteId, limit, repository, logger, cancellationToken);
+             return Results.Ok(list);
+         }
+         catch (InvalidOperationException ex)
+         {
+             logger.LogWarning(ex, "ListLabDataConfigurations failed: DB not configured.");
+             return Results.Problem(title: "Database not configured", detail: ex.Message, statusCode: StatusCodes.Status503ServiceUnavailable);
+         }
+     })
+     .RequireAuthorization("CanRead")
+     .WithName("ListLabDataConfigurations")
+     .WithTags("Section4")
+     .WithSummary("List lab data configurations")
+     .WithDescription("Lists Lab Data Configuration rows (BRD §4 conditional). Optional filter: siteId.")
+     .Produces<IReadOnlyList<LabDataConfigurationDto>>(StatusCodes.Status200OK)
+     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+ app.MapPost("/api/section4/lab-data-configurations", async (
+         CreateLabDataConfigurationRequest request,
+         Section4Repository repository,
+         ILoggerFactory loggerFactory,
+         CancellationToken cancellationToken) =>
+     {
+         var logger = loggerFactory.CreateLogger("CreateLabDataConfiguration");
+         try
+         {
+             RequestValidation.ValidateAndThrow(request, nameof(CreateLabDataConfigurationRequest));
+             var created = await repository.CreateLabDataConfigurationAsync(request, cancellationToken);
+             return Results.Created($"/api/section4/lab-data-configurations/{created.LabDataConfigurationId}", created);
+         }
+         catch (InvalidOperationException ex)
+         {
+             logger.LogWarning(ex, "CreateLabDataConfiguration failed: DB not configured.");
+             return Results.Problem(title: "Database not configured", detail: ex.Message, statusCode: StatusCodes.Status503ServiceUnavailable);
+         }
+         catch (PostgresException ex)
+         {
+             logger.LogWarning(ex, "CreateLabDataConfiguration failed due to database constraint error.");
+             return Results.Problem(title: "Database constraint error", detail: ex.MessageText, statusCode: StatusCodes.Status409Conflict);
+         }
+     })
+     .RequireAuthorization("CanWrite")
+     .WithName("CreateLabDataConfiguration")
+     .WithTags("Section4")
+     .WithSummary("Create lab data configuration")
+     .WithDescription("Creates a Lab Data Configuration row (BRD §4 conditional).")
+     .Accepts<CreateLabDataConfigurationRequest>("application/json")
+     .Produces<LabDataConfigurationDto>(StatusCodes.Status201Created)
+     .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+     .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+     .ProducesProblem(StatusCodes.Status409Conflict);
+
+ app.MapPut("/api/section4/lab-data-configurations/{labDataConfigurationId:long}", async (
+         long labDataConfigurationId,
+         UpdateLabDataConfigurationRequest request,
+         Section4Repository repository,
+         ILoggerFactory loggerFactory,
+         CancellationToken cancellationToken) =>
+     {
+         var logger = loggerFactory.CreateLogger("UpdateLabDataConfiguration");
+         try
+         {
+             RequestValidation.ValidateAndThrow(request, nameof(UpdateLabDataConfigurationRequest));
+             var updated = await repository.UpdateLabDataConfigurationAsync(labDataConfigurationId, request, cancellationToken);
+             return updated is null ? Results.NotFound() : Results.Ok(updated);
+         }
+         catch (InvalidOperationException ex)
+         {
+             logger.LogWarning(ex, "UpdateLabDataConfiguration failed: DB not configured.");
+             return Results.Problem(title: "Database not configured", detail: ex.Message, statusCode: StatusCodes.Status503ServiceUnavailable);
+         }
+     })
+     .RequireAuthorization("CanWrite")
+     .WithName("UpdateLabDataConfiguration")
+     .WithTags("Section4")
+     .WithSummary("Update lab data configuration")
+     .WithDescription("Updates a Lab Data Configuration row (BRD §4 conditional).")
+     .Accepts<UpdateLabDataConfigurationRequest>("application/json")
+     .Produces<LabDataConfigurationDto>(StatusCodes.Status200OK)
+     .Produces(StatusCodes.Status404NotFound)
+     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+ app.MapDelete("/api/section4/lab-data-configurations/{labDataConfigurationId:long}", async (
+         long labDataConfigurationId,
+         [FromBody] DeleteAssetRequest request,
+         Section4Repository repository,
+         ILoggerFactory loggerFactory,
+         CancellationToken cancellationToken) =>
+     {
+         var logger = loggerFactory.CreateLogger("DeleteLabDataConfiguration");
+         try
+         {
+             RequestValidation.ValidateAndThrow(request, nameof(DeleteAssetRequest));
+             var deleted = await repository.DeleteLabDataConfigurationAsync(labDataConfigurationId, request.ModifiedBy, request.CorrelationId, cancellationToken);
+             return deleted ? Results.NoContent() : Results.NotFound();
+         }
+         catch (InvalidOperationException ex)
+         {
+             logger.LogWarning(ex, "DeleteLabDataConfiguration failed: DB not configured.");
+             return Results.Problem(title: "Database not configured", detail: ex.Message, statusCode: StatusCodes.Status503ServiceUnavailable);
+         }
+     })
+     .RequireAuthorization("AdminOnly")
+     .WithName("DeleteLabDataConfiguration")
+     .WithTags("Section4")
+     .WithSummary("Delete lab data configuration")
+     .WithDescription("Soft-deletes a Lab Data Configuration row (BRD §4 conditional).")
+     .Accepts<DeleteAssetRequest>("application/json")
+     .Produces(StatusCodes.Status204NoContent)
+     .Produces(StatusCodes.Status404NotFound)
+     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+ // Water Process Configuration (conditional)
+ app.MapGet("/api/section4/water-process-configurations", async (
+         string? siteId,
+         int? limit,
+         Section4Repository repository,
+         ILoggerFactory loggerFactory,
+         CancellationToken cancellationToken) =>
+     {
+         var logger = loggerFactory.CreateLogger("ListWaterProcessConfigurations");
+         try
+         {
+             var list = await Section4Flows.ListWaterProcessConfigurationsAsync(siteId, limit, repository, logger, cancellationToken);
+             return Results.Ok(list);
+         }
+         catch (InvalidOperationException ex)
+         {
+             logger.LogWarning(ex, "ListWaterProcessConfigurations failed: DB not configured.");
+             return Results.Problem(title: "Database not configured", detail: ex.Message, statusCode: StatusCodes.Status503ServiceUnavailable);
+         }
+     })
+     .RequireAuthorization("CanRead")
+     .WithName("ListWaterProcessConfigurations")
+     .WithTags("Section4")
+     .WithSummary("List water process configurations")
+     .WithDescription("Lists Water Process configuration rows (BRD §4 conditional). Optional filter: siteId.")
+     .Produces<IReadOnlyList<WaterProcessConfigurationDto>>(StatusCodes.Status200OK)
+     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+ app.MapPost("/api/section4/water-process-configurations", async (
+         CreateWaterProcessConfigurationRequest request,
+         Section4Repository repository,
+         ILoggerFactory loggerFactory,
+         CancellationToken cancellationToken) =>
+     {
+         var logger = loggerFactory.CreateLogger("CreateWaterProcessConfiguration");
+         try
+         {
+             RequestValidation.ValidateAndThrow(request, nameof(CreateWaterProcessConfigurationRequest));
+             var created = await repository.CreateWaterProcessConfigurationAsync(request, cancellationToken);
+             return Results.Created($"/api/section4/water-process-configurations/{created.WaterProcessConfigurationId}", created);
+         }
+         catch (InvalidOperationException ex)
+         {
+             logger.LogWarning(ex, "CreateWaterProcessConfiguration failed: DB not configured.");
+             return Results.Problem(title: "Database not configured", detail: ex.Message, statusCode: StatusCodes.Status503ServiceUnavailable);
+         }
+         catch (PostgresException ex)
+         {
+             logger.LogWarning(ex, "CreateWaterProcessConfiguration failed due to database constraint error.");
+             return Results.Problem(title: "Database constraint error", detail: ex.MessageText, statusCode: StatusCodes.Status409Conflict);
+         }
+     })
+     .RequireAuthorization("CanWrite")
+     .WithName("CreateWaterProcessConfiguration")
+     .WithTags("Section4")
+     .WithSummary("Create water process configuration")
+     .WithDescription("Creates a Water Process configuration row (BRD §4 conditional).")
+     .Accepts<CreateWaterProcessConfigurationRequest>("application/json")
+     .Produces<WaterProcessConfigurationDto>(StatusCodes.Status201Created)
+     .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+     .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+     .ProducesProblem(StatusCodes.Status409Conflict);
+
+ app.MapPut("/api/section4/water-process-configurations/{waterProcessConfigurationId:long}", async (
+         long waterProcessConfigurationId,
+         UpdateWaterProcessConfigurationRequest request,
+         Section4Repository repository,
+         ILoggerFactory loggerFactory,
+         CancellationToken cancellationToken) =>
+     {
+         var logger = loggerFactory.CreateLogger("UpdateWaterProcessConfiguration");
+         try
+         {
+             RequestValidation.ValidateAndThrow(request, nameof(UpdateWaterProcessConfigurationRequest));
+             var updated = await repository.UpdateWaterProcessConfigurationAsync(waterProcessConfigurationId, request, cancellationToken);
+             return updated is null ? Results.NotFound() : Results.Ok(updated);
+         }
+         catch (InvalidOperationException ex)
+         {
+             logger.LogWarning(ex, "UpdateWaterProcessConfiguration failed: DB not configured.");
+             return Results.Problem(title: "Database not configured", detail: ex.Message, statusCode: StatusCodes.Status503ServiceUnavailable);
+         }
+     })
+     .RequireAuthorization("CanWrite")
+     .WithName("UpdateWaterProcessConfiguration")
+     .WithTags("Section4")
+     .WithSummary("Update water process configuration")
+     .WithDescription("Updates a Water Process configuration row (BRD §4 conditional).")
+     .Accepts<UpdateWaterProcessConfigurationRequest>("application/json")
+     .Produces<WaterProcessConfigurationDto>(StatusCodes.Status200OK)
+     .Produces(StatusCodes.Status404NotFound)
+     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+ app.MapDelete("/api/section4/water-process-configurations/{waterProcessConfigurationId:long}", async (
+         long waterProcessConfigurationId,
+         [FromBody] DeleteAssetRequest request,
+         Section4Repository repository,
+         ILoggerFactory loggerFactory,
+         CancellationToken cancellationToken) =>
+     {
+         var logger = loggerFactory.CreateLogger("DeleteWaterProcessConfiguration");
+         try
+         {
+             RequestValidation.ValidateAndThrow(request, nameof(DeleteAssetRequest));
+             var deleted = await repository.DeleteWaterProcessConfigurationAsync(waterProcessConfigurationId, request.ModifiedBy, request.CorrelationId, cancellationToken);
+             return deleted ? Results.NoContent() : Results.NotFound();
+         }
+         catch (InvalidOperationException ex)
+         {
+             logger.LogWarning(ex, "DeleteWaterProcessConfiguration failed: DB not configured.");
+             return Results.Problem(title: "Database not configured", detail: ex.Message, statusCode: StatusCodes.Status503ServiceUnavailable);
+         }
+     })
+     .RequireAuthorization("AdminOnly")
+     .WithName("DeleteWaterProcessConfiguration")
+     .WithTags("Section4")
+     .WithSummary("Delete water process configuration")
+     .WithDescription("Soft-deletes a Water Process configuration row (BRD §4 conditional).")
+     .Accepts<DeleteAssetRequest>("application/json")
+     .Produces(StatusCodes.Status204NoContent)
+     .Produces(StatusCodes.Status404NotFound)
+     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+ // ---------------------------------------------------------------------
+ // BRD §9 Legacy/Observed API inventory endpoints (compatibility shims)
+ // ---------------------------------------------------------------------
+ app.MapLegacyObservedApiEndpoints();
 
 // ---------------------------------------------------------------------
 // CORS preflight support

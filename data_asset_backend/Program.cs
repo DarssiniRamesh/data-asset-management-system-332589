@@ -433,14 +433,43 @@ app.UseSwaggerUi(config =>
 // IMPORTANT:
 // - This app uses AuthorizationOptions.FallbackPolicy to secure all endpoints by default.
 // - Public endpoints must opt out explicitly via .AllowAnonymous().
-// - To ensure endpoint metadata (AllowAnonymous/RequireAuthorization) is correctly evaluated,
-//   auth middleware must run in the standard global pipeline order.
 //
-// Prior behavior: auth was conditionally enabled via UseWhen(...). In minimal APIs, this can
-// result in endpoint metadata not being available/considered at the time auth runs, causing
-// anonymous endpoints like /healthz and /openapi.json to still be challenged (401 Bearer).
-app.UseAuthentication();
-app.UseAuthorization();
+// Problem being fixed:
+// - Swagger UI is served at /docs, but its JS/CSS/favicon assets are also under /docs.
+// - With a strict FallbackPolicy, those static asset requests can be challenged (401) in
+//   some hosting/proxy setups, resulting in "SwaggerUIBundle is not defined".
+//
+// Fix approach:
+// - Keep API endpoints protected.
+// - Explicitly bypass auth for Swagger/OpenAPI routes at the middleware level, so all
+//   /docs/** assets and OpenAPI JSON endpoints are always anonymous.
+app.UseWhen(
+    ctx =>
+    {
+        var path = ctx.Request.Path;
+
+        // NSwag Swagger UI assets + index
+        if (path.StartsWithSegments("/docs", StringComparison.OrdinalIgnoreCase))
+        {
+            return false; // do NOT run auth middleware
+        }
+
+        // OpenAPI endpoints served by NSwag in this app
+        if (path.Equals("/openapi.json", StringComparison.OrdinalIgnoreCase) ||
+            path.Equals("/swagger/v1/swagger.json", StringComparison.OrdinalIgnoreCase) ||
+            path.StartsWithSegments("/swagger", StringComparison.OrdinalIgnoreCase))
+        {
+            return false; // do NOT run auth middleware
+        }
+
+        return true; // run auth middleware for everything else
+    },
+    branch =>
+    {
+        branch.UseAuthentication();
+        branch.UseAuthorization();
+    }
+);
 
 // Idempotency (BRD §10.3): handles X-Idempotency-Key for asset operations (e.g., Copy Asset).
 app.UseMiddleware<IdempotencyKeyMiddleware>();

@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
+using DataAssetBackend.Features.Assets;
 using DataAssetBackend.Infrastructure.Database;
 using Microsoft.AspNetCore.HttpOverrides;
+using Npgsql;
 
 // Load .env (if present) *before* building configuration.
 // Some hosted/preview environments provide secrets via a .env file rather than true process env vars.
@@ -76,6 +78,10 @@ builder.Services.AddCors(options =>
 // - Errors: parsing errors are logged and treated as "not configured" for health checks (API still starts)
 // - Side effects: none at startup (no eager DB connect); health endpoint may attempt connection when configured
 builder.Services.AddSingleton<DatabaseConfigProvider>();
+
+// Postgres data access services (Flyway V2 schema)
+builder.Services.AddSingleton<NpgsqlConnectionFactory>();
+builder.Services.AddSingleton<AssetRepository>();
 
 var app = builder.Build();
 
@@ -226,6 +232,149 @@ app.MapPost("/api/validity-check", (ValidityCheckRequest request) =>
     .WithDescription("Performs a basic validity check on an input value. This endpoint can be extended as asset/tab validation rules are implemented.")
     .Produces<ValidityCheckResponse>(StatusCodes.Status200OK)
     .Accepts<ValidityCheckRequest>("application/json");
+
+// Asset endpoints (Flyway V2 schema)
+app.MapPost("/api/assets", async (
+        CreateAssetRequest request,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("CreateAsset");
+
+        try
+        {
+            var result = await AssetFlows.CreateAssetAsync(
+                new AssetFlows.CreateAssetFlowRequest(request),
+                repository,
+                logger,
+                cancellationToken);
+
+            return Results.Created($"/api/assets/{result.Asset.AssetId}", result.Asset);
+        }
+        catch (InvalidOperationException ex)
+        {
+            // DB not configured
+            logger.LogWarning(ex, "CreateAsset failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            // Surface constraint errors with safe info (no secrets).
+            logger.LogWarning(ex, "CreateAsset failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .WithName("CreateAsset")
+    .WithTags("Assets")
+    .WithSummary("Create asset")
+    .WithDescription("Creates an Asset (BRD §6.1 header fields) and persists it to Postgres using the Flyway V2 schema.")
+    .Accepts<CreateAssetRequest>("application/json")
+    .Produces<AssetDto>(StatusCodes.Status201Created)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
+
+app.MapGet("/api/assets/{assetId:long}", async (
+        long assetId,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("GetAsset");
+
+        try
+        {
+            var result = await AssetFlows.GetAssetAsync(assetId, repository, logger, cancellationToken);
+            return result.Asset is null ? Results.NotFound() : Results.Ok(result.Asset);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "GetAsset failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .WithName("GetAssetById")
+    .WithTags("Assets")
+    .WithSummary("Get asset by ID")
+    .WithDescription("Fetches an Asset by its database ID (excluding soft-deleted rows).")
+    .Produces<AssetDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapPut("/api/assets/{assetId:long}", async (
+        long assetId,
+        UpdateAssetRequest request,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("UpdateAsset");
+
+        try
+        {
+            var result = await AssetFlows.UpdateAssetAsync(
+                new AssetFlows.UpdateAssetFlowRequest(assetId, request),
+                repository,
+                logger,
+                cancellationToken);
+
+            return result.Asset is null ? Results.NotFound() : Results.Ok(result.Asset);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "UpdateAsset failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .WithName("UpdateAsset")
+    .WithTags("Assets")
+    .WithSummary("Update asset")
+    .WithDescription("Updates an existing Asset (does not allow changing Global Unique Asset ID).")
+    .Accepts<UpdateAssetRequest>("application/json")
+    .Produces<AssetDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapGet("/api/assets", async (
+        [AsParameters] QueryAssetsRequest request,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("QueryAssets");
+
+        try
+        {
+            var result = await AssetFlows.QueryAssetsAsync(request, repository, logger, cancellationToken);
+            return Results.Ok(result.Assets);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "QueryAssets failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .WithName("QueryAssets")
+    .WithTags("Assets")
+    .WithSummary("Query assets")
+    .WithDescription("Queries Assets with optional filters (siteId, assetGroup, processGroup, assetNameContains, permitEuId, globalUniqueAssetId).")
+    .Produces<IReadOnlyList<AssetDto>>(StatusCodes.Status200OK)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
 
 app.Run();
 

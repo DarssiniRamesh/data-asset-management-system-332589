@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using DataAssetBackend.Features.Assets;
+using DataAssetBackend.Features.Legacy;
 using DataAssetBackend.Features.Masters;
 using DataAssetBackend.Infrastructure.Api;
 using DataAssetBackend.Infrastructure.Database;
@@ -2910,6 +2911,11 @@ app.MapPut("/api/masters/status-codes/{statusCodeId:long}", async (
     .Produces<StatusCodeMasterDto>(StatusCodes.Status200OK)
     .Produces(StatusCodes.Status404NotFound)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+// ---------------------------------------------------------------------
+// BRD §9 Legacy/Observed API inventory endpoints (compatibility shims)
+// ---------------------------------------------------------------------
+app.MapLegacyObservedApiEndpoints();
 
 app.Run();
 

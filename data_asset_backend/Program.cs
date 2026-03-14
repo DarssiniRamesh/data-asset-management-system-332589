@@ -4,6 +4,7 @@ using DataAssetBackend.Features.Legacy;
 using DataAssetBackend.Features.Masters;
 using DataAssetBackend.Infrastructure.Api;
 using DataAssetBackend.Infrastructure.Database;
+using DataAssetBackend.Infrastructure.Idempotency;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Npgsql;
@@ -83,6 +84,10 @@ builder.Services.AddCors(options =>
 // - Side effects: none at startup (no eager DB connect); health endpoint may attempt connection when configured
 builder.Services.AddSingleton<DatabaseConfigProvider>();
 
+// Idempotency (BRD §10.3): in-memory store + middleware for X-Idempotency-Key.
+builder.Services.AddSingleton<IIdempotencyStore, InMemoryIdempotencyStore>();
+builder.Services.AddTransient<IdempotencyKeyMiddleware>();
+
  // Postgres data access services (Flyway V2 schema)
 builder.Services.AddSingleton<NpgsqlConnectionFactory>();
 builder.Services.AddSingleton<AssetRepository>();
@@ -102,6 +107,9 @@ app.UseCors("DefaultCors");
 // Note: endpoint-local try/catch blocks may still translate errors, but any uncaught exception
 // now produces a consistent RFC7807 ProblemDetails with stable status codes.
 app.UseUnifiedExceptionHandling();
+
+// Idempotency (BRD §10.3): handles X-Idempotency-Key for asset operations (e.g., Copy Asset).
+app.UseMiddleware<IdempotencyKeyMiddleware>();
 
 static string BuildPublishedServerUrl(HttpRequest req)
 {

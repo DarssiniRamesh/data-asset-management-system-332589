@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,25 +12,75 @@ builder.Services.AddOpenApiDocument(config =>
     config.Description = "Backend API for data asset management (POC). Includes validation utilities for asset configuration workflows.";
 });
 
+// Forwarded headers: required so Request.Scheme/Host reflect the *external* URL
+// (e.g., https://... in hosted environments), avoiding Swagger "Failed to fetch"
+// due to mixed scheme (http vs https) or incorrect host.
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders =
+        ForwardedHeaders.XForwardedFor |
+        ForwardedHeaders.XForwardedProto |
+        ForwardedHeaders.XForwardedHost;
+
+    // Managed environments often use dynamic proxy IPs; don't restrict.
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
+
 // Add CORS
+// NOTE: Browsers disallow credentialed requests with wildcard origins.
+// Swagger UI typically doesn't require credentials, but the frontend might.
+// We therefore support explicit origins via env var, and provide a safe local-dev default.
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("DefaultCors", policy =>
     {
-        policy.SetIsOriginAllowed(_ => true)
-              .AllowCredentials()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
+        var allowedOriginsEnv = Environment.GetEnvironmentVariable("CORS_ALLOWED_ORIGINS");
+        var allowedOrigins = (allowedOriginsEnv ?? string.Empty)
+            .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        if (allowedOrigins.Length > 0)
+        {
+            policy.WithOrigins(allowedOrigins)
+                  .AllowAnyMethod()
+                  .AllowAnyHeader()
+                  .AllowCredentials();
+        }
+        else
+        {
+            // Dev-only defaults (no credentials when not explicitly configured).
+            policy.WithOrigins(
+                    "http://localhost:3000",
+                    "http://localhost:3001",
+                    "https://localhost:7038"
+                )
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        }
     });
 });
 
 var app = builder.Build();
 
+// Must be early in pipeline, before anything that relies on scheme/host (OpenAPI generation).
+app.UseForwardedHeaders();
+
 // Use CORS
-app.UseCors("AllowAll");
+app.UseCors("DefaultCors");
 
 // Configure OpenAPI/Swagger
-app.UseOpenApi();
+app.UseOpenApi(settings =>
+{
+    // Ensure the generated OpenAPI document uses the externally visible base URL.
+    // This prevents Swagger UI from attempting to call http://... when the app is served via https://...
+    settings.PostProcess = (document, req) =>
+    {
+        var serverUrl = $"{req.Scheme}://{req.Host.Value}";
+        document.Servers.Clear();
+        document.Servers.Add(new NSwag.OpenApiServer { Url = serverUrl });
+    };
+});
+
 app.UseSwaggerUi(config =>
 {
     config.Path = "/docs";

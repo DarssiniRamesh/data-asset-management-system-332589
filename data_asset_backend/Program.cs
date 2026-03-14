@@ -421,6 +421,7 @@ app.MapPost("/api/masters/uoms", async (
     .WithDescription("Creates a UOM master row (BRD §6.14).")
     .Accepts<CreateUomMasterRequest>("application/json")
     .Produces<UomMasterDto>(StatusCodes.Status201Created)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
     .ProducesProblem(StatusCodes.Status409Conflict);
 
@@ -480,6 +481,7 @@ app.MapGet("/api/masters/uoms/{uomId:long}", async (
     .WithSummary("Get UOM master by ID")
     .WithDescription("Fetches a single UOM master row by ID (excluding soft-deleted).")
     .Produces<UomMasterDto>(StatusCodes.Status200OK)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
     .Produces(StatusCodes.Status404NotFound)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
 
@@ -552,6 +554,7 @@ app.MapPost("/api/masters/reporting-programs", async (
     .WithDescription("Creates a reporting program master row (BRD §6.14).")
     .Accepts<CreateReportingProgramMasterRequest>("application/json")
     .Produces<ReportingProgramMasterDto>(StatusCodes.Status201Created)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
     .ProducesProblem(StatusCodes.Status409Conflict);
 
@@ -611,6 +614,7 @@ app.MapGet("/api/masters/reporting-programs/{reportingProgramId:long}", async (
     .WithSummary("Get reporting program master by ID")
     .WithDescription("Fetches a single reporting program master row by ID (excluding soft-deleted).")
     .Produces<ReportingProgramMasterDto>(StatusCodes.Status200OK)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
     .Produces(StatusCodes.Status404NotFound)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
 
@@ -683,6 +687,7 @@ app.MapPost("/api/masters/control-devices", async (
     .WithDescription("Creates a control device master row (BRD §6.14).")
     .Accepts<CreateControlDeviceMasterRequest>("application/json")
     .Produces<ControlDeviceMasterDto>(StatusCodes.Status201Created)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
     .ProducesProblem(StatusCodes.Status409Conflict);
 
@@ -743,6 +748,7 @@ app.MapGet("/api/masters/control-devices/{controlDeviceId:long}", async (
     .WithSummary("Get control device master by ID")
     .WithDescription("Fetches a single control device master row by ID (excluding soft-deleted).")
     .Produces<ControlDeviceMasterDto>(StatusCodes.Status200OK)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
     .Produces(StatusCodes.Status404NotFound)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
 
@@ -815,6 +821,7 @@ app.MapPost("/api/masters/equations", async (
     .WithDescription("Creates an equation master row (BRD §6.14).")
     .Accepts<CreateEquationMasterRequest>("application/json")
     .Produces<EquationMasterDto>(StatusCodes.Status201Created)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
     .ProducesProblem(StatusCodes.Status409Conflict);
 
@@ -874,6 +881,7 @@ app.MapGet("/api/masters/equations/{equationMasterId:long}", async (
     .WithSummary("Get equation master by ID")
     .WithDescription("Fetches a single equation master row by ID (excluding soft-deleted).")
     .Produces<EquationMasterDto>(StatusCodes.Status200OK)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
     .Produces(StatusCodes.Status404NotFound)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
 
@@ -946,6 +954,7 @@ app.MapPost("/api/masters/status-codes", async (
     .WithDescription("Creates a status code master row (BRD §6.14).")
     .Accepts<CreateStatusCodeMasterRequest>("application/json")
     .Produces<StatusCodeMasterDto>(StatusCodes.Status201Created)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
     .ProducesProblem(StatusCodes.Status409Conflict);
 
@@ -1005,6 +1014,7 @@ app.MapGet("/api/masters/status-codes/{statusCodeId:long}", async (
     .WithSummary("Get status code master by ID")
     .WithDescription("Fetches a single status code master row by ID (excluding soft-deleted).")
     .Produces<StatusCodeMasterDto>(StatusCodes.Status200OK)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
     .Produces(StatusCodes.Status404NotFound)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
 

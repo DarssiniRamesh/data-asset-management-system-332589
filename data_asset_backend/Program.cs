@@ -219,7 +219,11 @@ var app = builder.Build();
 // Must be early in pipeline, before anything that relies on scheme/host (OpenAPI generation).
 app.UseForwardedHeaders();
 
- // Use CORS
+// Ensure endpoint routing runs before CORS so the CORS middleware can evaluate endpoint metadata
+// and consistently apply headers (including for preflight/OPTIONS requests).
+app.UseRouting();
+
+// Use CORS
 app.UseCors("DefaultCors");
 
 // Unified exception->HTTP mapping for all endpoints (assets, children, masters, copy lineage).
@@ -3113,6 +3117,20 @@ app.MapPut("/api/masters/status-codes/{statusCodeId:long}", async (
 // BRD §9 Legacy/Observed API inventory endpoints (compatibility shims)
 // ---------------------------------------------------------------------
 app.MapLegacyObservedApiEndpoints();
+
+// ---------------------------------------------------------------------
+// CORS preflight support
+// ---------------------------------------------------------------------
+//
+// Some hosting/proxy setups can cause OPTIONS requests to miss endpoint matching and return
+// a response without CORS headers. Provide an explicit fallback OPTIONS handler to ensure
+// preflight always succeeds and the CORS middleware can attach the correct headers.
+//
+// IMPORTANT: This must be registered after other endpoints so more specific matches win.
+app.MapMethods("{*path}", new[] { "OPTIONS" }, () => Results.NoContent())
+   .AllowAnonymous()
+   .WithName("CorsPreflightFallback")
+   .ExcludeFromDescription();
 
 app.Run();
 

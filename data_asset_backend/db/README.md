@@ -43,8 +43,10 @@ official Flyway CLI is not used.
 From `data_asset_backend/`:
 
 ```bash
-dotnet run --project MigrationRunner --
+dotnet run --project ./MigrationRunner/MigrationRunner.csproj --
 ```
+
+This runs migrations as a plain console app and is safe to execute while the backend preview is already running (it does not start Kestrel or bind to port 3001).
 
 Dry run (shows pending versions without applying):
 

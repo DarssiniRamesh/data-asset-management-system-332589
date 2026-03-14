@@ -38,8 +38,12 @@ built-in non-Docker migration runner:
 Quick run (from `data_asset_backend/`):
 
 ```bash
-dotnet run --project MigrationRunner --
+dotnet run --project ./MigrationRunner/MigrationRunner.csproj --
 ```
+
+Notes:
+- The `--` separator is required before any MigrationRunner arguments (and is safe even if you pass none).
+- Using the explicit `./MigrationRunner/MigrationRunner.csproj` path avoids accidentally running the web host (which binds to port 3001).
 
 ## Local run
 

@@ -10,7 +10,10 @@ namespace DataAssetBackend.MigrationRunner;
 /// </summary>
 internal static class Program
 {
-    private const string DefaultMigrationsRelativePath = "../db/migrations";
+    // Prefer running from data_asset_backend/ (then migrations are at ./db/migrations).
+    // Also support running from data_asset_backend/MigrationRunner/ (then migrations are at ../db/migrations).
+    private const string DefaultMigrationsRelativePathFromBackendRoot = "db/migrations";
+    private const string DefaultMigrationsRelativePathFromRunnerDir = "../db/migrations";
 
     public static async Task<int> Main(string[] args)
     {
@@ -152,16 +155,34 @@ internal static class Program
 
         private static DirectoryInfo ResolveMigrationsPath(string? input)
         {
-            // Default is ../db/migrations relative to this project folder.
             var baseDir = Directory.GetCurrentDirectory();
-            var candidate = string.IsNullOrWhiteSpace(input)
-                ? Path.GetFullPath(Path.Combine(baseDir, DefaultMigrationsRelativePath))
-                : Path.GetFullPath(input);
+
+            string candidate;
+            if (!string.IsNullOrWhiteSpace(input))
+            {
+                candidate = Path.GetFullPath(input);
+            }
+            else
+            {
+                // Try the most common invocation first: run from data_asset_backend/
+                var fromBackendRoot = Path.GetFullPath(Path.Combine(baseDir, DefaultMigrationsRelativePathFromBackendRoot));
+                if (Directory.Exists(fromBackendRoot))
+                {
+                    candidate = fromBackendRoot;
+                }
+                else
+                {
+                    // Fallback: run from data_asset_backend/MigrationRunner/
+                    candidate = Path.GetFullPath(Path.Combine(baseDir, DefaultMigrationsRelativePathFromRunnerDir));
+                }
+            }
 
             var di = new DirectoryInfo(candidate);
             if (!di.Exists)
             {
-                throw new ArgumentException($"Migrations directory not found: {di.FullName}");
+                throw new ArgumentException(
+                    $"Migrations directory not found: {di.FullName}. " +
+                    "Run from data_asset_backend/ or pass --migrations <path>.");
             }
 
             return di;

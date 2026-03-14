@@ -36,7 +36,17 @@ public sealed class DatabaseConfigProvider
         }
 
         // Alternative: DATABASE_URL (common in PaaS environments; and explicitly listed in CodeWiki plan)
-        var databaseUrl = _configuration["DATABASE_URL"];
+        // Note: Some environments may not flow env vars into IConfiguration as expected (or may mount them via .env).
+        // We therefore check both IConfiguration and Environment directly, and trim common quoting.
+        var databaseUrl = GetFirstNonEmpty(
+            _configuration["DATABASE_URL"],
+            _configuration["DatabaseUrl"],
+            Environment.GetEnvironmentVariable("DATABASE_URL"),
+            Environment.GetEnvironmentVariable("DatabaseUrl"),
+            Environment.GetEnvironmentVariable("database_url"));
+
+        databaseUrl = NormalizeEnvValue(databaseUrl);
+
         if (!string.IsNullOrWhiteSpace(databaseUrl))
         {
             try
@@ -54,6 +64,30 @@ public sealed class DatabaseConfigProvider
         }
 
         return DatabaseConnectionResolutionResult.NotConfigured();
+    }
+
+    private static string? GetFirstNonEmpty(params string?[] candidates)
+    {
+        foreach (var c in candidates)
+        {
+            if (!string.IsNullOrWhiteSpace(c))
+            {
+                return c;
+            }
+        }
+
+        return null;
+    }
+
+    private static string? NormalizeEnvValue(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return value;
+        }
+
+        // Trim whitespace and optional surrounding quotes that sometimes appear in env/.env injection.
+        return value.Trim().Trim('"').Trim('\'');
     }
 }
 

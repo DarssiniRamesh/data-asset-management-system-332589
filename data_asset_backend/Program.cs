@@ -2,6 +2,11 @@ using System.ComponentModel.DataAnnotations;
 using DataAssetBackend.Infrastructure.Database;
 using Microsoft.AspNetCore.HttpOverrides;
 
+// Load .env (if present) *before* building configuration.
+// Some hosted/preview environments provide secrets via a .env file rather than true process env vars.
+// This ensures IConfiguration can resolve DATABASE_URL / ConnectionStrings__Default consistently.
+LoadDotEnvIfPresent();
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services
@@ -223,6 +228,69 @@ app.MapPost("/api/validity-check", (ValidityCheckRequest request) =>
     .Accepts<ValidityCheckRequest>("application/json");
 
 app.Run();
+
+static void LoadDotEnvIfPresent()
+{
+    try
+    {
+        var envPath = Path.Combine(AppContext.BaseDirectory, ".env");
+        if (!File.Exists(envPath))
+        {
+            // Also try working directory (useful for local runs where base dir is /bin/Debug/...).
+            envPath = Path.Combine(Directory.GetCurrentDirectory(), ".env");
+            if (!File.Exists(envPath))
+            {
+                return;
+            }
+        }
+
+        foreach (var rawLine in File.ReadAllLines(envPath))
+        {
+            var line = rawLine.Trim();
+
+            // Skip blanks/comments.
+            if (line.Length == 0 || line.StartsWith('#'))
+            {
+                continue;
+            }
+
+            // Support "export KEY=VALUE" syntax.
+            if (line.StartsWith("export ", StringComparison.OrdinalIgnoreCase))
+            {
+                line = line["export ".Length..].TrimStart();
+            }
+
+            var idx = line.IndexOf('=');
+            if (idx <= 0)
+            {
+                continue;
+            }
+
+            var key = line[..idx].Trim();
+            var value = line[(idx + 1)..].Trim();
+
+            // Strip optional surrounding quotes.
+            value = value.Trim().Trim('"').Trim('\'');
+
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                continue;
+            }
+
+            // Don't override already-provided real environment variables.
+            if (!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(key)))
+            {
+                continue;
+            }
+
+            Environment.SetEnvironmentVariable(key, value);
+        }
+    }
+    catch
+    {
+        // Never fail app start due to .env parsing issues; health endpoint will report not configured if needed.
+    }
+}
 
 /// <summary>
 /// Request payload for the validity check endpoint.

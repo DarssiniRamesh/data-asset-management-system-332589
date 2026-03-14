@@ -1,0 +1,22 @@
+<Project>
+  <PropertyGroup>
+    <!--
+      Centralized, repo-enforced coding standards for .NET projects.
+      This aligns with the BRD-derived requirement to have consistent, enforceable standards.
+    -->
+
+    <!-- Enable built-in .NET analyzers and keep them current with SDK -->
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+
+    <!-- Enforce IDE code-style rules during build (uses .editorconfig) -->
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+
+    <!-- Keep builds non-breaking initially; CI can later opt-in to strictness -->
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+
+    <!-- Ensure deterministic, modern builds -->
+    <Deterministic>true</Deterministic>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+</Project>

@@ -4,6 +4,7 @@ using DataAssetBackend.Features.Masters;
 using DataAssetBackend.Infrastructure.Api;
 using DataAssetBackend.Infrastructure.Database;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 
 // Load .env (if present) *before* building configuration.
@@ -397,7 +398,7 @@ app.MapGet("/api/assets", async (
 // FR-04: Delete Asset (soft-delete)
 app.MapDelete("/api/assets/{assetId:long}", async (
         long assetId,
-        DeleteAssetRequest request,
+        [FromBody] DeleteAssetRequest request,
         AssetRepository repository,
         ILoggerFactory loggerFactory,
         CancellationToken cancellationToken) =>

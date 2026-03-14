@@ -452,7 +452,11 @@ app.UseWhen(
  */
 app.UseWhen(
     context =>
-        !(context.Request.Path.StartsWithSegments("/docs", StringComparison.OrdinalIgnoreCase) ||
+        // Anything not explicitly excluded here will be subject to authentication/authorization.
+        // Keep health probes and Swagger/OpenAPI publicly accessible.
+        !(context.Request.Path.Equals("/", StringComparison.OrdinalIgnoreCase) ||
+          context.Request.Path.Equals("/healthz", StringComparison.OrdinalIgnoreCase) ||
+          context.Request.Path.StartsWithSegments("/docs", StringComparison.OrdinalIgnoreCase) ||
           context.Request.Path.StartsWithSegments("/swagger", StringComparison.OrdinalIgnoreCase) ||
           context.Request.Path.Equals("/openapi.json", StringComparison.OrdinalIgnoreCase) ||
           context.Request.Path.StartsWithSegments("/openapi", StringComparison.OrdinalIgnoreCase)),

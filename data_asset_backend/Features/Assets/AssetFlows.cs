@@ -79,6 +79,17 @@ public static class AssetFlows
             throw new DuplicatePermitEuIdException(permitEuIdNormalized);
         }
 
+        // Parent pseudo asset semantics:
+        // - Prevent FK violations (fk_asset_parent_pseudo_asset) by validating existence up-front.
+        // - Enforce consistent request semantics (requiresParentPseudo <-> parentPseudoAssetId).
+        await AssetParentPseudoValidation.ValidateAndThrowAsync(
+            assetIdBeingUpdated: null,
+            requiresParentPseudo: request.Payload.RequiresParentPseudo ?? false,
+            parentPseudoAssetId: request.Payload.ParentPseudoAssetId,
+            repository: repository,
+            logger: logger,
+            cancellationToken: cancellationToken);
+
         var created = await repository.CreateAsync(request.Payload, cancellationToken);
 
         logger.LogInformation(
@@ -153,6 +164,18 @@ public static class AssetFlows
 
             throw new DuplicatePermitEuIdException(permitEuIdNormalized);
         }
+
+        // Parent pseudo asset semantics:
+        // - Prevent FK violations (fk_asset_parent_pseudo_asset) by validating existence up-front.
+        // - Enforce consistent request semantics (requiresParentPseudo <-> parentPseudoAssetId).
+        // - Disallow self-reference on update.
+        await AssetParentPseudoValidation.ValidateAndThrowAsync(
+            assetIdBeingUpdated: request.AssetId,
+            requiresParentPseudo: request.Payload.RequiresParentPseudo ?? false,
+            parentPseudoAssetId: request.Payload.ParentPseudoAssetId,
+            repository: repository,
+            logger: logger,
+            cancellationToken: cancellationToken);
 
         var updated = await repository.UpdateAsync(request.AssetId, request.Payload, cancellationToken);
 

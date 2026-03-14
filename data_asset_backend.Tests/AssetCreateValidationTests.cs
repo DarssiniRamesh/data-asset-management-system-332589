@@ -72,4 +72,46 @@ public sealed class AssetCreateValidationTests : IClassFixture<TestAppFactory>
 
         Assert.Equal(HttpStatusCode.BadRequest, resp.StatusCode);
     }
+
+    [Fact]
+    public async Task Create_asset_rejects_nonexistent_parentPseudoAssetId_with_400()
+    {
+        // Before fix: this would reach DB and fail FK with 409 (fk_asset_parent_pseudo_asset).
+        // After fix: should be a request validation error (400).
+        var resp = await _client.PostAsJsonAsync("/api/assets", new
+        {
+            siteId = "S1",
+            assetGroup = "AG1",
+            processGroup = "PG1",
+            assetName = "Asset A",
+            permitEuId = "P1",
+            globalUniqueAssetId = "GUID-1",
+            requiresParentPseudo = true,
+            parentPseudoAssetId = 99999999,
+            createdBy = "tester",
+            correlationId = "corr-1"
+        });
+
+        Assert.Equal(HttpStatusCode.BadRequest, resp.StatusCode);
+    }
+
+    [Fact]
+    public async Task Create_asset_rejects_parentPseudoAssetId_when_requiresParentPseudo_is_false()
+    {
+        var resp = await _client.PostAsJsonAsync("/api/assets", new
+        {
+            siteId = "S1",
+            assetGroup = "AG1",
+            processGroup = "PG1",
+            assetName = "Asset A",
+            permitEuId = "P1",
+            globalUniqueAssetId = "GUID-1",
+            requiresParentPseudo = false,
+            parentPseudoAssetId = 1,
+            createdBy = "tester",
+            correlationId = "corr-1"
+        });
+
+        Assert.Equal(HttpStatusCode.BadRequest, resp.StatusCode);
+    }
 }

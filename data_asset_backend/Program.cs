@@ -404,10 +404,20 @@ app.UseOpenApi(settings =>
     ConfigureOpenApiDocument(settings);
 });
 
-// Also serve OpenAPI at /openapi.json (some tooling expects this path)
+﻿// Also serve OpenAPI at /openapi.json (some tooling expects this path)
 app.UseOpenApi(settings =>
 {
     settings.Path = "/openapi.json";
+    ConfigureOpenApiDocument(settings);
+});
+
+// Compatibility: many Swagger UI static bundles (and some reverse proxies) assume
+// the Swashbuckle default JSON path: /swagger/v1/swagger.json.
+// We serve the same NSwag-generated OpenAPI document at that path so /docs works
+// even if it was configured for Swashbuckle.
+app.UseOpenApi(settings =>
+{
+    settings.Path = "/swagger/v1/swagger.json";
     ConfigureOpenApiDocument(settings);
 });
 

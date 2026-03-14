@@ -14,7 +14,7 @@ builder.Services.AddOpenApiDocument(config =>
 
 // Forwarded headers: required so Request.Scheme/Host reflect the *external* URL
 // (e.g., https://... in hosted environments), avoiding Swagger "Failed to fetch"
-// due to mixed scheme (http vs https) or incorrect host.
+// due to mixed scheme (http vs https) or incorrect host/port.
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
     options.ForwardedHeaders =
@@ -68,17 +68,73 @@ app.UseForwardedHeaders();
 // Use CORS
 app.UseCors("DefaultCors");
 
-// Configure OpenAPI/Swagger
-app.UseOpenApi(settings =>
+static string BuildPublishedServerUrl(HttpRequest req)
 {
-    // Ensure the generated OpenAPI document uses the externally visible base URL.
-    // This prevents Swagger UI from attempting to call http://... when the app is served via https://...
+    // Optional override for environments that want a fixed absolute server URL.
+    // Example: OPENAPI_SERVER_URL=https://api.example.com
+    var explicitServerUrl = Environment.GetEnvironmentVariable("OPENAPI_SERVER_URL");
+    if (!string.IsNullOrWhiteSpace(explicitServerUrl))
+    {
+        return explicitServerUrl.Trim().TrimEnd('/');
+    }
+
+    // Best-effort: if the OpenAPI document is being requested by Swagger UI in a browser,
+    // the request typically includes an Origin header containing the correct external
+    // scheme+host+port (this avoids "missing port" issues behind some proxies).
+    var origin = req.Headers.Origin.ToString();
+    if (!string.IsNullOrWhiteSpace(origin) &&
+        Uri.TryCreate(origin, UriKind.Absolute, out var originUri) &&
+        (string.Equals(originUri.Scheme, Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) ||
+         string.Equals(originUri.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)))
+    {
+        return originUri.GetLeftPart(UriPartial.Authority).TrimEnd('/');
+    }
+
+    // Fallback: reconstruct from forwarded headers if present.
+    var forwardedProto = req.Headers["X-Forwarded-Proto"].ToString();
+    var forwardedHost = req.Headers["X-Forwarded-Host"].ToString();
+    var forwardedPort = req.Headers["X-Forwarded-Port"].ToString();
+
+    var scheme = !string.IsNullOrWhiteSpace(forwardedProto) ? forwardedProto.Split(',')[0].Trim() : req.Scheme;
+    var host = !string.IsNullOrWhiteSpace(forwardedHost) ? forwardedHost.Split(',')[0].Trim() : req.Host.Value;
+
+    // If host doesn't already contain a port, but we have X-Forwarded-Port, add it.
+    if (!string.IsNullOrWhiteSpace(host) && !host.Contains(':', StringComparison.Ordinal) && !string.IsNullOrWhiteSpace(forwardedPort))
+    {
+        host = $"{host}:{forwardedPort.Split(',')[0].Trim()}";
+    }
+
+    return $"{scheme}://{host}".TrimEnd('/');
+}
+
+static void ConfigureOpenApiDocument(NSwag.AspNetCore.OpenApiDocumentMiddlewareSettings settings)
+{
     settings.PostProcess = (document, req) =>
     {
-        var serverUrl = $"{req.Scheme}://{req.Host.Value}";
+        // Publish a server URL that preserves the externally visible scheme/host/port.
+        // This is critical for Swagger UI's "Try it out" to call the correct origin.
+        var baseUrl = BuildPublishedServerUrl(req);
+
+        // Respect PathBase if hosting behind a sub-path reverse proxy.
+        var pathBase = req.PathBase.HasValue ? req.PathBase.Value : string.Empty;
+        var serverUrl = string.IsNullOrWhiteSpace(pathBase) ? baseUrl : $"{baseUrl}{pathBase}";
+
         document.Servers.Clear();
         document.Servers.Add(new NSwag.OpenApiServer { Url = serverUrl });
     };
+}
+
+// Configure OpenAPI/Swagger (serve at default NSwag path)
+app.UseOpenApi(settings =>
+{
+    ConfigureOpenApiDocument(settings);
+});
+
+// Also serve OpenAPI at /openapi.json (some tooling expects this path)
+app.UseOpenApi(settings =>
+{
+    settings.Path = "/openapi.json";
+    ConfigureOpenApiDocument(settings);
 });
 
 app.UseSwaggerUi(config =>

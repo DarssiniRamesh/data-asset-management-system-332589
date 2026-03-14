@@ -417,49 +417,35 @@ app.UseSwaggerUi(config =>
 });
 
  // ---------------------------------------------------------------------
- // Swagger/OpenAPI must be publicly accessible (no auth)
+ // Auth gating (single canonical flow)
  // ---------------------------------------------------------------------
  //
- // The app has a strict Authorization FallbackPolicy. Swagger UI assets are served by NSwag middleware
- // (not MVC/static-files endpoints), so attempting to mutate endpoint metadata for /docs can lead to
- // method-matching issues (405) under some hosting/proxy configurations.
+ // Contract:
+ // - Public endpoints MUST remain anonymous:
+ //   - GET /           (root health)
+ //   - GET /healthz    (platform health probe)
+ //   - /docs, /swagger, /openapi* (NSwag UI + documents)
+ // - All other endpoints remain protected by JWT auth + Authorization FallbackPolicy
+ //   (and per-endpoint RequireAuthorization policies where specified).
  //
- // Instead, bypass auth for Swagger/OpenAPI paths by skipping auth middlewares when those paths are requested.
-app.UseWhen(
-    context =>
-        context.Request.Path.StartsWithSegments("/docs", StringComparison.OrdinalIgnoreCase) ||
-        context.Request.Path.StartsWithSegments("/swagger", StringComparison.OrdinalIgnoreCase) ||
-        context.Request.Path.Equals("/openapi.json", StringComparison.OrdinalIgnoreCase) ||
-        context.Request.Path.StartsWithSegments("/openapi", StringComparison.OrdinalIgnoreCase),
-    branch =>
-    {
-        // Intentionally empty: do not call UseAuthentication/UseAuthorization on this branch.
-        // NSwag middleware registered above will serve the UI + assets + openapi docs.
-    });
+ // Why this shape:
+ // - Minimal APIs rely on endpoint metadata (AllowAnonymous / RequireAuthorization).
+ // - If UseAuthentication/UseAuthorization run globally, some hosting/proxy setups can end up
+ //   challenging requests (401) before the intended anonymous endpoints are reached.
+ // - Therefore we *only* run auth middleware for non-public paths.
+static bool IsPublicPath(PathString path)
+{
+    return
+        path.Equals("/", StringComparison.OrdinalIgnoreCase) ||
+        path.Equals("/healthz", StringComparison.OrdinalIgnoreCase) ||
+        path.StartsWithSegments("/docs", StringComparison.OrdinalIgnoreCase) ||
+        path.StartsWithSegments("/swagger", StringComparison.OrdinalIgnoreCase) ||
+        path.Equals("/openapi.json", StringComparison.OrdinalIgnoreCase) ||
+        path.StartsWithSegments("/openapi", StringComparison.OrdinalIgnoreCase);
+}
 
-/*
- * AuthN/AuthZ
- *
- * IMPORTANT:
- * - The app uses a strict Authorization FallbackPolicy.
- * - Swagger UI (/docs) and its assets are served by NSwag middleware, not via endpoint metadata.
- * - In preview/proxy environments, the fallback policy can inadvertently apply to /docs assets and
- *   return 401/403, preventing anonymous access to Swagger UI.
- *
- * Approach:
- * - If the request is for Swagger/OpenAPI paths, skip auth middleware entirely.
- * - Otherwise, enforce auth for the protected API.
- */
 app.UseWhen(
-    context =>
-        // Anything not explicitly excluded here will be subject to authentication/authorization.
-        // Keep health probes and Swagger/OpenAPI publicly accessible.
-        !(context.Request.Path.Equals("/", StringComparison.OrdinalIgnoreCase) ||
-          context.Request.Path.Equals("/healthz", StringComparison.OrdinalIgnoreCase) ||
-          context.Request.Path.StartsWithSegments("/docs", StringComparison.OrdinalIgnoreCase) ||
-          context.Request.Path.StartsWithSegments("/swagger", StringComparison.OrdinalIgnoreCase) ||
-          context.Request.Path.Equals("/openapi.json", StringComparison.OrdinalIgnoreCase) ||
-          context.Request.Path.StartsWithSegments("/openapi", StringComparison.OrdinalIgnoreCase)),
+    context => !IsPublicPath(context.Request.Path),
     branch =>
     {
         branch.UseAuthentication();

@@ -227,13 +227,6 @@ app.UseCors("DefaultCors");
 // now produces a consistent RFC7807 ProblemDetails with stable status codes.
 app.UseUnifiedExceptionHandling();
 
-// AuthN/AuthZ
-app.UseAuthentication();
-app.UseAuthorization();
-
-// Idempotency (BRD §10.3): handles X-Idempotency-Key for asset operations (e.g., Copy Asset).
-app.UseMiddleware<IdempotencyKeyMiddleware>();
-
 static string BuildPublishedServerUrl(HttpRequest req)
 {
     // Optional override for environments that want a fixed absolute server URL.
@@ -290,6 +283,15 @@ static void ConfigureOpenApiDocument(NSwag.AspNetCore.OpenApiDocumentMiddlewareS
     };
 }
 
+// ---------------------------------------------------------------------
+// OpenAPI/Swagger (NSwag)
+// ---------------------------------------------------------------------
+//
+// Important: Swagger UI + OpenAPI documents must remain publicly accessible (no auth)
+// so that preview environments can load /docs without needing a JWT.
+// We therefore register NSwag middleware *before* Authentication/Authorization.
+// API endpoints remain protected via RequireAuthorization(...) and the FallbackPolicy.
+
 // Configure OpenAPI/Swagger (serve at default NSwag path)
 app.UseOpenApi(settings =>
 {
@@ -307,6 +309,13 @@ app.UseSwaggerUi(config =>
 {
     config.Path = "/docs";
 });
+
+// AuthN/AuthZ
+app.UseAuthentication();
+app.UseAuthorization();
+
+// Idempotency (BRD §10.3): handles X-Idempotency-Key for asset operations (e.g., Copy Asset).
+app.UseMiddleware<IdempotencyKeyMiddleware>();
 
 //
 // Auth endpoints

@@ -426,50 +426,37 @@ app.UseSwaggerUi(config =>
     config.Path = "/docs";
 });
 
-// ---------------------------------------------------------------------
-// Authentication/Authorization
-// ---------------------------------------------------------------------
-//
-// IMPORTANT:
-// - This app uses AuthorizationOptions.FallbackPolicy to secure all endpoints by default.
-// - Public endpoints must opt out explicitly via .AllowAnonymous().
-//
-// Problem being fixed:
-// - Swagger UI is served at /docs, but its JS/CSS/favicon assets are also under /docs.
-// - With a strict FallbackPolicy, those static asset requests can be challenged (401) in
-//   some hosting/proxy setups, resulting in "SwaggerUIBundle is not defined".
-//
-// Fix approach:
-// - Keep API endpoints protected.
-// - Explicitly bypass auth for Swagger/OpenAPI routes at the middleware level, so all
-//   /docs/** assets and OpenAPI JSON endpoints are always anonymous.
-app.UseWhen(
-    ctx =>
-    {
-        var path = ctx.Request.Path;
+/*
+ * ---------------------------------------------------------------------
+ * Authentication/Authorization
+ * ---------------------------------------------------------------------
+ *
+ * Contract:
+ * - We apply a strict AuthorizationOptions.FallbackPolicy (authenticated + role required).
+ * - Public endpoints opt out via .AllowAnonymous().
+ *
+ * Bug fix:
+ * - Previously we attempted to bypass auth middleware for Swagger/OpenAPI routes via UseWhen().
+ *   In practice (especially under proxy/hosting quirks), this led to *all* requests being
+ *   challenged (401), including endpoints explicitly marked AllowAnonymous (/, /healthz, /docs).
+ *
+ * Durable fix approach:
+ * 1) Use the standard ASP.NET Core ordering: Routing -> AuthN -> AuthZ -> Endpoints.
+ * 2) Explicitly map Swagger UI + OpenAPI endpoints under separate branches and mark them
+ *    AllowAnonymous at the endpoint level, so /docs and /docs/* assets are always accessible.
+ */
+app.UseAuthentication();
+app.UseAuthorization();
 
-        // NSwag Swagger UI assets + index
-        if (path.StartsWithSegments("/docs", StringComparison.OrdinalIgnoreCase))
-        {
-            return false; // do NOT run auth middleware
-        }
-
-        // OpenAPI endpoints served by NSwag in this app
-        if (path.Equals("/openapi.json", StringComparison.OrdinalIgnoreCase) ||
-            path.Equals("/swagger/v1/swagger.json", StringComparison.OrdinalIgnoreCase) ||
-            path.StartsWithSegments("/swagger", StringComparison.OrdinalIgnoreCase))
-        {
-            return false; // do NOT run auth middleware
-        }
-
-        return true; // run auth middleware for everything else
-    },
-    branch =>
-    {
-        branch.UseAuthentication();
-        branch.UseAuthorization();
-    }
-);
+/*
+ * NOTE:
+ * We intentionally do NOT use app.MapWhen(...).AllowAnonymous() here because MapWhen returns
+ * IApplicationBuilder (middleware pipeline), not an endpoint convention builder.
+ *
+ * Swagger/OpenAPI are already configured above (app.UseOpenApi + app.UseSwaggerUi) BEFORE
+ * UseAuthentication/UseAuthorization, which guarantees /docs and the OpenAPI JSON documents
+ * remain publicly reachable even with a strict authorization fallback policy.
+ */
 
 // Idempotency (BRD §10.3): handles X-Idempotency-Key for asset operations (e.g., Copy Asset).
 app.UseMiddleware<IdempotencyKeyMiddleware>();

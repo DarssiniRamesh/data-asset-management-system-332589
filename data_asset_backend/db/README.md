@@ -40,25 +40,34 @@ official Flyway CLI is not used.
 
 ### Run it
 
-From `data_asset_backend/`:
+From `data_asset_backend/` (recommended: wrapper script — avoids shell formatting issues):
 
 ```bash
-dotnet run --project ./MigrationRunner/MigrationRunner.csproj --
+bash ./run-migrations.sh
 ```
-
-This runs migrations as a plain console app and is safe to execute while the backend preview is already running (it does not start Kestrel or bind to port 3001).
 
 Dry run (shows pending versions without applying):
 
 ```bash
-dotnet run --project MigrationRunner -- --dry-run
+bash ./run-migrations.sh --dry-run
 ```
 
 Optional: specify migrations directory explicitly:
 
 ```bash
-dotnet run --project MigrationRunner -- --migrations ./db/migrations
+bash ./run-migrations.sh --migrations ./db/migrations
 ```
+
+#### If you must run via `dotnet` directly (copy/paste this as ONE line)
+
+```bash
+dotnet run --project ./MigrationRunner/MigrationRunner.csproj -- --dry-run
+```
+
+Notes:
+- If `--project` or the `.csproj` path gets split across lines, your shell may execute `--project` as a separate command (e.g., `--project: command not found`).
+- When that happens, `dotnet run` may fall back to running the web host project, which starts Kestrel and tries to bind port **3001**, causing: “Failed to bind to address http://127.0.0.1:3001: address already in use”.
+- Using the wrapper script (or the explicit one-line command above) makes MigrationRunner invocation unambiguous.
 
 ## Flyway migrator (Docker, optional)
 

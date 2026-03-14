@@ -35,15 +35,23 @@ built-in non-Docker migration runner:
 
 - See: `data_asset_backend/db/README.md` (section “Migrations (no Docker): .NET MigrationRunner”)
 
-Quick run (from `data_asset_backend/`):
+Quick run (from `data_asset_backend/`, recommended):
 
 ```bash
-dotnet run --project ./MigrationRunner/MigrationRunner.csproj --
+bash ./run-migrations.sh
+```
+
+Copy/paste-safe dry run:
+
+```bash
+bash ./run-migrations.sh --dry-run
 ```
 
 Notes:
+- This wrapper exists to prevent accidental `dotnet run` fallback to the web host (which binds to port 3001).
+- If you run via `dotnet` directly, keep it on a single line, e.g.:
+  `dotnet run --project ./MigrationRunner/MigrationRunner.csproj -- --dry-run`
 - The `--` separator is required before any MigrationRunner arguments (and is safe even if you pass none).
-- Using the explicit `./MigrationRunner/MigrationRunner.csproj` path avoids accidentally running the web host (which binds to port 3001).
 
 ## Local run
 

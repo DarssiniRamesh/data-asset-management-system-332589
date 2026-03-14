@@ -594,7 +594,8 @@ internal static class DatabaseUrlParser
         static string esc(string s) => s.Replace(";", "\\;", StringComparison.Ordinal);
 
         // Npgsql supports both "Ssl Mode" and "Trust Server Certificate".
-        return string.Join(';', new[]
+        // Use string separator (not char) to support older target frameworks that don't have string.Join(char, ...).
+        return string.Join(";", new[]
         {
             $"Host={esc(host)}",
             $"Port={port}",

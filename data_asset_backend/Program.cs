@@ -224,18 +224,15 @@ app.UseForwardedHeaders();
 // Robust CORS preflight handling
 // ---------------------------------------------------------------------
 //
-// In some hosted preview/proxy environments, the built-in CORS middleware may not reliably
-// attach headers to preflight (OPTIONS) responses for certain paths (observed for
-// /api/auth/login). When that happens, browsers block the real request.
+// Why this exists:
+// - The app uses a strict Authorization FallbackPolicy (authenticated + role required).
+// - In some proxy/preview environments, OPTIONS preflight requests can fail to match endpoints
+//   or can reach the auth/authorization middleware before the CORS middleware has a chance to
+//   set headers. That results in 403 responses and broken browser requests.
+// - Swagger UI also fails ("Failed to fetch") when preflight is blocked.
 //
-// This middleware explicitly handles CORS preflight early in the pipeline and guarantees
-// Access-Control-* headers are present for allowed origins.
-//
-// Notes:
-// - We intentionally keep this logic aligned with the existing CORS policy intent:
-//   * If CORS_ALLOWED_ORIGINS is set, only those origins are allowed
-//   * Otherwise, allow local-dev + kavia.ai preview hosts on :3000/:3001
-// - We echo requested headers/method where possible to satisfy strict browsers.
+// This middleware explicitly handles preflight early and guarantees Access-Control-* headers
+// are present for allowed origins.
 static bool IsAllowedCorsOriginForPreflight(string origin)
 {
     var allowedOriginsEnv = Environment.GetEnvironmentVariable("CORS_ALLOWED_ORIGINS");
@@ -259,13 +256,6 @@ static bool IsAllowedCorsOriginForPreflight(string origin)
     }
 
     // Hosted preview (frontend typically :3000, backend typically :3001).
-    // Some proxy/preview environments surface the frontend origin on default ports (443/80)
-    // while still mapping to the same internal services.
-    //
-    // Note: preview hosts can be of the form:
-    // - *.beta01.cloud.kavia.ai
-    // - *.cloud.kavia.ai
-    // - *.kavia.ai
     var isKaviaPreviewHost =
         uri.Host.Contains("kavia.ai", StringComparison.OrdinalIgnoreCase) ||
         uri.Host.Contains("cloud.kavia.ai", StringComparison.OrdinalIgnoreCase);
@@ -284,10 +274,6 @@ static bool IsAllowedCorsOriginForPreflight(string origin)
 app.Use(async (context, next) =>
 {
     // Treat any OPTIONS request with an Origin header as CORS preflight.
-    //
-    // Why: in some preview/proxy environments the browser's preflight can arrive without
-    // Access-Control-Request-Method being visible to the app. If we don't short-circuit here,
-    // the request can fall through into auth/authorization and be rejected with 403.
     if (HttpMethods.IsOptions(context.Request.Method) &&
         context.Request.Headers.ContainsKey("Origin"))
     {
@@ -295,28 +281,24 @@ app.Use(async (context, next) =>
 
         if (IsAllowedCorsOriginForPreflight(origin))
         {
-            // Required by browsers
             context.Response.Headers["Access-Control-Allow-Origin"] = origin;
             context.Response.Headers["Vary"] = "Origin";
 
-            // If the request asks for headers, echo them back; otherwise allow common headers.
+            // Echo requested headers/method (strict browser compatibility).
             var reqHeaders = context.Request.Headers["Access-Control-Request-Headers"].ToString();
             context.Response.Headers["Access-Control-Allow-Headers"] =
                 string.IsNullOrWhiteSpace(reqHeaders) ? "Content-Type, Authorization" : reqHeaders;
 
-            // Echo requested method when provided; otherwise be permissive.
             var reqMethod = context.Request.Headers["Access-Control-Request-Method"].ToString();
             context.Response.Headers["Access-Control-Allow-Methods"] =
                 string.IsNullOrWhiteSpace(reqMethod) ? "GET, POST, PUT, DELETE, OPTIONS" : reqMethod;
 
-            // This backend's CORS policy allows credentials; mirror that here.
             context.Response.Headers["Access-Control-Allow-Credentials"] = "true";
 
             context.Response.StatusCode = StatusCodes.Status204NoContent;
             return;
         }
 
-        // Origin is present but not allowed: return 403 to make the failure explicit.
         context.Response.StatusCode = StatusCodes.Status403Forbidden;
         return;
     }
@@ -324,17 +306,13 @@ app.Use(async (context, next) =>
     await next();
 });
 
-// Ensure endpoint routing runs before CORS so the CORS middleware can evaluate endpoint metadata
-// and consistently apply headers (including for non-preflight CORS requests).
+// Ensure endpoint routing runs before CORS so CORS can evaluate endpoint metadata and apply headers.
 app.UseRouting();
 
-// Use CORS (still applies to all non-preflight requests and to any OPTIONS requests not
-// handled by the explicit preflight middleware above).
+// Apply CORS before auth, so even auth failures include CORS headers (browser-visible).
 app.UseCors("DefaultCors");
 
-// Unified exception->HTTP mapping for all endpoints (assets, children, masters, copy lineage).
-// Note: endpoint-local try/catch blocks may still translate errors, but any uncaught exception
-// now produces a consistent RFC7807 ProblemDetails with stable status codes.
+// Unified exception->HTTP mapping for all endpoints.
 app.UseUnifiedExceptionHandling();
 
 static string BuildPublishedServerUrl(HttpRequest req)

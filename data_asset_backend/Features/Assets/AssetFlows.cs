@@ -142,4 +142,47 @@ public static class AssetFlows
 
         return new QueryAssetsFlowResult(assets);
     }
+
+    /// <summary>
+    /// Request for delete asset.
+    /// </summary>
+    public sealed record DeleteAssetFlowRequest(long AssetId, DeleteAssetRequest Payload);
+
+    /// <summary>
+    /// Result for delete asset.
+    /// </summary>
+    public sealed record DeleteAssetFlowResult(bool Deleted);
+
+    // PUBLIC_INTERFACE
+    /// <summary>
+    /// Soft-deletes an asset by ID using the existing <c>is_deleted</c> flag (FR-04).
+    /// </summary>
+    /// <remarks>
+    /// Dependency-safety (BRD-aligned, evidence-based):
+    /// - The V2 schema models asset dependencies via foreign keys to BRD-evidenced child tables.
+    /// - This flow performs a soft-delete of the asset and soft-deletes BRD-evidenced dependent rows
+    ///   in a single transaction to avoid leaving active dependent records pointing at a deleted asset.
+    /// - No hard-delete is performed.
+    /// </remarks>
+    public static async Task<DeleteAssetFlowResult> DeleteAssetAsync(
+        DeleteAssetFlowRequest request,
+        AssetRepository repository,
+        ILogger logger,
+        CancellationToken cancellationToken = default)
+    {
+        logger.LogInformation("AssetFlows.DeleteAsset starting. asset_id={AssetId}", request.AssetId);
+
+        var deleted = await repository.SoftDeleteAssetGraphAsync(
+            request.AssetId,
+            request.Payload.ModifiedBy,
+            request.Payload.CorrelationId,
+            cancellationToken);
+
+        logger.LogInformation(
+            "AssetFlows.DeleteAsset completed. asset_id={AssetId}, deleted={Deleted}",
+            request.AssetId,
+            deleted);
+
+        return new DeleteAssetFlowResult(deleted);
+    }
 }

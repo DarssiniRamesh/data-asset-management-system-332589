@@ -387,6 +387,211 @@ public sealed class AssetRepository
 
     // PUBLIC_INTERFACE
     /// <summary>
+    /// Soft-deletes an asset and BRD-evidenced dependent rows using the existing <c>is_deleted</c> flag.
+    /// </summary>
+    /// <remarks>
+    /// Transactional behavior:
+    /// - All updates occur in a single DB transaction.
+    /// - If the asset does not exist (or is already deleted), returns false and performs no updates.
+    /// </remarks>
+    public async Task<bool> SoftDeleteAssetGraphAsync(
+        long assetId,
+        string modifiedBy,
+        string correlationId,
+        CancellationToken cancellationToken)
+    {
+        await using var conn = await _connectionFactory.OpenAsync(cancellationToken);
+        await using var tx = await conn.BeginTransactionAsync(cancellationToken);
+
+        // 1) Soft-delete the asset row itself first; if nothing updated, treat as not found.
+        const string deleteAssetSql = """
+            UPDATE asset
+            SET
+                is_deleted = TRUE,
+                modified_by = @modified_by,
+                modified_at = now(),
+                correlation_id = @correlation_id
+            WHERE asset_id = @asset_id
+              AND is_deleted = FALSE;
+            """;
+
+        var assetUpdated = await ExecuteNonQueryAsync(
+            conn,
+            deleteAssetSql,
+            new[]
+            {
+                ("asset_id", (object)assetId),
+                ("modified_by", (object)modifiedBy),
+                ("correlation_id", (object)correlationId)
+            },
+            cancellationToken);
+
+        if (assetUpdated == 0)
+        {
+            await tx.RollbackAsync(cancellationToken);
+            return false;
+        }
+
+        // 2) Soft-delete BRD-evidenced child tables that reference asset_id directly.
+        await ExecuteNonQueryAsync(
+            conn,
+            """
+            UPDATE asset_status_log
+            SET is_deleted = TRUE, modified_by = @modified_by, modified_at = now(), correlation_id = @correlation_id
+            WHERE asset_id = @asset_id AND is_deleted = FALSE;
+            """,
+            new[] { ("asset_id", (object)assetId), ("modified_by", (object)modifiedBy), ("correlation_id", (object)correlationId) },
+            cancellationToken);
+
+        await ExecuteNonQueryAsync(
+            conn,
+            """
+            UPDATE additional_asset_id
+            SET is_deleted = TRUE, modified_by = @modified_by, modified_at = now(), correlation_id = @correlation_id
+            WHERE asset_id = @asset_id AND is_deleted = FALSE;
+            """,
+            new[] { ("asset_id", (object)assetId), ("modified_by", (object)modifiedBy), ("correlation_id", (object)correlationId) },
+            cancellationToken);
+
+        await ExecuteNonQueryAsync(
+            conn,
+            """
+            UPDATE asset_property
+            SET is_deleted = TRUE, modified_by = @modified_by, modified_at = now(), correlation_id = @correlation_id
+            WHERE asset_id = @asset_id AND is_deleted = FALSE;
+            """,
+            new[] { ("asset_id", (object)assetId), ("modified_by", (object)modifiedBy), ("correlation_id", (object)correlationId) },
+            cancellationToken);
+
+        await ExecuteNonQueryAsync(
+            conn,
+            """
+            UPDATE control_device_mapping
+            SET is_deleted = TRUE, modified_by = @modified_by, modified_at = now(), correlation_id = @correlation_id
+            WHERE asset_id = @asset_id AND is_deleted = FALSE;
+            """,
+            new[] { ("asset_id", (object)assetId), ("modified_by", (object)modifiedBy), ("correlation_id", (object)correlationId) },
+            cancellationToken);
+
+        await ExecuteNonQueryAsync(
+            conn,
+            """
+            UPDATE reporting_attribute_mapping
+            SET is_deleted = TRUE, modified_by = @modified_by, modified_at = now(), correlation_id = @correlation_id
+            WHERE asset_id = @asset_id AND is_deleted = FALSE;
+            """,
+            new[] { ("asset_id", (object)assetId), ("modified_by", (object)modifiedBy), ("correlation_id", (object)correlationId) },
+            cancellationToken);
+
+        // 3) Soft-delete input_parameter and its nested dependents.
+        // We delete deepest children first (throughput_scalar), then parents, to remain safe even if future rules add constraints.
+        await ExecuteNonQueryAsync(
+            conn,
+            """
+            WITH inputs AS (
+                SELECT input_parameter_id
+                FROM input_parameter
+                WHERE asset_id = @asset_id AND is_deleted = FALSE
+            ),
+            equations AS (
+                SELECT throughput_equation_id
+                FROM throughput_equation
+                WHERE input_parameter_id IN (SELECT input_parameter_id FROM inputs)
+                  AND is_deleted = FALSE
+            )
+            UPDATE throughput_scalar ts
+            SET is_deleted = TRUE, modified_by = @modified_by, modified_at = now(), correlation_id = @correlation_id
+            WHERE ts.throughput_equation_id IN (SELECT throughput_equation_id FROM equations)
+              AND ts.is_deleted = FALSE;
+            """,
+            new[] { ("asset_id", (object)assetId), ("modified_by", (object)modifiedBy), ("correlation_id", (object)correlationId) },
+            cancellationToken);
+
+        await ExecuteNonQueryAsync(
+            conn,
+            """
+            WITH inputs AS (
+                SELECT input_parameter_id
+                FROM input_parameter
+                WHERE asset_id = @asset_id AND is_deleted = FALSE
+            )
+            UPDATE throughput_equation te
+            SET is_deleted = TRUE, modified_by = @modified_by, modified_at = now(), correlation_id = @correlation_id
+            WHERE te.input_parameter_id IN (SELECT input_parameter_id FROM inputs)
+              AND te.is_deleted = FALSE;
+            """,
+            new[] { ("asset_id", (object)assetId), ("modified_by", (object)modifiedBy), ("correlation_id", (object)correlationId) },
+            cancellationToken);
+
+        await ExecuteNonQueryAsync(
+            conn,
+            """
+            WITH inputs AS (
+                SELECT input_parameter_id
+                FROM input_parameter
+                WHERE asset_id = @asset_id AND is_deleted = FALSE
+            )
+            UPDATE ef_source_mapping esm
+            SET is_deleted = TRUE, modified_by = @modified_by, modified_at = now(), correlation_id = @correlation_id
+            WHERE esm.input_parameter_id IN (SELECT input_parameter_id FROM inputs)
+              AND esm.is_deleted = FALSE;
+            """,
+            new[] { ("asset_id", (object)assetId), ("modified_by", (object)modifiedBy), ("correlation_id", (object)correlationId) },
+            cancellationToken);
+
+        await ExecuteNonQueryAsync(
+            conn,
+            """
+            WITH inputs AS (
+                SELECT input_parameter_id
+                FROM input_parameter
+                WHERE asset_id = @asset_id AND is_deleted = FALSE
+            )
+            UPDATE data_input_value div
+            SET is_deleted = TRUE, modified_by = @modified_by, modified_at = now(), correlation_id = @correlation_id
+            WHERE div.input_parameter_id IN (SELECT input_parameter_id FROM inputs)
+              AND div.is_deleted = FALSE;
+            """,
+            new[] { ("asset_id", (object)assetId), ("modified_by", (object)modifiedBy), ("correlation_id", (object)correlationId) },
+            cancellationToken);
+
+        // parent_input_mapping references input_parameter (child + parent). We soft-delete any mapping where either side is under the asset.
+        await ExecuteNonQueryAsync(
+            conn,
+            """
+            WITH inputs AS (
+                SELECT input_parameter_id
+                FROM input_parameter
+                WHERE asset_id = @asset_id AND is_deleted = FALSE
+            )
+            UPDATE parent_input_mapping pim
+            SET is_deleted = TRUE, modified_by = @modified_by, modified_at = now(), correlation_id = @correlation_id
+            WHERE pim.is_deleted = FALSE
+              AND (
+                pim.child_input_parameter_id IN (SELECT input_parameter_id FROM inputs)
+                OR pim.parent_input_parameter_id IN (SELECT input_parameter_id FROM inputs)
+              );
+            """,
+            new[] { ("asset_id", (object)assetId), ("modified_by", (object)modifiedBy), ("correlation_id", (object)correlationId) },
+            cancellationToken);
+
+        // Finally, soft-delete the inputs themselves.
+        await ExecuteNonQueryAsync(
+            conn,
+            """
+            UPDATE input_parameter
+            SET is_deleted = TRUE, modified_by = @modified_by, modified_at = now(), correlation_id = @correlation_id
+            WHERE asset_id = @asset_id AND is_deleted = FALSE;
+            """,
+            new[] { ("asset_id", (object)assetId), ("modified_by", (object)modifiedBy), ("correlation_id", (object)correlationId) },
+            cancellationToken);
+
+        await tx.CommitAsync(cancellationToken);
+        return true;
+    }
+
+    // PUBLIC_INTERFACE
+    /// <summary>
     /// Checks whether a non-deleted input parameter exists and belongs to the given asset.
     /// </summary>
     public async Task<bool> InputParameterBelongsToAssetAsync(long assetId, long inputParameterId, CancellationToken cancellationToken)
@@ -2561,6 +2766,21 @@ public sealed class AssetRepository
     {
         var p = cmd.Parameters.AddWithValue(name, value);
         _ = p;
+    }
+
+    private static async Task<int> ExecuteNonQueryAsync(
+        NpgsqlConnection conn,
+        string sql,
+        IEnumerable<(string Name, object Value)> parameters,
+        CancellationToken cancellationToken)
+    {
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        foreach (var (name, value) in parameters)
+        {
+            AddParam(cmd, name, value);
+        }
+
+        return await cmd.ExecuteNonQueryAsync(cancellationToken);
     }
 
     private static AssetDto ReadAsset(NpgsqlDataReader r)

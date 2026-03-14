@@ -388,6 +388,54 @@ app.MapGet("/api/assets", async (
     .Produces<IReadOnlyList<AssetDto>>(StatusCodes.Status200OK)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
 
+// FR-04: Delete Asset (soft-delete)
+app.MapDelete("/api/assets/{assetId:long}", async (
+        long assetId,
+        DeleteAssetRequest request,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("DeleteAsset");
+
+        try
+        {
+            var result = await AssetFlows.DeleteAssetAsync(
+                new AssetFlows.DeleteAssetFlowRequest(assetId, request),
+                repository,
+                logger,
+                cancellationToken);
+
+            return result.Deleted ? Results.NoContent() : Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "DeleteAsset failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            // Conservative: map integrity/constraint errors the same way as other endpoints.
+            logger.LogWarning(ex, "DeleteAsset failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .WithName("DeleteAsset")
+    .WithTags("Assets")
+    .WithSummary("Delete asset")
+    .WithDescription("Soft-deletes an Asset by ID using the existing is_deleted flag (and soft-deletes BRD-evidenced dependent records).")
+    .Accepts<DeleteAssetRequest>("application/json")
+    .Produces(StatusCodes.Status204NoContent)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
+
 // ---------------------------------------------------------------------
 // Copy Asset (BRD FR-03; Copy and Lineage Capture Requirements - BRD §6.13)
 // ---------------------------------------------------------------------

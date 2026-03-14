@@ -100,6 +100,22 @@ public sealed class UpdateAssetRequest
 }
 
 /// <summary>
+/// Request payload for deleting (soft-deleting) an asset.
+/// </summary>
+/// <remarks>
+/// This uses the existing V2 schema convention of <c>is_deleted</c> soft deletes (BRD §6.11 audit/trace fields).
+/// </remarks>
+public sealed class DeleteAssetRequest
+{
+    // BRD §6.11 audit/trace fields (required)
+    [Required(AllowEmptyStrings = false)]
+    public string ModifiedBy { get; set; } = string.Empty;
+
+    [Required(AllowEmptyStrings = false)]
+    public string CorrelationId { get; set; } = string.Empty;
+}
+
+/// <summary>
 /// Query parameters for searching assets.
 /// All filters are optional; when multiple filters are provided, they are ANDed.
 /// </summary>

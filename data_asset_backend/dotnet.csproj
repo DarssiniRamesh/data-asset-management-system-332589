@@ -16,8 +16,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Make the ASP.NET Core shared framework explicit (helps in builds that disable implicit framework refs). -->
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+
     <PackageReference Include="NSwag.AspNetCore" Version="14.4.0" />
     <PackageReference Include="Npgsql" Version="8.0.5" />
+
+    <!-- JWT auth -->
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.0.0" />
   </ItemGroup>
 
 </Project>

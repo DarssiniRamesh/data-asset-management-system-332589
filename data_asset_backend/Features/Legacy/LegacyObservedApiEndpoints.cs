@@ -117,6 +117,7 @@ public static class LegacyObservedApiEndpoints
                     [nameof(request.Mode)] = new[] { "mode must be either 'create' or 'update'." }
                 });
             })
+            .RequireAuthorization("CanWrite")
             .WithName("Legacy_ManageSiteAssets")
             .WithSummary("Legacy: Manage site assets (create or update)")
             .WithDescription(
@@ -148,6 +149,7 @@ public static class LegacyObservedApiEndpoints
 
                 return deleted.Deleted ? Results.NoContent() : Results.NotFound();
             })
+            .RequireAuthorization("AdminOnly")
             .WithName("Legacy_RemoveSiteAsset")
             .WithSummary("Legacy: Remove site asset (soft delete)")
             .WithDescription(
@@ -191,6 +193,7 @@ public static class LegacyObservedApiEndpoints
                     $"/api/assets/{assetId}/input-parameters/{inputParameterId}/ef-source-mappings/{created.EfSourceMappingId}",
                     created);
             })
+            .RequireAuthorization("CanWrite")
             .WithName("Legacy_CreateInputEfSourceMapping")
             .WithSummary("Legacy: Create EF source mapping for input parameter")
             .WithDescription(
@@ -219,6 +222,7 @@ public static class LegacyObservedApiEndpoints
 
                 return Results.Ok(list);
             })
+            .RequireAuthorization("CanRead")
             .WithName("Legacy_ListInputEfSourceMappings")
             .WithSummary("Legacy: List EF source mappings for input parameter")
             .WithDescription(
@@ -249,6 +253,7 @@ public static class LegacyObservedApiEndpoints
 
                 return updated is null ? Results.NotFound() : Results.Ok(updated);
             })
+            .RequireAuthorization("CanWrite")
             .WithName("Legacy_UpdateInputEfSourceMapping")
             .WithSummary("Legacy: Update EF source mapping for input parameter")
             .WithDescription(
@@ -297,6 +302,7 @@ public static class LegacyObservedApiEndpoints
                         $"/api/assets/{assetId}/input-parameters/{inputParameterId}/throughput-equations/{created.ThroughputEquationId}",
                         created);
                 })
+            .RequireAuthorization("CanWrite")
             .WithName("Legacy_GenerateThroughputForInputParameter")
             .WithSummary("Legacy: Generate throughput for input parameter")
             .WithDescription(

@@ -1,13 +1,20 @@
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using DataAssetBackend.Features.Assets;
 using DataAssetBackend.Features.Legacy;
 using DataAssetBackend.Features.Masters;
 using DataAssetBackend.Infrastructure.Api;
+using DataAssetBackend.Infrastructure.Auth;
 using DataAssetBackend.Infrastructure.Database;
 using DataAssetBackend.Infrastructure.Idempotency;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Npgsql;
+using NSwag;
+using NSwag.Generation.Processors.Security;
 
 // Load .env (if present) *before* building configuration.
 // Some hosted/preview environments provide secrets via a .env file rather than true process env vars.
@@ -18,11 +25,96 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services
 builder.Services.AddEndpointsApiExplorer();
+
+// ---------------------------------------------------------------------
+// Authentication/Authorization (JWT + RBAC)
+// ---------------------------------------------------------------------
+//
+// Contract:
+// - JWT_SIGNING_KEY must be provided via environment variable for non-dev usage.
+//   For local/dev you may set any sufficiently long string.
+// - JWT_ISSUER and JWT_AUDIENCE are optional; safe defaults are used.
+var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? "data-asset-backend";
+var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? "data-asset-frontend";
+var jwtSigningKey = Environment.GetEnvironmentVariable("JWT_SIGNING_KEY") ?? "dev-insecure-signing-key-change-me";
+
+// Register a token service (used by dev login endpoint and for validation parameters)
+builder.Services.AddSingleton(new JwtTokenService(jwtIssuer, jwtAudience, jwtSigningKey));
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        // Configure validation directly (avoid building a container during service registration).
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = jwtIssuer,
+
+            ValidateAudience = true,
+            ValidAudience = jwtAudience,
+
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(jwtSigningKey)),
+
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.FromMinutes(2),
+        };
+
+        // Allow Authorization: Bearer {token}
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+    });
+
+builder.Services.AddAuthorization(options =>
+{
+    // Roles
+    const string admin = "Admin";
+    const string editor = "Editor";
+    const string viewer = "Viewer";
+
+    // Default requirement: must be authenticated AND have one of the known roles.
+    // This avoids accidentally granting access to tokens missing role claims.
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .RequireAssertion(ctx =>
+        {
+            var roles = ctx.User.FindAll(ClaimTypes.Role).Select(r => r.Value).ToHashSet(StringComparer.OrdinalIgnoreCase);
+            return roles.Contains(admin) || roles.Contains(editor) || roles.Contains(viewer);
+        })
+        .Build();
+
+    // Policy mapping used by endpoints:
+    // - Viewer: can read/query
+    // - Editor: can create/update (and read)
+    // - Admin: can delete and do everything
+    options.AddPolicy("CanRead", p => p.RequireAssertion(ctx =>
+        ctx.User.IsInRole(admin) || ctx.User.IsInRole(editor) || ctx.User.IsInRole(viewer)));
+
+    options.AddPolicy("CanWrite", p => p.RequireAssertion(ctx =>
+        ctx.User.IsInRole(admin) || ctx.User.IsInRole(editor)));
+
+    options.AddPolicy("AdminOnly", p => p.RequireRole(admin));
+});
+
+// ---------------------------------------------------------------------
+// OpenAPI/Swagger (NSwag) with Bearer auth
+// ---------------------------------------------------------------------
 builder.Services.AddOpenApiDocument(config =>
 {
     config.Title = "Data Asset Backend API";
     config.Version = "1.0.0";
     config.Description = "Backend API for data asset management (POC). Includes validation utilities for asset configuration workflows.";
+
+    config.AddSecurity("Bearer", new OpenApiSecurityScheme
+    {
+        Type = OpenApiSecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\""
+    });
+
+    config.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("Bearer"));
 });
 
 // Forwarded headers: required so Request.Scheme/Host reflect the *external* URL
@@ -107,6 +199,10 @@ app.UseCors("DefaultCors");
 // now produces a consistent RFC7807 ProblemDetails with stable status codes.
 app.UseUnifiedExceptionHandling();
 
+// AuthN/AuthZ
+app.UseAuthentication();
+app.UseAuthorization();
+
 // Idempotency (BRD §10.3): handles X-Idempotency-Key for asset operations (e.g., Copy Asset).
 app.UseMiddleware<IdempotencyKeyMiddleware>();
 
@@ -184,6 +280,54 @@ app.UseSwaggerUi(config =>
     config.Path = "/docs";
 });
 
+//
+// Auth endpoints
+//
+app.MapPost("/api/auth/login", (DevLoginRequest request, JwtTokenService tokenService) =>
+    {
+        // Minimal dev login:
+        // - No password validation
+        // - Accepts a role and mints a JWT
+        var role = (request.Role ?? "Viewer").Trim();
+        if (!string.Equals(role, "Admin", StringComparison.OrdinalIgnoreCase) &&
+            !string.Equals(role, "Editor", StringComparison.OrdinalIgnoreCase) &&
+            !string.Equals(role, "Viewer", StringComparison.OrdinalIgnoreCase))
+        {
+            return Results.ValidationProblem(new Dictionary<string, string[]>
+            {
+                [nameof(request.Role)] = new[] { "role must be one of: Admin, Editor, Viewer." }
+            });
+        }
+
+        var username = (request.Username ?? string.Empty).Trim();
+        if (string.IsNullOrWhiteSpace(username))
+        {
+            return Results.ValidationProblem(new Dictionary<string, string[]>
+            {
+                [nameof(request.Username)] = new[] { "username is required." }
+            });
+        }
+
+        var expires = TimeSpan.FromHours(8);
+        var token = tokenService.CreateToken(username, role, expires);
+
+        return Results.Ok(new DevLoginResponse
+        {
+            AccessToken = token,
+            ExpiresInSeconds = (int)expires.TotalSeconds,
+            Username = username,
+            Role = role
+        });
+    })
+    .AllowAnonymous()
+    .WithName("DevLogin")
+    .WithTags("Auth")
+    .WithSummary("Dev login (mints JWT)")
+    .WithDescription("Development-only login endpoint that returns a signed JWT for the provided username and role (Admin/Editor/Viewer).")
+    .Accepts<DevLoginRequest>("application/json")
+    .Produces<DevLoginResponse>(StatusCodes.Status200OK)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest);
+
  // Health check endpoints
 // Note: the platform/preview health probe expects `/healthz`.
 // We keep `/` as a friendly default while ensuring `/healthz` returns HTTP 200.
@@ -192,6 +336,7 @@ app.MapGet("/", () =>
         // Use a typed response so OpenAPI accurately documents the response shape.
         return Results.Ok(new HealthRootResponse(Status: "ok"));
     })
+   .AllowAnonymous()
    .WithName("HealthRoot")
    .WithTags("Health")
    .WithSummary("Root health check")
@@ -214,6 +359,7 @@ app.MapGet("/healthz", async (DatabaseConfigProvider dbConfigProvider, ILoggerFa
                 Ok: result.IsHealthy,
                 Error: result.Error)));
     })
+   .AllowAnonymous()
    .WithName("Healthz")
    .WithTags("Health")
    .WithSummary("Health check")
@@ -247,6 +393,7 @@ app.MapPost("/api/validity-check", (ValidityCheckRequest request) =>
 
         return Results.Ok(new ValidityCheckResponse { IsValid = true, Reason = null });
     })
+    .AllowAnonymous()
     .WithName("ValidityCheck")
     .WithTags("Validation")
     .WithSummary("Validity check utility")
@@ -295,6 +442,7 @@ app.MapPost("/api/assets", async (
                 statusCode: StatusCodes.Status409Conflict);
         }
     })
+    .RequireAuthorization("CanWrite")
     .WithName("CreateAsset")
     .WithTags("Assets")
     .WithSummary("Create asset")
@@ -327,6 +475,7 @@ app.MapGet("/api/assets/{assetId:long}", async (
                 statusCode: StatusCodes.Status503ServiceUnavailable);
         }
     })
+    .RequireAuthorization("CanRead")
     .WithName("GetAssetById")
     .WithTags("Assets")
     .WithSummary("Get asset by ID")
@@ -367,6 +516,7 @@ app.MapPut("/api/assets/{assetId:long}", async (
                 statusCode: StatusCodes.Status503ServiceUnavailable);
         }
     })
+    .RequireAuthorization("CanWrite")
     .WithName("UpdateAsset")
     .WithTags("Assets")
     .WithSummary("Update asset")
@@ -399,6 +549,7 @@ app.MapGet("/api/assets", async (
                 statusCode: StatusCodes.Status503ServiceUnavailable);
         }
     })
+    .RequireAuthorization("CanRead")
     .WithName("QueryAssets")
     .WithTags("Assets")
     .WithSummary("Query assets")
@@ -444,6 +595,7 @@ app.MapDelete("/api/assets/{assetId:long}", async (
                 statusCode: StatusCodes.Status409Conflict);
         }
     })
+    .RequireAuthorization("AdminOnly")
     .WithName("DeleteAsset")
     .WithTags("Assets")
     .WithSummary("Delete asset")
@@ -498,6 +650,7 @@ app.MapPost("/api/assets/{assetId:long}/copy", async (
                 statusCode: StatusCodes.Status409Conflict);
         }
     })
+    .RequireAuthorization("CanWrite")
     .WithName("CopyAsset")
     .WithTags("Assets")
     .WithSummary("Copy asset")

@@ -416,41 +416,21 @@ app.UseSwaggerUi(config =>
     config.Path = "/docs";
 });
 
- // ---------------------------------------------------------------------
- // Auth gating (single canonical flow)
- // ---------------------------------------------------------------------
- //
- // Contract:
- // - Public endpoints MUST remain anonymous:
- //   - GET /           (root health)
- //   - GET /healthz    (platform health probe)
- //   - /docs, /swagger, /openapi* (NSwag UI + documents)
- // - All other endpoints remain protected by JWT auth + Authorization FallbackPolicy
- //   (and per-endpoint RequireAuthorization policies where specified).
- //
- // Why this shape:
- // - Minimal APIs rely on endpoint metadata (AllowAnonymous / RequireAuthorization).
- // - If UseAuthentication/UseAuthorization run globally, some hosting/proxy setups can end up
- //   challenging requests (401) before the intended anonymous endpoints are reached.
- // - Therefore we *only* run auth middleware for non-public paths.
-static bool IsPublicPath(PathString path)
-{
-    return
-        path.Equals("/", StringComparison.OrdinalIgnoreCase) ||
-        path.Equals("/healthz", StringComparison.OrdinalIgnoreCase) ||
-        path.StartsWithSegments("/docs", StringComparison.OrdinalIgnoreCase) ||
-        path.StartsWithSegments("/swagger", StringComparison.OrdinalIgnoreCase) ||
-        path.Equals("/openapi.json", StringComparison.OrdinalIgnoreCase) ||
-        path.StartsWithSegments("/openapi", StringComparison.OrdinalIgnoreCase);
-}
-
-app.UseWhen(
-    context => !IsPublicPath(context.Request.Path),
-    branch =>
-    {
-        branch.UseAuthentication();
-        branch.UseAuthorization();
-    });
+// ---------------------------------------------------------------------
+// Authentication/Authorization
+// ---------------------------------------------------------------------
+//
+// IMPORTANT:
+// - This app uses AuthorizationOptions.FallbackPolicy to secure all endpoints by default.
+// - Public endpoints must opt out explicitly via .AllowAnonymous().
+// - To ensure endpoint metadata (AllowAnonymous/RequireAuthorization) is correctly evaluated,
+//   auth middleware must run in the standard global pipeline order.
+//
+// Prior behavior: auth was conditionally enabled via UseWhen(...). In minimal APIs, this can
+// result in endpoint metadata not being available/considered at the time auth runs, causing
+// anonymous endpoints like /healthz and /openapi.json to still be challenged (401 Bearer).
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Idempotency (BRD §10.3): handles X-Idempotency-Key for asset operations (e.g., Copy Asset).
 app.UseMiddleware<IdempotencyKeyMiddleware>();

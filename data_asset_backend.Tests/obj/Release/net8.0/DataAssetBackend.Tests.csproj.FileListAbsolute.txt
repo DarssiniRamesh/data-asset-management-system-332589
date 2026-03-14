@@ -313,10 +313,17 @@
 /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/refs/System.Xml.XPath.dll
 /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/refs/System.Xml.XPath.XDocument.dll
 /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/refs/WindowsBase.dll
+/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
 /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/Microsoft.AspNetCore.Mvc.Testing.dll
 /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/Microsoft.AspNetCore.TestHost.dll
 /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/Microsoft.VisualStudio.CodeCoverage.Shim.dll
 /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/Microsoft.Extensions.DependencyModel.dll
+/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/Microsoft.IdentityModel.Abstractions.dll
+/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/Microsoft.IdentityModel.Logging.dll
+/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/Microsoft.IdentityModel.Protocols.dll
+/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/Microsoft.IdentityModel.Tokens.dll
 /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/Microsoft.TestPlatform.CoreUtilities.dll
 /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/Microsoft.TestPlatform.PlatformAbstractions.dll
 /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/Microsoft.VisualStudio.TestPlatform.ObjectModel.dll
@@ -338,6 +345,7 @@
 /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/NSwag.Core.Yaml.dll
 /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/NSwag.Generation.dll
 /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/NSwag.Generation.AspNetCore.dll
+/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/System.IdentityModel.Tokens.Jwt.dll
 /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/xunit.abstractions.dll
 /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/xunit.assert.dll
 /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/xunit.core.dll
@@ -423,11 +431,3 @@
 /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/obj/Release/net8.0/DataAssetBackend.Tests.pdb
 /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/obj/Release/net8.0/DataAssetBackend.Tests.genruntimeconfig.cache
 /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/obj/Release/net8.0/ref/DataAssetBackend.Tests.dll
-/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
-/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/Microsoft.IdentityModel.Abstractions.dll
-/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/Microsoft.IdentityModel.JsonWebTokens.dll
-/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/Microsoft.IdentityModel.Logging.dll
-/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/Microsoft.IdentityModel.Protocols.dll
-/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
-/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/Microsoft.IdentityModel.Tokens.dll
-/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/System.IdentityModel.Tokens.Jwt.dll

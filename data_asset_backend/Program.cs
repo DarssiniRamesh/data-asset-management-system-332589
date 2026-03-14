@@ -398,47 +398,33 @@ app.UseSwaggerUi(config =>
     config.Path = "/docs";
 });
 
-// ---------------------------------------------------------------------
-// Swagger UI anonymous access (static assets under /docs)
-// ---------------------------------------------------------------------
-//
-// NSwag serves Swagger UI assets via middleware which can still be subject to Authorization
-// fallback policy in some hosting/proxy setups. We explicitly bypass auth for /docs requests.
-app.Use(async (context, next) =>
-{
-    if (context.Request.Path.StartsWithSegments("/docs", StringComparison.OrdinalIgnoreCase))
+ // ---------------------------------------------------------------------
+ // Swagger/OpenAPI must be publicly accessible (no auth)
+ // ---------------------------------------------------------------------
+ //
+ // The app has a strict Authorization FallbackPolicy. Swagger UI assets are served by NSwag middleware
+ // (not MVC/static-files endpoints), so attempting to mutate endpoint metadata for /docs can lead to
+ // method-matching issues (405) under some hosting/proxy configurations.
+ //
+ // Instead, bypass auth for Swagger/OpenAPI paths by skipping auth middlewares when those paths are requested.
+app.UseWhen(
+    context =>
+        context.Request.Path.StartsWithSegments("/docs", StringComparison.OrdinalIgnoreCase) ||
+        context.Request.Path.StartsWithSegments("/swagger", StringComparison.OrdinalIgnoreCase) ||
+        context.Request.Path.Equals("/openapi.json", StringComparison.OrdinalIgnoreCase) ||
+        context.Request.Path.StartsWithSegments("/openapi", StringComparison.OrdinalIgnoreCase),
+    branch =>
     {
-        var currentEndpoint = context.GetEndpoint();
-        if (currentEndpoint is not null)
-        {
-            // Endpoint ctor expects EndpointMetadataCollection, not object[].
-            var metadata = new EndpointMetadataCollection(
-                currentEndpoint.Metadata.Concat(new object[] { new AllowAnonymousAttribute() }).ToArray());
+        // Intentionally empty: do not call UseAuthentication/UseAuthorization on this branch.
+        // NSwag middleware registered above will serve the UI + assets + openapi docs.
+    });
 
-            var withAnon = new Endpoint(
-                currentEndpoint.RequestDelegate,
-                metadata,
-                currentEndpoint.DisplayName);
-
-            context.SetEndpoint(withAnon);
-        }
-    }
-
-    await next();
-});
-
-// AuthN/AuthZ
+// AuthN/AuthZ (only for non-Swagger paths due to UseWhen above)
 app.UseAuthentication();
 app.UseAuthorization();
 
 // Idempotency (BRD §10.3): handles X-Idempotency-Key for asset operations (e.g., Copy Asset).
 app.UseMiddleware<IdempotencyKeyMiddleware>();
-
-// IMPORTANT: Because this app explicitly calls UseRouting(), we also explicitly register
-// the endpoint middleware (UseEndpoints) to ensure endpoint routing is fully active.
-// Without this, CORS headers can be missing (notably on preflight/OPTIONS requests) in
-// some proxy/hosting configurations.
-app.UseEndpoints(_ => { });
 
 //
 // Auth endpoints

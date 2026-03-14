@@ -153,14 +153,42 @@ builder.Services.AddCors(options =>
         }
         else
         {
-            // Dev-only defaults (no credentials when not explicitly configured).
-            policy.WithOrigins(
-                    "http://localhost:3000",
-                    "http://localhost:3001",
-                    "https://localhost:7038"
-                )
+            // Dev/preview defaults:
+            // - Allow localhost dev servers
+            // - Allow Kavia preview hosts where the frontend runs on :3000 and backend on :3001
+            //
+            // Note: We use SetIsOriginAllowed (instead of AllowAnyOrigin) so this remains compatible
+            // with credentialed requests if the frontend ever needs cookies/Authorization flows.
+            static bool IsAllowedDevOrPreviewOrigin(string origin)
+            {
+                if (!Uri.TryCreate(origin, UriKind.Absolute, out var uri))
+                {
+                    return false;
+                }
+
+                // Local dev
+                if (string.Equals(uri.Host, "localhost", StringComparison.OrdinalIgnoreCase))
+                {
+                    return uri.Port == 3000 || uri.Port == 3001 || uri.Port == 7038;
+                }
+
+                // Hosted preview environment (example host: vscode-internal-34811-beta.beta01.cloud.kavia.ai)
+                // Frontend is typically :3000, backend is typically :3001.
+                if (uri.Host.Contains("kavia.ai", StringComparison.OrdinalIgnoreCase) &&
+                    (uri.Port == 3000 || uri.Port == 3001) &&
+                    (string.Equals(uri.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase) ||
+                     string.Equals(uri.Scheme, Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase)))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            policy.SetIsOriginAllowed(IsAllowedDevOrPreviewOrigin)
                 .AllowAnyMethod()
-                .AllowAnyHeader();
+                .AllowAnyHeader()
+                .AllowCredentials();
         }
     });
 });

@@ -1238,6 +1238,9 @@ app.MapPost("/api/assets/{assetId:long}/reporting-attribute-mappings", async (
     {
         var logger = loggerFactory.CreateLogger("CreateReportingAttributeMapping");
 
+        // BRD FR-05 tab-level validations (request contract + uniqueness enforced in flow)
+        RequestValidation.ValidateAndThrow(request, nameof(CreateReportingAttributeMappingRequest));
+
         try
         {
             var created = await AssetChildFlows.CreateReportingAttributeMappingAsync(assetId, request, repository, logger, cancellationToken);
@@ -1270,6 +1273,7 @@ app.MapPost("/api/assets/{assetId:long}/reporting-attribute-mappings", async (
     .WithDescription("Creates a reporting attribute mapping row for an asset (table: reporting_attribute_mapping).")
     .Accepts<CreateReportingAttributeMappingRequest>("application/json")
     .Produces<ReportingAttributeMappingDto>(StatusCodes.Status201Created)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
     .Produces(StatusCodes.Status404NotFound)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
     .ProducesProblem(StatusCodes.Status409Conflict);
@@ -1359,6 +1363,9 @@ app.MapPut("/api/assets/{assetId:long}/reporting-attribute-mappings/{reportingAt
     {
         var logger = loggerFactory.CreateLogger("UpdateReportingAttributeMapping");
 
+        // BRD FR-05 tab-level validations (request contract + uniqueness enforced in flow)
+        RequestValidation.ValidateAndThrow(request, nameof(UpdateReportingAttributeMappingRequest));
+
         try
         {
             var updated = await AssetChildFlows.UpdateReportingAttributeMappingAsync(
@@ -1390,6 +1397,7 @@ app.MapPut("/api/assets/{assetId:long}/reporting-attribute-mappings/{reportingAt
     .WithDescription("Updates a reporting attribute mapping row under an asset scope (table: reporting_attribute_mapping).")
     .Accepts<UpdateReportingAttributeMappingRequest>("application/json")
     .Produces<ReportingAttributeMappingDto>(StatusCodes.Status200OK)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
     .Produces(StatusCodes.Status404NotFound)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
 
@@ -1564,6 +1572,9 @@ app.MapPost("/api/assets/{assetId:long}/input-parameters/{childInputParameterId:
     {
         var logger = loggerFactory.CreateLogger("CreateParentInputMapping");
 
+        // BRD FR-05 tab-level validations (request contract + conditional rules enforced in flow)
+        RequestValidation.ValidateAndThrow(request, nameof(CreateParentInputMappingRequest));
+
         try
         {
             var created = await AssetChildFlows.CreateParentInputMappingAsync(
@@ -1605,6 +1616,7 @@ app.MapPost("/api/assets/{assetId:long}/input-parameters/{childInputParameterId:
     .WithDescription("Creates a parent input mapping row (table: parent_input_mapping) under an asset + input-parameter scope.")
     .Accepts<CreateParentInputMappingRequest>("application/json")
     .Produces<ParentInputMappingDto>(StatusCodes.Status201Created)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
     .Produces(StatusCodes.Status404NotFound)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
     .ProducesProblem(StatusCodes.Status409Conflict);
@@ -1655,6 +1667,9 @@ app.MapPut("/api/assets/{assetId:long}/input-parameters/{childInputParameterId:l
     {
         var logger = loggerFactory.CreateLogger("UpdateParentInputMapping");
 
+        // BRD FR-05 tab-level validations (request contract + conditional rules enforced in flow)
+        RequestValidation.ValidateAndThrow(request, nameof(UpdateParentInputMappingRequest));
+
         try
         {
             var updated = await AssetChildFlows.UpdateParentInputMappingAsync(
@@ -1687,6 +1702,7 @@ app.MapPut("/api/assets/{assetId:long}/input-parameters/{childInputParameterId:l
     .WithDescription("Updates a parent input mapping row under an asset + input-parameter scope (table: parent_input_mapping).")
     .Accepts<UpdateParentInputMappingRequest>("application/json")
     .Produces<ParentInputMappingDto>(StatusCodes.Status200OK)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
     .Produces(StatusCodes.Status404NotFound)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
 

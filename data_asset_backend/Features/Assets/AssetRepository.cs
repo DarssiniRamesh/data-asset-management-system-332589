@@ -640,6 +640,110 @@ public sealed class AssetRepository
         return result is not null;
     }
 
+    // PUBLIC_INTERFACE
+    /// <summary>
+    /// Checks whether adding (or updating) a parent-input mapping would create a cycle in the parent/child graph.
+    /// </summary>
+    /// <remarks>
+    /// BRD evidence: §6.6 “Hierarchy Validity: No cycles; parent-child consistency required.”
+    ///
+    /// Contract:
+    /// - Inputs:
+    ///   - <paramref name="childInputParameterId"/>: the child node for the mapping
+    ///   - <paramref name="proposedParentInputParameterId"/>: the proposed parent node for the mapping
+    ///   - <paramref name="excludeParentInputMappingId"/>: optional, used when updating an existing mapping so it is not considered in traversal
+    /// - Output:
+    ///   - true if a cycle would be created (i.e., the child is reachable from the proposed parent following existing parent links)
+    /// - Notes:
+    ///   - Soft-deleted mappings are ignored.
+    /// </remarks>
+    public async Task<bool> WouldParentInputMappingCreateCycleAsync(
+        long childInputParameterId,
+        long proposedParentInputParameterId,
+        long? excludeParentInputMappingId,
+        CancellationToken cancellationToken)
+    {
+        await using var conn = await _connectionFactory.OpenAsync(cancellationToken);
+
+        // If the child is reachable from the proposed parent by traversing parent links upward,
+        // then adding proposedParent -> ... -> child would create a cycle.
+        const string sql = """
+            WITH RECURSIVE ancestors AS (
+                SELECT
+                    pim.parent_input_parameter_id AS node_id
+                FROM parent_input_mapping pim
+                WHERE pim.child_input_parameter_id = @start_node
+                  AND pim.is_deleted = FALSE
+                  AND (@exclude_id IS NULL OR pim.parent_input_mapping_id <> @exclude_id)
+
+                UNION
+
+                SELECT
+                    pim2.parent_input_parameter_id AS node_id
+                FROM parent_input_mapping pim2
+                INNER JOIN ancestors a ON a.node_id = pim2.child_input_parameter_id
+                WHERE pim2.is_deleted = FALSE
+                  AND (@exclude_id IS NULL OR pim2.parent_input_mapping_id <> @exclude_id)
+            )
+            SELECT 1
+            FROM ancestors
+            WHERE node_id = @target_node
+            LIMIT 1;
+            """;
+
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        AddParam(cmd, "start_node", proposedParentInputParameterId);
+        AddParam(cmd, "target_node", childInputParameterId);
+        AddParam(cmd, "exclude_id", excludeParentInputMappingId.HasValue ? excludeParentInputMappingId.Value : DBNull.Value);
+
+        var scalar = await cmd.ExecuteScalarAsync(cancellationToken);
+        return scalar is not null;
+    }
+
+    // PUBLIC_INTERFACE
+    /// <summary>
+    /// Checks whether the given reporting attribute combination already exists under an asset.
+    /// </summary>
+    /// <remarks>
+    /// BRD evidence: §6.7 “Uniqueness Constraint: Duplicate attribute combinations prevented.”
+    ///
+    /// Since the BRD does not specify a database-level uniqueness key, we enforce uniqueness at the
+    /// API level for the full visible combination captured on the tab:
+    /// (asset_id, reporting_program_id, attribute_name, attribute_value) among non-deleted rows.
+    /// </remarks>
+    public async Task<bool> ReportingAttributeCombinationExistsAsync(
+        long assetId,
+        long reportingProgramId,
+        string attributeName,
+        string attributeValue,
+        long? excludeReportingAttributeMappingId,
+        CancellationToken cancellationToken)
+    {
+        await using var conn = await _connectionFactory.OpenAsync(cancellationToken);
+
+        const string sql = """
+            SELECT 1
+            FROM reporting_attribute_mapping
+            WHERE asset_id = @asset_id
+              AND reporting_program_id = @reporting_program_id
+              AND attribute_name = @attribute_name
+              AND attribute_value = @attribute_value
+              AND is_deleted = FALSE
+              AND (@exclude_id IS NULL OR reporting_attribute_mapping_id <> @exclude_id)
+            LIMIT 1;
+            """;
+
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        AddParam(cmd, "asset_id", assetId);
+        AddParam(cmd, "reporting_program_id", reportingProgramId);
+        AddParam(cmd, "attribute_name", attributeName);
+        AddParam(cmd, "attribute_value", attributeValue);
+        AddParam(cmd, "exclude_id", excludeReportingAttributeMappingId.HasValue ? excludeReportingAttributeMappingId.Value : DBNull.Value);
+
+        var scalar = await cmd.ExecuteScalarAsync(cancellationToken);
+        return scalar is not null;
+    }
+
     // ---------------------------------------------------------------------
     // Child resources (BRD evidenced tables)
     // ---------------------------------------------------------------------

@@ -529,6 +529,34 @@ public static class AssetChildFlows
             throw new AssetRepository.EntityNotFoundException("input_parameter", request.ParentInputParameterId);
         }
 
+        // BRD §6.6: Hierarchy validity - no cycles; parent-child consistency required.
+        // Evidence-based rule: prevent self-parenting and any cycle in the parent graph.
+        if (childInputParameterId == request.ParentInputParameterId)
+        {
+            throw new RequestValidationException(new Dictionary<string, string[]>
+            {
+                [nameof(request.ParentInputParameterId)] = new[]
+                {
+                    "parentInputParameterId must not be the same as the child input parameter id (self-parenting is not allowed)."
+                }
+            });
+        }
+
+        if (await repository.WouldParentInputMappingCreateCycleAsync(
+                childInputParameterId,
+                request.ParentInputParameterId,
+                excludeParentInputMappingId: null,
+                cancellationToken))
+        {
+            throw new RequestValidationException(new Dictionary<string, string[]>
+            {
+                [nameof(request.ParentInputParameterId)] = new[]
+                {
+                    "parentInputParameterId would create a cycle in the parent/child hierarchy (cycles are not allowed)."
+                }
+            });
+        }
+
         return await repository.CreateParentInputMappingAsync(childInputParameterId, request, cancellationToken);
     }
 
@@ -595,6 +623,33 @@ public static class AssetChildFlows
             throw new AssetRepository.EntityNotFoundException("input_parameter", request.ParentInputParameterId);
         }
 
+        // BRD §6.6: no cycles; prevent self-parenting and graph cycles.
+        if (childInputParameterId == request.ParentInputParameterId)
+        {
+            throw new RequestValidationException(new Dictionary<string, string[]>
+            {
+                [nameof(request.ParentInputParameterId)] = new[]
+                {
+                    "parentInputParameterId must not be the same as the child input parameter id (self-parenting is not allowed)."
+                }
+            });
+        }
+
+        if (await repository.WouldParentInputMappingCreateCycleAsync(
+                childInputParameterId,
+                request.ParentInputParameterId,
+                excludeParentInputMappingId: parentInputMappingId,
+                cancellationToken))
+        {
+            throw new RequestValidationException(new Dictionary<string, string[]>
+            {
+                [nameof(request.ParentInputParameterId)] = new[]
+                {
+                    "parentInputParameterId would create a cycle in the parent/child hierarchy (cycles are not allowed)."
+                }
+            });
+        }
+
         return await repository.UpdateParentInputMappingAsync(childInputParameterId, parentInputMappingId, request, cancellationToken);
     }
 
@@ -614,6 +669,26 @@ public static class AssetChildFlows
         if (!await repository.AssetExistsAsync(assetId, cancellationToken))
         {
             throw new AssetRepository.EntityNotFoundException("asset", assetId);
+        }
+
+        // BRD §6.7: Uniqueness Constraint - Duplicate attribute combinations prevented.
+        // Since DB uniqueness scope is not evidenced, enforce at API level for the captured combination
+        // within the current asset: (reportingProgramId, attributeName, attributeValue).
+        if (await repository.ReportingAttributeCombinationExistsAsync(
+                assetId,
+                request.ReportingProgramId,
+                request.AttributeName,
+                request.AttributeValue,
+                excludeReportingAttributeMappingId: null,
+                cancellationToken))
+        {
+            throw new RequestValidationException(new Dictionary<string, string[]>
+            {
+                ["combination"] = new[]
+                {
+                    "A reporting attribute mapping with the same reportingProgramId, attributeName, and attributeValue already exists for this asset."
+                }
+            });
         }
 
         return await repository.CreateReportingAttributeMappingAsync(assetId, request, cancellationToken);
@@ -683,6 +758,24 @@ public static class AssetChildFlows
         if (!await repository.AssetExistsAsync(assetId, cancellationToken))
         {
             throw new AssetRepository.EntityNotFoundException("asset", assetId);
+        }
+
+        // BRD §6.7: duplicate attribute combinations prevented.
+        if (await repository.ReportingAttributeCombinationExistsAsync(
+                assetId,
+                request.ReportingProgramId,
+                request.AttributeName,
+                request.AttributeValue,
+                excludeReportingAttributeMappingId: reportingAttributeMappingId,
+                cancellationToken))
+        {
+            throw new RequestValidationException(new Dictionary<string, string[]>
+            {
+                ["combination"] = new[]
+                {
+                    "A reporting attribute mapping with the same reportingProgramId, attributeName, and attributeValue already exists for this asset."
+                }
+            });
         }
 
         return await repository.UpdateReportingAttributeMappingAsync(assetId, reportingAttributeMappingId, request, cancellationToken);

@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using DataAssetBackend.Features.Assets;
 using DataAssetBackend.Features.Masters;
+using DataAssetBackend.Infrastructure.Api;
 using DataAssetBackend.Infrastructure.Database;
 using Microsoft.AspNetCore.HttpOverrides;
 using Npgsql;
@@ -91,8 +92,13 @@ var app = builder.Build();
 // Must be early in pipeline, before anything that relies on scheme/host (OpenAPI generation).
 app.UseForwardedHeaders();
 
-// Use CORS
+ // Use CORS
 app.UseCors("DefaultCors");
+
+// Unified exception->HTTP mapping for all endpoints (assets, children, masters, copy lineage).
+// Note: endpoint-local try/catch blocks may still translate errors, but any uncaught exception
+// now produces a consistent RFC7807 ProblemDetails with stable status codes.
+app.UseUnifiedExceptionHandling();
 
 static string BuildPublishedServerUrl(HttpRequest req)
 {

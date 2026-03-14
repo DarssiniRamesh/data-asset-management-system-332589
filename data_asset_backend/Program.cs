@@ -437,9 +437,30 @@ app.UseWhen(
         // NSwag middleware registered above will serve the UI + assets + openapi docs.
     });
 
-// AuthN/AuthZ (only for non-Swagger paths due to UseWhen above)
-app.UseAuthentication();
-app.UseAuthorization();
+/*
+ * AuthN/AuthZ
+ *
+ * IMPORTANT:
+ * - The app uses a strict Authorization FallbackPolicy.
+ * - Swagger UI (/docs) and its assets are served by NSwag middleware, not via endpoint metadata.
+ * - In preview/proxy environments, the fallback policy can inadvertently apply to /docs assets and
+ *   return 401/403, preventing anonymous access to Swagger UI.
+ *
+ * Approach:
+ * - If the request is for Swagger/OpenAPI paths, skip auth middleware entirely.
+ * - Otherwise, enforce auth for the protected API.
+ */
+app.UseWhen(
+    context =>
+        !(context.Request.Path.StartsWithSegments("/docs", StringComparison.OrdinalIgnoreCase) ||
+          context.Request.Path.StartsWithSegments("/swagger", StringComparison.OrdinalIgnoreCase) ||
+          context.Request.Path.Equals("/openapi.json", StringComparison.OrdinalIgnoreCase) ||
+          context.Request.Path.StartsWithSegments("/openapi", StringComparison.OrdinalIgnoreCase)),
+    branch =>
+    {
+        branch.UseAuthentication();
+        branch.UseAuthorization();
+    });
 
 // Idempotency (BRD §10.3): handles X-Idempotency-Key for asset operations (e.g., Copy Asset).
 app.UseMiddleware<IdempotencyKeyMiddleware>();

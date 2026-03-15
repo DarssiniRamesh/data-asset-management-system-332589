@@ -3740,13 +3740,45 @@
             "x-position": 1
           },
           {
+            "name": "SiteId",
+            "x-originalName": "siteIdPascal",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 2
+          },
+          {
+            "name": "limit",
+            "x-originalName": "limitLower",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            },
+            "x-position": 3
+          },
+          {
+            "name": "Limit",
+            "x-originalName": "limitPascal",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            },
+            "x-position": 4
+          },
+          {
             "name": "ActiveOnly",
             "in": "query",
             "schema": {
               "type": "boolean",
               "nullable": true
             },
-            "x-position": 2
+            "x-position": 5
           },
           {
             "name": "Limit",
@@ -3756,7 +3788,7 @@
               "format": "int32",
               "nullable": true
             },
-            "x-position": 3
+            "x-position": 6
           }
         ],
         "responses": {

@@ -436,17 +436,36 @@ static void ConfigureOpenApiDocument(NSwag.AspNetCore.OpenApiDocumentMiddlewareS
 // *static assets* (e.g., swagger-ui-bundle.js, swagger-ui.css, favicon) to be challenged,
 // resulting in 401s and a broken UI ("SwaggerUIBundle is not defined").
 //
-// To make this robust, we explicitly mark requests under /docs (and /swagger) as anonymous
-// by setting HttpContext.User to an empty principal before auth runs.
+// To make this robust with a strict AuthorizationOptions.FallbackPolicy, we explicitly mark
+// requests under /docs (and /swagger) as anonymous.
+//
+// Why not just clear HttpContext.User?
+// - Authorization middleware evaluates the fallback policy when an endpoint is not anonymous.
+// - An empty principal still fails RequireAuthenticatedUser(), resulting in 401.
+// - NSwag's Swagger UI middleware is not an "endpoint" where we can attach .AllowAnonymous().
+//
+// Therefore we set an IAllowAnonymous feature (the same mechanism the framework uses when
+// you decorate endpoints/controllers with [AllowAnonymous]).
 app.Use(async (context, next) =>
 {
     var path = context.Request.Path;
 
     // NSwag Swagger UI is hosted under /docs; assets are served under /docs/*.
-    // We also expose OpenAPI under /swagger/v1/swagger.json and the default /swagger/* path.
-    if (path.StartsWithSegments("/docs", StringComparison.OrdinalIgnoreCase) ||
-        path.StartsWithSegments("/swagger", StringComparison.OrdinalIgnoreCase))
+    // OpenAPI JSON is served under /swagger/* (including /swagger/v1/swagger.json) and /openapi.json.
+    var isSwaggerUiOrAssets =
+        path.StartsWithSegments("/docs", StringComparison.OrdinalIgnoreCase);
+
+    var isSwaggerJson =
+        path.StartsWithSegments("/swagger", StringComparison.OrdinalIgnoreCase) ||
+        path.Equals("/openapi.json", StringComparison.OrdinalIgnoreCase);
+
+    if (isSwaggerUiOrAssets || isSwaggerJson)
     {
+        // Mark request as anonymous for authz middleware.
+        // AllowAnonymousAttribute implements IAllowAnonymous and is what the framework uses for [AllowAnonymous].
+        context.Features.Set<IAllowAnonymous>(new AllowAnonymousAttribute());
+
+        // Also ensure the current principal is empty to avoid any accidental partial identity.
         context.User = new ClaimsPrincipal(new ClaimsIdentity());
     }
 

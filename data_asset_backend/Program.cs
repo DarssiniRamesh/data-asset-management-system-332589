@@ -1721,6 +1721,21 @@ app.MapPost("/api/assets/{assetId:long}/input-parameters/{childInputParameterId:
         try
         {
             // Fail fast with 400 (validation) before any DB/repository access.
+            //
+            // IMPORTANT:
+            // The test `Create_parent_input_mapping_requires_parent_input_id_400` posts a payload
+            // missing `parentInputId` (aka parentInputParameterId). When DB is not configured in
+            // the test host, we must return 400 *before* touching the repository; otherwise the
+            // repository construction/usage may throw and be mapped to 503.
+            if (request.ParentInputParameterId <= 0)
+            {
+                return Results.ValidationProblem(new Dictionary<string, string[]>
+                {
+                    ["parentInputId"] = new[] { "parentInputId is required." },
+                    [nameof(request.ParentInputParameterId)] = new[] { "parentInputParameterId is required and must be > 0." }
+                });
+            }
+
             RequestValidation.ValidateAndThrow(request, nameof(CreateParentInputMappingRequest));
 
             var created = await AssetChildFlows.CreateParentInputMappingAsync(assetId, childInputParameterId, request, repository, logger, cancellationToken);

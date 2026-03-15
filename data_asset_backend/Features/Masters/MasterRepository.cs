@@ -397,6 +397,10 @@ public sealed class MasterRepository
     {
         await using var conn = await _connectionFactory.OpenAsync(cancellationToken);
 
+        // Normalize at the write-boundary to prevent invisible mismatches during site-scoped queries.
+        // Contract/invariant: site_id is stored trimmed (no leading/trailing whitespace).
+        var normalizedSiteId = request.SiteId.Trim();
+
         const string sql = """
             INSERT INTO control_device_master (
                 site_id,
@@ -437,7 +441,7 @@ public sealed class MasterRepository
             """;
 
         await using var cmd = new NpgsqlCommand(sql, conn);
-        AddParam(cmd, "site_id", request.SiteId);
+        AddParam(cmd, "site_id", normalizedSiteId);
         AddParam(cmd, "device_key", request.DeviceKey);
         AddParam(cmd, "display_label", request.DisplayLabel);
         AddParam(cmd, "is_active", request.IsActive);
@@ -491,6 +495,10 @@ public sealed class MasterRepository
     {
         await using var conn = await _connectionFactory.OpenAsync(cancellationToken);
 
+        // Normalize at the write-boundary to keep query semantics stable.
+        // Contract/invariant: site_id is stored trimmed (no leading/trailing whitespace).
+        var normalizedSiteId = request.SiteId.Trim();
+
         const string sql = """
             UPDATE control_device_master
             SET
@@ -519,7 +527,7 @@ public sealed class MasterRepository
 
         await using var cmd = new NpgsqlCommand(sql, conn);
         AddParam(cmd, "control_device_id", controlDeviceId);
-        AddParam(cmd, "site_id", request.SiteId);
+        AddParam(cmd, "site_id", normalizedSiteId);
         AddParam(cmd, "device_key", request.DeviceKey);
         AddParam(cmd, "display_label", request.DisplayLabel);
         AddParam(cmd, "is_active", request.IsActive);
@@ -549,10 +557,11 @@ public sealed class MasterRepository
             where.Add("is_active = TRUE");
         }
 
-        if (!string.IsNullOrWhiteSpace(siteId))
+        var normalizedSiteId = !string.IsNullOrWhiteSpace(siteId) ? siteId.Trim() : null;
+        if (!string.IsNullOrWhiteSpace(normalizedSiteId))
         {
             where.Add("site_id = @site_id");
-            parameters.Add(("site_id", siteId.Trim()));
+            parameters.Add(("site_id", normalizedSiteId));
         }
 
         var sql = $"""

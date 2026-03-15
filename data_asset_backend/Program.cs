@@ -429,23 +429,16 @@ static void ConfigureOpenApiDocument(NSwag.AspNetCore.OpenApiDocumentMiddlewareS
  * OpenAPI/Swagger (NSwag)
  * ---------------------------------------------------------------------
  *
- * Important: Swagger UI + OpenAPI documents must remain publicly accessible (no auth)
+ * Swagger UI + OpenAPI documents must remain publicly accessible (no auth)
  * so that preview environments can load /docs without needing a JWT.
  *
- * Durable fix: explicitly map these paths as AllowAnonymous so they bypass a strict
- * AuthorizationOptions.FallbackPolicy, including static assets (CSS/JS/favicon).
+ * IMPORTANT:
+ * Do NOT register placeholder endpoints like `/docs/{*path}` because they intercept
+ * Swagger UI static bundle requests (JS/CSS) and cause a blank screen:
+ * `SwaggerUIBundle is not defined`.
+ *
+ * Correct behavior: let NSwag middleware serve `/docs` and its embedded assets.
  */
-app.MapGet("/docs/{*path}", () => Results.Empty)
-   .AllowAnonymous()
-   .ExcludeFromDescription();
-
-app.MapGet("/swagger/{*path}", () => Results.Empty)
-   .AllowAnonymous()
-   .ExcludeFromDescription();
-
-app.MapGet("/openapi.json", () => Results.Empty)
-   .AllowAnonymous()
-   .ExcludeFromDescription();
 
 // Configure OpenAPI/Swagger (serve at default NSwag path)
 app.UseOpenApi(settings =>

@@ -430,8 +430,28 @@ static void ConfigureOpenApiDocument(NSwag.AspNetCore.OpenApiDocumentMiddlewareS
 //
 // Important: Swagger UI + OpenAPI documents must remain publicly accessible (no auth)
 // so that preview environments can load /docs without needing a JWT.
-// We therefore register NSwag middleware *before* Authentication/Authorization.
-// API endpoints remain protected via RequireAuthorization(...) and the FallbackPolicy.
+//
+// Even though we register NSwag middleware before Authentication/Authorization,
+// some hosting/proxy setups and/or auth fallback policies can still cause Swagger UI
+// *static assets* (e.g., swagger-ui-bundle.js, swagger-ui.css, favicon) to be challenged,
+// resulting in 401s and a broken UI ("SwaggerUIBundle is not defined").
+//
+// To make this robust, we explicitly mark requests under /docs (and /swagger) as anonymous
+// by setting HttpContext.User to an empty principal before auth runs.
+app.Use(async (context, next) =>
+{
+    var path = context.Request.Path;
+
+    // NSwag Swagger UI is hosted under /docs; assets are served under /docs/*.
+    // We also expose OpenAPI under /swagger/v1/swagger.json and the default /swagger/* path.
+    if (path.StartsWithSegments("/docs", StringComparison.OrdinalIgnoreCase) ||
+        path.StartsWithSegments("/swagger", StringComparison.OrdinalIgnoreCase))
+    {
+        context.User = new ClaimsPrincipal(new ClaimsIdentity());
+    }
+
+    await next();
+});
 
 // Configure OpenAPI/Swagger (serve at default NSwag path)
 app.UseOpenApi(settings =>
@@ -470,15 +490,11 @@ app.UseSwaggerUi(config =>
  * - We apply a strict AuthorizationOptions.FallbackPolicy (authenticated + role required).
  * - Public endpoints opt out via .AllowAnonymous().
  *
- * Bug fix:
- * - Previously we attempted to bypass auth middleware for Swagger/OpenAPI routes via UseWhen().
- *   In practice (especially under proxy/hosting quirks), this led to *all* requests being
- *   challenged (401), including endpoints explicitly marked AllowAnonymous (/, /healthz, /docs).
- *
  * Durable fix approach:
- * 1) Use the standard ASP.NET Core ordering: Routing -> AuthN -> AuthZ -> Endpoints.
- * 2) Explicitly map Swagger UI + OpenAPI endpoints under separate branches and mark them
- *    AllowAnonymous at the endpoint level, so /docs and /docs/* assets are always accessible.
+ * 1) Standard ASP.NET Core ordering: Routing -> CORS -> AuthN -> AuthZ -> Endpoints.
+ * 2) Swagger/OpenAPI are registered before auth.
+ * 3) Additionally, /docs/* and /swagger/* are forced anonymous via the middleware above,
+ *    preventing 401/502 asset failures caused by strict auth fallback policies.
  */
 app.UseAuthentication();
 app.UseAuthorization();

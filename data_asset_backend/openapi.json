@@ -7764,13 +7764,31 @@
             "type": "integer",
             "format": "int64"
           },
+          "equationMasterId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
           "generatedEquation": {
             "type": "string",
             "minLength": 1
           },
+          "equationText": {
+            "type": "string",
+            "nullable": true
+          },
           "reportingYear": {
             "type": "integer",
             "format": "int32"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean",
+            "nullable": true
           },
           "createdBy": {
             "type": "string",
@@ -7797,13 +7815,31 @@
             "type": "integer",
             "format": "int64"
           },
+          "equationMasterId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
           "generatedEquation": {
             "type": "string",
             "minLength": 1
           },
+          "equationText": {
+            "type": "string",
+            "nullable": true
+          },
           "reportingYear": {
             "type": "integer",
             "format": "int32"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean",
+            "nullable": true
           },
           "modifiedBy": {
             "type": "string",
@@ -7897,6 +7933,24 @@
             "type": "string",
             "nullable": true
           },
+          "scalarName": {
+            "type": "string",
+            "nullable": true
+          },
+          "scalarNumberValue": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "uomId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean",
+            "nullable": true
+          },
           "createdBy": {
             "type": "string",
             "minLength": 1
@@ -7934,6 +7988,24 @@
           },
           "scalarBasis": {
             "type": "string",
+            "nullable": true
+          },
+          "scalarName": {
+            "type": "string",
+            "nullable": true
+          },
+          "scalarNumberValue": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "uomId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean",
             "nullable": true
           },
           "modifiedBy": {

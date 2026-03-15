@@ -832,9 +832,18 @@ public static class AssetChildFlows
             throw new AssetRepository.EntityNotFoundException("asset", assetId);
         }
 
+        // LIST semantics:
+        // - If the asset exists but the inputParameterId is not found under that asset (or soft-deleted),
+        //   we return an empty list rather than 404. This prevents UI “empty state” from being treated as an error
+        //   and aligns with other list endpoints that are safe to render as “no rows yet”.
         if (!await repository.InputParameterBelongsToAssetAsync(assetId, inputParameterId, cancellationToken))
         {
-            throw new AssetRepository.EntityNotFoundException("input_parameter", inputParameterId);
+            logger.LogInformation(
+                "AssetChildFlows.ListEfSourceMappings input parameter not found under asset; returning empty list. asset_id={AssetId}, input_parameter_id={InputId}",
+                assetId,
+                inputParameterId);
+
+            return Array.Empty<EfSourceMappingDto>();
         }
 
         return await repository.ListEfSourceMappingsAsync(inputParameterId, cancellationToken);

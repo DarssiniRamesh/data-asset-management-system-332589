@@ -2052,6 +2052,96 @@
             "Bearer": []
           }
         ]
+      },
+      "post": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "CreateEfSourceMapping",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "inputParameterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 2
+          }
+        ],
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEfSourceMappingRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 3
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EfSourceMappingDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/api/assets/{assetId}/input-parameters/{inputParameterId}/data-input-values": {
@@ -5338,6 +5428,42 @@
           }
         }
       },
+      "CreateEfSourceMappingRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "efSourceSetOrTable",
+          "createdBy",
+          "correlationId"
+        ],
+        "properties": {
+          "efSourceSetOrTable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "equationSetup": {
+            "type": "string",
+            "nullable": true
+          },
+          "scalarValues": {
+            "type": "string",
+            "nullable": true
+          },
+          "reportingProgramId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "minLength": 1
+          },
+          "correlationId": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
       "DataInputValueDto": {
         "type": "object",
         "additionalProperties": false,
@@ -6178,42 +6304,6 @@
             "format": "int64"
           },
           "modifiedBy": {
-            "type": "string",
-            "minLength": 1
-          },
-          "correlationId": {
-            "type": "string",
-            "minLength": 1
-          }
-        }
-      },
-      "CreateEfSourceMappingRequest": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "efSourceSetOrTable",
-          "createdBy",
-          "correlationId"
-        ],
-        "properties": {
-          "efSourceSetOrTable": {
-            "type": "string",
-            "minLength": 1
-          },
-          "equationSetup": {
-            "type": "string",
-            "nullable": true
-          },
-          "scalarValues": {
-            "type": "string",
-            "nullable": true
-          },
-          "reportingProgramId": {
-            "type": "integer",
-            "format": "int64",
-            "nullable": true
-          },
-          "createdBy": {
             "type": "string",
             "minLength": 1
           },

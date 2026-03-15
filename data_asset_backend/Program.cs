@@ -1049,6 +1049,814 @@ app.MapGet("/api/assets/{assetId:long}/properties", async (
     .Produces(StatusCodes.Status404NotFound)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
 
+// ---------------------------------------------------------------------
+// Missing asset child endpoints (previously implemented in flows/repo but
+// not registered here -> runtime 404 + missing from Swagger/OpenAPI)
+// ---------------------------------------------------------------------
+
+// Status logs
+app.MapPost("/api/assets/{assetId:long}/status-logs", async (
+        long assetId,
+        CreateAssetStatusLogRequest request,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("CreateAssetStatusLog");
+
+        try
+        {
+            var created = await AssetChildFlows.CreateAssetStatusLogAsync(assetId, request, repository, logger, cancellationToken);
+            return Results.Created($"/api/assets/{assetId}/status-logs/{created.AssetStatusLogId}", created);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "CreateAssetStatusLog failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("CreateAssetStatusLog")
+    .WithTags("Assets")
+    .WithSummary("Create asset status log")
+    .WithDescription("Creates a status log entry for the asset (BRD §6.2).")
+    .Accepts<CreateAssetStatusLogRequest>("application/json")
+    .Produces<AssetStatusLogDto>(StatusCodes.Status201Created)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapGet("/api/assets/{assetId:long}/status-logs", async (
+        long assetId,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("ListAssetStatusLogs");
+
+        try
+        {
+            var list = await AssetChildFlows.ListAssetStatusLogsAsync(assetId, repository, logger, cancellationToken);
+            return Results.Ok(list);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "ListAssetStatusLogs failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanRead")
+    .WithName("ListAssetStatusLogs")
+    .WithTags("Assets")
+    .WithSummary("List asset status logs")
+    .WithDescription("Lists status log entries for the asset (BRD §6.2).")
+    .Produces<IReadOnlyList<AssetStatusLogDto>>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapGet("/api/assets/{assetId:long}/status-logs/{assetStatusLogId:long}", async (
+        long assetId,
+        long assetStatusLogId,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("GetAssetStatusLogById");
+
+        try
+        {
+            var row = await AssetChildFlows.GetAssetStatusLogByIdAsync(assetId, assetStatusLogId, repository, logger, cancellationToken);
+            return row is null ? Results.NotFound() : Results.Ok(row);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "GetAssetStatusLogById failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanRead")
+    .WithName("GetAssetStatusLogById")
+    .WithTags("Assets")
+    .WithSummary("Get asset status log by ID")
+    .WithDescription("Gets a specific status log entry by ID under an asset scope.")
+    .Produces<AssetStatusLogDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapPut("/api/assets/{assetId:long}/status-logs/{assetStatusLogId:long}", async (
+        long assetId,
+        long assetStatusLogId,
+        UpdateAssetStatusLogRequest request,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("UpdateAssetStatusLog");
+
+        try
+        {
+            var updated = await AssetChildFlows.UpdateAssetStatusLogAsync(assetId, assetStatusLogId, request, repository, logger, cancellationToken);
+            return updated is null ? Results.NotFound() : Results.Ok(updated);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "UpdateAssetStatusLog failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("UpdateAssetStatusLog")
+    .WithTags("Assets")
+    .WithSummary("Update asset status log")
+    .WithDescription("Updates a status log entry by ID under an asset scope.")
+    .Accepts<UpdateAssetStatusLogRequest>("application/json")
+    .Produces<AssetStatusLogDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+// Additional IDs
+app.MapPost("/api/assets/{assetId:long}/additional-ids", async (
+        long assetId,
+        CreateAdditionalAssetIdRequest request,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("CreateAdditionalAssetId");
+
+        try
+        {
+            var created = await AssetChildFlows.CreateAdditionalAssetIdAsync(assetId, request, repository, logger, cancellationToken);
+            return Results.Created($"/api/assets/{assetId}/additional-ids/{created.AdditionalAssetId}", created);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "CreateAdditionalAssetId failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("CreateAdditionalAssetId")
+    .WithTags("Assets")
+    .WithSummary("Create additional asset ID")
+    .WithDescription("Creates an additional ID record under an asset (BRD §6.3).")
+    .Accepts<CreateAdditionalAssetIdRequest>("application/json")
+    .Produces<AdditionalAssetIdDto>(StatusCodes.Status201Created)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapGet("/api/assets/{assetId:long}/additional-ids", async (
+        long assetId,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("ListAdditionalAssetIds");
+
+        try
+        {
+            var list = await AssetChildFlows.ListAdditionalAssetIdsAsync(assetId, repository, logger, cancellationToken);
+            return Results.Ok(list);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "ListAdditionalAssetIds failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanRead")
+    .WithName("ListAdditionalAssetIds")
+    .WithTags("Assets")
+    .WithSummary("List additional asset IDs")
+    .WithDescription("Lists additional ID records under an asset (BRD §6.3).")
+    .Produces<IReadOnlyList<AdditionalAssetIdDto>>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapGet("/api/assets/{assetId:long}/additional-ids/{additionalAssetId:long}", async (
+        long assetId,
+        long additionalAssetId,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("GetAdditionalAssetIdById");
+
+        try
+        {
+            var row = await AssetChildFlows.GetAdditionalAssetIdByIdAsync(assetId, additionalAssetId, repository, logger, cancellationToken);
+            return row is null ? Results.NotFound() : Results.Ok(row);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "GetAdditionalAssetIdById failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanRead")
+    .WithName("GetAdditionalAssetIdById")
+    .WithTags("Assets")
+    .WithSummary("Get additional asset ID by ID")
+    .WithDescription("Gets an additional ID record by ID under an asset scope.")
+    .Produces<AdditionalAssetIdDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapPut("/api/assets/{assetId:long}/additional-ids/{additionalAssetId:long}", async (
+        long assetId,
+        long additionalAssetId,
+        UpdateAdditionalAssetIdRequest request,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("UpdateAdditionalAssetId");
+
+        try
+        {
+            var updated = await AssetChildFlows.UpdateAdditionalAssetIdAsync(assetId, additionalAssetId, request, repository, logger, cancellationToken);
+            return updated is null ? Results.NotFound() : Results.Ok(updated);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "UpdateAdditionalAssetId failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("UpdateAdditionalAssetId")
+    .WithTags("Assets")
+    .WithSummary("Update additional asset ID")
+    .WithDescription("Updates an additional ID record by ID under an asset scope.")
+    .Accepts<UpdateAdditionalAssetIdRequest>("application/json")
+    .Produces<AdditionalAssetIdDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+// Reporting attribute mappings
+app.MapPost("/api/assets/{assetId:long}/reporting-attribute-mappings", async (
+        long assetId,
+        CreateReportingAttributeMappingRequest request,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("CreateReportingAttributeMapping");
+
+        try
+        {
+            var created = await AssetChildFlows.CreateReportingAttributeMappingAsync(assetId, request, repository, logger, cancellationToken);
+            return Results.Created($"/api/assets/{assetId}/reporting-attribute-mappings/{created.ReportingAttributeMappingId}", created);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "CreateReportingAttributeMapping failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("CreateReportingAttributeMapping")
+    .WithTags("Assets")
+    .WithSummary("Create reporting attribute mapping")
+    .WithDescription("Creates a reporting attribute mapping row under an asset (BRD §6.7).")
+    .Accepts<CreateReportingAttributeMappingRequest>("application/json")
+    .Produces<ReportingAttributeMappingDto>(StatusCodes.Status201Created)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapGet("/api/assets/{assetId:long}/reporting-attribute-mappings", async (
+        long assetId,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("ListReportingAttributeMappings");
+
+        try
+        {
+            var list = await AssetChildFlows.ListReportingAttributeMappingsAsync(assetId, repository, logger, cancellationToken);
+            return Results.Ok(list);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "ListReportingAttributeMappings failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanRead")
+    .WithName("ListReportingAttributeMappings")
+    .WithTags("Assets")
+    .WithSummary("List reporting attribute mappings")
+    .WithDescription("Lists reporting attribute mapping rows under an asset (BRD §6.7).")
+    .Produces<IReadOnlyList<ReportingAttributeMappingDto>>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapGet("/api/assets/{assetId:long}/reporting-attribute-mappings/{reportingAttributeMappingId:long}", async (
+        long assetId,
+        long reportingAttributeMappingId,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("GetReportingAttributeMappingById");
+
+        try
+        {
+            var row = await AssetChildFlows.GetReportingAttributeMappingByIdAsync(assetId, reportingAttributeMappingId, repository, logger, cancellationToken);
+            return row is null ? Results.NotFound() : Results.Ok(row);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "GetReportingAttributeMappingById failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanRead")
+    .WithName("GetReportingAttributeMappingById")
+    .WithTags("Assets")
+    .WithSummary("Get reporting attribute mapping by ID")
+    .WithDescription("Gets a reporting attribute mapping row by ID under an asset scope.")
+    .Produces<ReportingAttributeMappingDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapPut("/api/assets/{assetId:long}/reporting-attribute-mappings/{reportingAttributeMappingId:long}", async (
+        long assetId,
+        long reportingAttributeMappingId,
+        UpdateReportingAttributeMappingRequest request,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("UpdateReportingAttributeMapping");
+
+        try
+        {
+            var updated = await AssetChildFlows.UpdateReportingAttributeMappingAsync(assetId, reportingAttributeMappingId, request, repository, logger, cancellationToken);
+            return updated is null ? Results.NotFound() : Results.Ok(updated);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "UpdateReportingAttributeMapping failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("UpdateReportingAttributeMapping")
+    .WithTags("Assets")
+    .WithSummary("Update reporting attribute mapping")
+    .WithDescription("Updates a reporting attribute mapping row by ID under an asset scope.")
+    .Accepts<UpdateReportingAttributeMappingRequest>("application/json")
+    .Produces<ReportingAttributeMappingDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+// Parent input mappings
+app.MapPost("/api/assets/{assetId:long}/input-parameters/{childInputParameterId:long}/parent-input-mappings", async (
+        long assetId,
+        long childInputParameterId,
+        CreateParentInputMappingRequest request,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("CreateParentInputMapping");
+
+        try
+        {
+            var created = await AssetChildFlows.CreateParentInputMappingAsync(assetId, childInputParameterId, request, repository, logger, cancellationToken);
+            return Results.Created($"/api/assets/{assetId}/input-parameters/{childInputParameterId}/parent-input-mappings/{created.ParentInputMappingId}", created);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "CreateParentInputMapping failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("CreateParentInputMapping")
+    .WithTags("Assets")
+    .WithSummary("Create parent input mapping")
+    .WithDescription("Creates a parent input mapping for a child input parameter (BRD §6.6).")
+    .Accepts<CreateParentInputMappingRequest>("application/json")
+    .Produces<ParentInputMappingDto>(StatusCodes.Status201Created)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapGet("/api/assets/{assetId:long}/input-parameters/{childInputParameterId:long}/parent-input-mappings", async (
+        long assetId,
+        long childInputParameterId,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("ListParentInputMappings");
+
+        try
+        {
+            var list = await AssetChildFlows.ListParentInputMappingsAsync(assetId, childInputParameterId, repository, logger, cancellationToken);
+            return Results.Ok(list);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "ListParentInputMappings failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanRead")
+    .WithName("ListParentInputMappings")
+    .WithTags("Assets")
+    .WithSummary("List parent input mappings")
+    .WithDescription("Lists parent input mappings for a child input parameter (BRD §6.6).")
+    .Produces<IReadOnlyList<ParentInputMappingDto>>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapPut("/api/assets/{assetId:long}/input-parameters/{childInputParameterId:long}/parent-input-mappings/{parentInputMappingId:long}", async (
+        long assetId,
+        long childInputParameterId,
+        long parentInputMappingId,
+        UpdateParentInputMappingRequest request,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("UpdateParentInputMapping");
+
+        try
+        {
+            var updated = await AssetChildFlows.UpdateParentInputMappingAsync(
+                assetId,
+                childInputParameterId,
+                parentInputMappingId,
+                request,
+                repository,
+                logger,
+                cancellationToken);
+
+            return updated is null ? Results.NotFound() : Results.Ok(updated);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "UpdateParentInputMapping failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("UpdateParentInputMapping")
+    .WithTags("Assets")
+    .WithSummary("Update parent input mapping")
+    .WithDescription("Updates a parent input mapping row by ID under an asset scope (BRD §6.6).")
+    .Accepts<UpdateParentInputMappingRequest>("application/json")
+    .Produces<ParentInputMappingDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+// Throughput equations
+app.MapPost("/api/assets/{assetId:long}/input-parameters/{inputParameterId:long}/throughput-equations", async (
+        long assetId,
+        long inputParameterId,
+        CreateThroughputEquationRequest request,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("CreateThroughputEquation");
+
+        try
+        {
+            var created = await AssetChildFlows.CreateThroughputEquationAsync(assetId, inputParameterId, request, repository, logger, cancellationToken);
+            return Results.Created($"/api/assets/{assetId}/input-parameters/{inputParameterId}/throughput-equations/{created.ThroughputEquationId}", created);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "CreateThroughputEquation failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("CreateThroughputEquation")
+    .WithTags("Assets")
+    .WithSummary("Create throughput equation")
+    .WithDescription("Creates a throughput equation row under an input parameter (BRD §6.8).")
+    .Accepts<CreateThroughputEquationRequest>("application/json")
+    .Produces<ThroughputEquationDto>(StatusCodes.Status201Created)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapGet("/api/assets/{assetId:long}/input-parameters/{inputParameterId:long}/throughput-equations", async (
+        long assetId,
+        long inputParameterId,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("ListThroughputEquations");
+
+        try
+        {
+            var list = await AssetChildFlows.ListThroughputEquationsAsync(assetId, inputParameterId, repository, logger, cancellationToken);
+            return Results.Ok(list);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "ListThroughputEquations failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanRead")
+    .WithName("ListThroughputEquations")
+    .WithTags("Assets")
+    .WithSummary("List throughput equations")
+    .WithDescription("Lists throughput equation rows under an input parameter (BRD §6.8).")
+    .Produces<IReadOnlyList<ThroughputEquationDto>>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapPut("/api/assets/{assetId:long}/input-parameters/{inputParameterId:long}/throughput-equations/{throughputEquationId:long}", async (
+        long assetId,
+        long inputParameterId,
+        long throughputEquationId,
+        UpdateThroughputEquationRequest request,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("UpdateThroughputEquation");
+
+        try
+        {
+            var updated = await AssetChildFlows.UpdateThroughputEquationAsync(assetId, inputParameterId, throughputEquationId, request, repository, logger, cancellationToken);
+            return updated is null ? Results.NotFound() : Results.Ok(updated);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "UpdateThroughputEquation failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("UpdateThroughputEquation")
+    .WithTags("Assets")
+    .WithSummary("Update throughput equation")
+    .WithDescription("Updates a throughput equation row by ID under an input parameter.")
+    .Accepts<UpdateThroughputEquationRequest>("application/json")
+    .Produces<ThroughputEquationDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+// Data input values
+app.MapPost("/api/assets/{assetId:long}/input-parameters/{inputParameterId:long}/data-input-values", async (
+        long assetId,
+        long inputParameterId,
+        CreateDataInputValueRequest request,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("CreateDataInputValue");
+
+        try
+        {
+            var created = await AssetChildFlows.CreateDataInputValueAsync(assetId, inputParameterId, request, repository, logger, cancellationToken);
+            return Results.Created($"/api/assets/{assetId}/input-parameters/{inputParameterId}/data-input-values/{created.DataInputValueId}", created);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "CreateDataInputValue failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("CreateDataInputValue")
+    .WithTags("Assets")
+    .WithSummary("Create data input value")
+    .WithDescription("Creates a data input value row under an input parameter (BRD §6.9).")
+    .Accepts<CreateDataInputValueRequest>("application/json")
+    .Produces<DataInputValueDto>(StatusCodes.Status201Created)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapGet("/api/assets/{assetId:long}/input-parameters/{inputParameterId:long}/data-input-values", async (
+        long assetId,
+        long inputParameterId,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("ListDataInputValues");
+
+        try
+        {
+            var list = await AssetChildFlows.ListDataInputValuesAsync(assetId, inputParameterId, repository, logger, cancellationToken);
+            return Results.Ok(list);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "ListDataInputValues failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanRead")
+    .WithName("ListDataInputValues")
+    .WithTags("Assets")
+    .WithSummary("List data input values")
+    .WithDescription("Lists data input value rows under an input parameter (BRD §6.9).")
+    .Produces<IReadOnlyList<DataInputValueDto>>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapPut("/api/assets/{assetId:long}/input-parameters/{inputParameterId:long}/data-input-values/{dataInputValueId:long}", async (
+        long assetId,
+        long inputParameterId,
+        long dataInputValueId,
+        UpdateDataInputValueRequest request,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("UpdateDataInputValue");
+
+        try
+        {
+            var updated = await AssetChildFlows.UpdateDataInputValueAsync(assetId, inputParameterId, dataInputValueId, request, repository, logger, cancellationToken);
+            return updated is null ? Results.NotFound() : Results.Ok(updated);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "UpdateDataInputValue failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("UpdateDataInputValue")
+    .WithTags("Assets")
+    .WithSummary("Update data input value")
+    .WithDescription("Updates a data input value row by ID under an input parameter.")
+    .Accepts<UpdateDataInputValueRequest>("application/json")
+    .Produces<DataInputValueDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
 //
 // Copy lineage endpoints (BRD §6.13; table: asset_copy_lineage)
 //

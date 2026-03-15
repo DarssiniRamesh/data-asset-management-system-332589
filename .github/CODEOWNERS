@@ -1,0 +1,10 @@
+# Default owners for the repository.
+# Update these to match your GitHub organization/users/teams.
+* @YOUR_GITHUB_ORG_OR_USERNAME
+
+# Backend ownership
+/data_asset_backend/ @YOUR_GITHUB_ORG_OR_USERNAME
+/data_asset_backend.Tests/ @YOUR_GITHUB_ORG_OR_USERNAME
+
+# CI/CD ownership
+/.github/ @YOUR_GITHUB_ORG_OR_USERNAME

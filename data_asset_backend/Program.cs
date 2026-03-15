@@ -288,8 +288,11 @@ if (!string.Equals(app.Environment.EnvironmentName, "Testing", StringComparison.
     }
 }
 
-// Must be early in pipeline, before anything that relies on scheme/host (OpenAPI generation).
+ // Must be early in pipeline, before anything that relies on scheme/host (OpenAPI generation).
 app.UseForwardedHeaders();
+
+// Correlation-ID propagation (must be early so it applies to everything, including auth, idempotency and exception handler).
+app.UseMiddleware<CorrelationIdMiddleware>();
 
 // ---------------------------------------------------------------------
 // Robust CORS preflight handling
@@ -356,6 +359,9 @@ app.Use(async (context, next) =>
 
         if (IsAllowedCorsOriginForPreflight(origin))
         {
+            // Include correlation id even for preflight responses (helps trace browser issues).
+            context.Response.Headers[CorrelationIdMiddleware.HeaderName] = context.GetCorrelationId();
+
             context.Response.Headers["Access-Control-Allow-Origin"] = origin;
             context.Response.Headers["Vary"] = "Origin";
 

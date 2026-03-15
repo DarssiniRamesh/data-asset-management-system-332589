@@ -1747,9 +1747,20 @@ app.MapPut("/api/assets/{assetId:long}/input-parameters/{inputParameterId:long}/
  * ---------------------------------------------------------------------
  */
 
-// EF source mappings (missing GET mapping fix)
-// NOTE: The flow/handler already exists in AssetChildFlows; it just wasn't mapped here,
-// causing runtime 404s and the endpoint to be absent from the OpenAPI document.
+/*
+ * ---------------------------------------------------------------------
+ * EF source mappings (asset scoped)
+ * ---------------------------------------------------------------------
+ *
+ * Root bug:
+ * - Only GET was mapped for /ef-source-mappings, but the frontend calls POST to create.
+ * - ASP.NET Core returns 405 when the path matches but the verb is not mapped.
+ *
+ * Fix:
+ * - Add POST mapping for CreateEfSourceMapping so Swagger includes it and runtime accepts it.
+ */
+
+// List EF source mappings
 app.MapGet("/api/assets/{assetId:long}/input-parameters/{inputParameterId:long}/ef-source-mappings", async (
         long assetId,
         long inputParameterId,
@@ -1785,6 +1796,57 @@ app.MapGet("/api/assets/{assetId:long}/input-parameters/{inputParameterId:long}/
     .Produces<IReadOnlyList<EfSourceMappingDto>>(StatusCodes.Status200OK)
     .Produces(StatusCodes.Status404NotFound)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+// Create EF source mapping (FIX for 405)
+app.MapPost("/api/assets/{assetId:long}/input-parameters/{inputParameterId:long}/ef-source-mappings", async (
+        long assetId,
+        long inputParameterId,
+        CreateEfSourceMappingRequest request,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("CreateEfSourceMapping");
+
+        try
+        {
+            var created = await AssetChildFlows.CreateEfSourceMappingAsync(assetId, inputParameterId, request, repository, logger, cancellationToken);
+            return Results.Created(
+                $"/api/assets/{assetId}/input-parameters/{inputParameterId}/ef-source-mappings/{created.EfSourceMappingId}",
+                created);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "CreateEfSourceMapping failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            logger.LogWarning(ex, "CreateEfSourceMapping failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("CreateEfSourceMapping")
+    .WithTags("Assets")
+    .WithSummary("Create EF source mapping")
+    .WithDescription("Creates an EF source mapping row under an input parameter (asset scoped).")
+    .Accepts<CreateEfSourceMappingRequest>("application/json")
+    .Produces<EfSourceMappingDto>(StatusCodes.Status201Created)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
 
 // Data input values
 app.MapPost("/api/assets/{assetId:long}/input-parameters/{inputParameterId:long}/data-input-values", async (

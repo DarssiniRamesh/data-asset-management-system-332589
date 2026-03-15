@@ -732,6 +732,1500 @@
         ]
       }
     },
+    "/api/assets/{assetId}/status-logs": {
+      "post": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "CreateAssetStatusLog",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAssetStatusLogRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssetStatusLogDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "ListAssetStatusLogs",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AssetStatusLogDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/assets/{assetId}/status-logs/{assetStatusLogId}": {
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "GetAssetStatusLogById",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "assetStatusLogId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssetStatusLogDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "UpdateAssetStatusLog",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "assetStatusLogId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 2
+          }
+        ],
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAssetStatusLogRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 3
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssetStatusLogDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/assets/{assetId}/additional-ids": {
+      "post": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "CreateAdditionalAssetId",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAdditionalAssetIdRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdditionalAssetIdDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "ListAdditionalAssetIds",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdditionalAssetIdDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/assets/{assetId}/additional-ids/{additionalAssetId}": {
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "GetAdditionalAssetIdById",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "additionalAssetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdditionalAssetIdDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "UpdateAdditionalAssetId",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "additionalAssetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 2
+          }
+        ],
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAdditionalAssetIdRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 3
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdditionalAssetIdDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/assets/{assetId}/reporting-attribute-mappings": {
+      "post": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "CreateReportingAttributeMapping",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReportingAttributeMappingRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportingAttributeMappingDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "ListReportingAttributeMappings",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReportingAttributeMappingDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/assets/{assetId}/reporting-attribute-mappings/{reportingAttributeMappingId}": {
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "GetReportingAttributeMappingById",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "reportingAttributeMappingId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportingAttributeMappingDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "UpdateReportingAttributeMapping",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "reportingAttributeMappingId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 2
+          }
+        ],
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateReportingAttributeMappingRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 3
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportingAttributeMappingDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/assets/{assetId}/input-parameters/{childInputParameterId}/parent-input-mappings": {
+      "post": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "CreateParentInputMapping",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "childInputParameterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 2
+          }
+        ],
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateParentInputMappingRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 3
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ParentInputMappingDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "ListParentInputMappings",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "childInputParameterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ParentInputMappingDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/assets/{assetId}/input-parameters/{childInputParameterId}/parent-input-mappings/{parentInputMappingId}": {
+      "put": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "UpdateParentInputMapping",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "childInputParameterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 2
+          },
+          {
+            "name": "parentInputMappingId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 3
+          }
+        ],
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateParentInputMappingRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 4
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ParentInputMappingDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/assets/{assetId}/input-parameters/{inputParameterId}/throughput-equations": {
+      "post": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "CreateThroughputEquation",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "inputParameterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 2
+          }
+        ],
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateThroughputEquationRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 3
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ThroughputEquationDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "ListThroughputEquations",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "inputParameterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ThroughputEquationDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/assets/{assetId}/input-parameters/{inputParameterId}/throughput-equations/{throughputEquationId}": {
+      "put": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "UpdateThroughputEquation",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "inputParameterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 2
+          },
+          {
+            "name": "throughputEquationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 3
+          }
+        ],
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateThroughputEquationRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 4
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ThroughputEquationDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/assets/{assetId}/input-parameters/{inputParameterId}/data-input-values": {
+      "post": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "CreateDataInputValue",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "inputParameterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 2
+          }
+        ],
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDataInputValueRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 3
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataInputValueDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "ListDataInputValues",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "inputParameterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DataInputValueDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/assets/{assetId}/input-parameters/{inputParameterId}/data-input-values/{dataInputValueId}": {
+      "put": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "UpdateDataInputValue",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "inputParameterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 2
+          },
+          {
+            "name": "dataInputValueId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 3
+          }
+        ],
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDataInputValueRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 4
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataInputValueDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
     "/api/asset-copy-lineage": {
       "post": {
         "tags": [
@@ -3169,6 +4663,690 @@
           }
         }
       },
+      "AssetStatusLogDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "assetStatusLogId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "assetId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "operatingStatus": {
+            "type": "string"
+          },
+          "statusFromDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "statusToDate": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "comments": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "modifiedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "correlationId": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateAssetStatusLogRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "operatingStatus",
+          "statusFromDate",
+          "createdBy",
+          "correlationId"
+        ],
+        "properties": {
+          "operatingStatus": {
+            "type": "string",
+            "minLength": 1
+          },
+          "statusFromDate": {
+            "type": "string",
+            "format": "date",
+            "minLength": 1
+          },
+          "statusToDate": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "comments": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "minLength": 1
+          },
+          "correlationId": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "UpdateAssetStatusLogRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "operatingStatus",
+          "statusFromDate",
+          "modifiedBy",
+          "correlationId"
+        ],
+        "properties": {
+          "operatingStatus": {
+            "type": "string",
+            "minLength": 1
+          },
+          "statusFromDate": {
+            "type": "string",
+            "format": "date",
+            "minLength": 1
+          },
+          "statusToDate": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "comments": {
+            "type": "string",
+            "nullable": true
+          },
+          "modifiedBy": {
+            "type": "string",
+            "minLength": 1
+          },
+          "correlationId": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "AdditionalAssetIdDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "additionalAssetId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "assetId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "idType": {
+            "type": "string"
+          },
+          "idValue": {
+            "type": "string"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "modifiedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "correlationId": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateAdditionalAssetIdRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "idType",
+          "idValue",
+          "createdBy",
+          "correlationId"
+        ],
+        "properties": {
+          "idType": {
+            "type": "string",
+            "minLength": 1
+          },
+          "idValue": {
+            "type": "string",
+            "minLength": 1
+          },
+          "createdBy": {
+            "type": "string",
+            "minLength": 1
+          },
+          "correlationId": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "UpdateAdditionalAssetIdRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "idType",
+          "idValue",
+          "modifiedBy",
+          "correlationId"
+        ],
+        "properties": {
+          "idType": {
+            "type": "string",
+            "minLength": 1
+          },
+          "idValue": {
+            "type": "string",
+            "minLength": 1
+          },
+          "modifiedBy": {
+            "type": "string",
+            "minLength": 1
+          },
+          "correlationId": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "ReportingAttributeMappingDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "reportingAttributeMappingId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "assetId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "attributeName": {
+            "type": "string"
+          },
+          "attributeValue": {
+            "type": "string"
+          },
+          "reportingProgramId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "modifiedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "correlationId": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateReportingAttributeMappingRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "attributeName",
+          "attributeValue",
+          "reportingProgramId",
+          "createdBy",
+          "correlationId"
+        ],
+        "properties": {
+          "attributeName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "attributeValue": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reportingProgramId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "createdBy": {
+            "type": "string",
+            "minLength": 1
+          },
+          "correlationId": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "UpdateReportingAttributeMappingRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "attributeName",
+          "attributeValue",
+          "reportingProgramId",
+          "modifiedBy",
+          "correlationId"
+        ],
+        "properties": {
+          "attributeName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "attributeValue": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reportingProgramId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "modifiedBy": {
+            "type": "string",
+            "minLength": 1
+          },
+          "correlationId": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "ParentInputMappingDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "parentInputMappingId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "childInputParameterId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "parentInputParameterId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "modifiedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "correlationId": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateParentInputMappingRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "parentInputParameterId",
+          "createdBy",
+          "correlationId"
+        ],
+        "properties": {
+          "parentInputParameterId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "createdBy": {
+            "type": "string",
+            "minLength": 1
+          },
+          "correlationId": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "UpdateParentInputMappingRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "parentInputParameterId",
+          "modifiedBy",
+          "correlationId"
+        ],
+        "properties": {
+          "parentInputParameterId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "modifiedBy": {
+            "type": "string",
+            "minLength": 1
+          },
+          "correlationId": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "ThroughputEquationDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "throughputEquationId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "inputParameterId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "masterEquationId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "generatedEquation": {
+            "type": "string"
+          },
+          "reportingYear": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "modifiedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "correlationId": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateThroughputEquationRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "masterEquationId",
+          "generatedEquation",
+          "reportingYear",
+          "createdBy",
+          "correlationId"
+        ],
+        "properties": {
+          "masterEquationId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "equationMasterId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "generatedEquation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "equationText": {
+            "type": "string",
+            "nullable": true
+          },
+          "reportingYear": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "minLength": 1
+          },
+          "correlationId": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "UpdateThroughputEquationRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "masterEquationId",
+          "generatedEquation",
+          "reportingYear",
+          "modifiedBy",
+          "correlationId"
+        ],
+        "properties": {
+          "masterEquationId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "equationMasterId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "generatedEquation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "equationText": {
+            "type": "string",
+            "nullable": true
+          },
+          "reportingYear": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "modifiedBy": {
+            "type": "string",
+            "minLength": 1
+          },
+          "correlationId": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "DataInputValueDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "dataInputValueId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "inputParameterId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "inputParameterValue": {
+            "type": "string",
+            "nullable": true
+          },
+          "reportingYear": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "reportingPeriod": {
+            "type": "string"
+          },
+          "calculatedThroughputOutput": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "modifiedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "correlationId": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateDataInputValueRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "reportingYear",
+          "reportingPeriod",
+          "createdBy",
+          "correlationId"
+        ],
+        "properties": {
+          "inputParameterValue": {
+            "type": "string",
+            "nullable": true
+          },
+          "reportingYear": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "reportingPeriod": {
+            "type": "string",
+            "minLength": 1
+          },
+          "calculatedThroughputOutput": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "minLength": 1
+          },
+          "correlationId": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "UpdateDataInputValueRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "reportingYear",
+          "reportingPeriod",
+          "modifiedBy",
+          "correlationId"
+        ],
+        "properties": {
+          "inputParameterValue": {
+            "type": "string",
+            "nullable": true
+          },
+          "reportingYear": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "reportingPeriod": {
+            "type": "string",
+            "minLength": 1
+          },
+          "calculatedThroughputOutput": {
+            "type": "string",
+            "nullable": true
+          },
+          "modifiedBy": {
+            "type": "string",
+            "minLength": 1
+          },
+          "correlationId": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
       "CreateAssetCopyLineageRequest": {
         "type": "object",
         "additionalProperties": false,
@@ -4009,102 +6187,6 @@
             "nullable": true
           },
           "modifiedBy": {
-            "type": "string",
-            "minLength": 1
-          },
-          "correlationId": {
-            "type": "string",
-            "minLength": 1
-          }
-        }
-      },
-      "ThroughputEquationDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "throughputEquationId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "inputParameterId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "masterEquationId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "generatedEquation": {
-            "type": "string"
-          },
-          "reportingYear": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "createdBy": {
-            "type": "string"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "modifiedBy": {
-            "type": "string"
-          },
-          "modifiedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "isDeleted": {
-            "type": "boolean"
-          },
-          "correlationId": {
-            "type": "string"
-          }
-        }
-      },
-      "CreateThroughputEquationRequest": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "masterEquationId",
-          "generatedEquation",
-          "reportingYear",
-          "createdBy",
-          "correlationId"
-        ],
-        "properties": {
-          "masterEquationId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "equationMasterId": {
-            "type": "integer",
-            "format": "int64",
-            "nullable": true
-          },
-          "generatedEquation": {
-            "type": "string",
-            "minLength": 1
-          },
-          "equationText": {
-            "type": "string",
-            "nullable": true
-          },
-          "reportingYear": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "year": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "isActive": {
-            "type": "boolean",
-            "nullable": true
-          },
-          "createdBy": {
             "type": "string",
             "minLength": 1
           },

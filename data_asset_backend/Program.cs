@@ -424,53 +424,28 @@ static void ConfigureOpenApiDocument(NSwag.AspNetCore.OpenApiDocumentMiddlewareS
     };
 }
 
-// ---------------------------------------------------------------------
-// OpenAPI/Swagger (NSwag)
-// ---------------------------------------------------------------------
-//
-// Important: Swagger UI + OpenAPI documents must remain publicly accessible (no auth)
-// so that preview environments can load /docs without needing a JWT.
-//
-// Even though we register NSwag middleware before Authentication/Authorization,
-// some hosting/proxy setups and/or auth fallback policies can still cause Swagger UI
-// *static assets* (e.g., swagger-ui-bundle.js, swagger-ui.css, favicon) to be challenged,
-// resulting in 401s and a broken UI ("SwaggerUIBundle is not defined").
-//
-// To make this robust with a strict AuthorizationOptions.FallbackPolicy, we explicitly mark
-// requests under /docs (and /swagger) as anonymous.
-//
-// Why not just clear HttpContext.User?
-// - Authorization middleware evaluates the fallback policy when an endpoint is not anonymous.
-// - An empty principal still fails RequireAuthenticatedUser(), resulting in 401.
-// - NSwag's Swagger UI middleware is not an "endpoint" where we can attach .AllowAnonymous().
-//
-// Therefore we set an IAllowAnonymous feature (the same mechanism the framework uses when
-// you decorate endpoints/controllers with [AllowAnonymous]).
-app.Use(async (context, next) =>
-{
-    var path = context.Request.Path;
+/*
+ * ---------------------------------------------------------------------
+ * OpenAPI/Swagger (NSwag)
+ * ---------------------------------------------------------------------
+ *
+ * Important: Swagger UI + OpenAPI documents must remain publicly accessible (no auth)
+ * so that preview environments can load /docs without needing a JWT.
+ *
+ * Durable fix: explicitly map these paths as AllowAnonymous so they bypass a strict
+ * AuthorizationOptions.FallbackPolicy, including static assets (CSS/JS/favicon).
+ */
+app.MapGet("/docs/{*path}", () => Results.Empty)
+   .AllowAnonymous()
+   .ExcludeFromDescription();
 
-    // NSwag Swagger UI is hosted under /docs; assets are served under /docs/*.
-    // OpenAPI JSON is served under /swagger/* (including /swagger/v1/swagger.json) and /openapi.json.
-    var isSwaggerUiOrAssets =
-        path.StartsWithSegments("/docs", StringComparison.OrdinalIgnoreCase);
+app.MapGet("/swagger/{*path}", () => Results.Empty)
+   .AllowAnonymous()
+   .ExcludeFromDescription();
 
-    var isSwaggerJson =
-        path.StartsWithSegments("/swagger", StringComparison.OrdinalIgnoreCase) ||
-        path.Equals("/openapi.json", StringComparison.OrdinalIgnoreCase);
-
-    if (isSwaggerUiOrAssets || isSwaggerJson)
-    {
-        // Mark request as anonymous for authz middleware.
-        // AllowAnonymousAttribute implements IAllowAnonymous and is what the framework uses for [AllowAnonymous].
-        context.Features.Set<IAllowAnonymous>(new AllowAnonymousAttribute());
-
-        // Also ensure the current principal is empty to avoid any accidental partial identity.
-        context.User = new ClaimsPrincipal(new ClaimsIdentity());
-    }
-
-    await next();
-});
+app.MapGet("/openapi.json", () => Results.Empty)
+   .AllowAnonymous()
+   .ExcludeFromDescription();
 
 // Configure OpenAPI/Swagger (serve at default NSwag path)
 app.UseOpenApi(settings =>
@@ -4112,6 +4087,8 @@ app.MapMethods("{*path}", new[] { "OPTIONS" }, () => Results.NoContent())
    .AllowAnonymous()
    .WithName("CorsPreflightFallback")
    .ExcludeFromDescription();
+
+
 
 app.Run();
 

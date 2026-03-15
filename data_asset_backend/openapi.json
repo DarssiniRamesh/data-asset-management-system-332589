@@ -1991,6 +1991,69 @@
         ]
       }
     },
+    "/api/assets/{assetId}/input-parameters/{inputParameterId}/ef-source-mappings": {
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "ListEfSourceMappings",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "inputParameterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EfSourceMappingDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
     "/api/assets/{assetId}/input-parameters/{inputParameterId}/data-input-values": {
       "post": {
         "tags": [
@@ -5226,6 +5289,55 @@
           }
         }
       },
+      "EfSourceMappingDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "efSourceMappingId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "inputParameterId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "efSourceSetOrTable": {
+            "type": "string"
+          },
+          "equationSetup": {
+            "type": "string",
+            "nullable": true
+          },
+          "scalarValues": {
+            "type": "string",
+            "nullable": true
+          },
+          "reportingProgramId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "modifiedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "correlationId": {
+            "type": "string"
+          }
+        }
+      },
       "DataInputValueDto": {
         "type": "object",
         "additionalProperties": false,
@@ -6072,55 +6184,6 @@
           "correlationId": {
             "type": "string",
             "minLength": 1
-          }
-        }
-      },
-      "EfSourceMappingDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "efSourceMappingId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "inputParameterId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "efSourceSetOrTable": {
-            "type": "string"
-          },
-          "equationSetup": {
-            "type": "string",
-            "nullable": true
-          },
-          "scalarValues": {
-            "type": "string",
-            "nullable": true
-          },
-          "reportingProgramId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "createdBy": {
-            "type": "string"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "modifiedBy": {
-            "type": "string"
-          },
-          "modifiedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "isDeleted": {
-            "type": "boolean"
-          },
-          "correlationId": {
-            "type": "string"
           }
         }
       },

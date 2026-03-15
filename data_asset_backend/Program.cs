@@ -69,10 +69,36 @@ builder.Services
 
 builder.Services.AddAuthorization(options =>
 {
-    // Roles
+    // Roles (canonical values)
     const string admin = "Admin";
     const string editor = "Editor";
     const string viewer = "Viewer";
+
+    static HashSet<string> GetUserRolesCanonical(ClaimsPrincipal user)
+    {
+        // Normalize any role claim value (e.g., "admin", "ADMIN", "Admin") to canonical casing.
+        // This prevents unexpected 403s when clients mint lowercase roles.
+        return user
+            .FindAll(ClaimTypes.Role)
+            .Select(r => r.Value?.Trim())
+            .Where(v => !string.IsNullOrWhiteSpace(v))
+            .Select(v => v!.ToUpperInvariant())
+            .ToHashSet(StringComparer.Ordinal);
+    }
+
+    static bool HasAnyRole(ClaimsPrincipal user, params string[] canonicalRoles)
+    {
+        var roles = GetUserRolesCanonical(user);
+        foreach (var role in canonicalRoles)
+        {
+            if (roles.Contains(role.ToUpperInvariant()))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     // Default requirement: must be authenticated AND have one of the known roles.
     // This avoids accidentally granting access to tokens missing role claims.
@@ -88,11 +114,7 @@ builder.Services.AddAuthorization(options =>
     {
         options.FallbackPolicy = new AuthorizationPolicyBuilder()
             .RequireAuthenticatedUser()
-            .RequireAssertion(ctx =>
-            {
-                var roles = ctx.User.FindAll(ClaimTypes.Role).Select(r => r.Value).ToHashSet(StringComparer.OrdinalIgnoreCase);
-                return roles.Contains(admin) || roles.Contains(editor) || roles.Contains(viewer);
-            })
+            .RequireAssertion(ctx => HasAnyRole(ctx.User, admin, editor, viewer))
             .Build();
     }
 
@@ -100,13 +122,9 @@ builder.Services.AddAuthorization(options =>
     // - Viewer: can read/query
     // - Editor: can create/update (and read)
     // - Admin: can delete and do everything
-    options.AddPolicy("CanRead", p => p.RequireAssertion(ctx =>
-        ctx.User.IsInRole(admin) || ctx.User.IsInRole(editor) || ctx.User.IsInRole(viewer)));
-
-    options.AddPolicy("CanWrite", p => p.RequireAssertion(ctx =>
-        ctx.User.IsInRole(admin) || ctx.User.IsInRole(editor)));
-
-    options.AddPolicy("AdminOnly", p => p.RequireRole(admin));
+    options.AddPolicy("CanRead", p => p.RequireAssertion(ctx => HasAnyRole(ctx.User, admin, editor, viewer)));
+    options.AddPolicy("CanWrite", p => p.RequireAssertion(ctx => HasAnyRole(ctx.User, admin, editor)));
+    options.AddPolicy("AdminOnly", p => p.RequireAssertion(ctx => HasAnyRole(ctx.User, admin)));
 });
 
 // ---------------------------------------------------------------------

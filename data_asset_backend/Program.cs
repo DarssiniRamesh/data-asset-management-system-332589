@@ -1741,6 +1741,51 @@ app.MapPut("/api/assets/{assetId:long}/input-parameters/{inputParameterId:long}/
     .ProducesValidationProblem(StatusCodes.Status400BadRequest)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
 
+/*
+ * ---------------------------------------------------------------------
+ * Input Parameter nested child resources (asset scoped)
+ * ---------------------------------------------------------------------
+ */
+
+// EF source mappings (missing GET mapping fix)
+// NOTE: The flow/handler already exists in AssetChildFlows; it just wasn't mapped here,
+// causing runtime 404s and the endpoint to be absent from the OpenAPI document.
+app.MapGet("/api/assets/{assetId:long}/input-parameters/{inputParameterId:long}/ef-source-mappings", async (
+        long assetId,
+        long inputParameterId,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("ListEfSourceMappings");
+
+        try
+        {
+            var list = await AssetChildFlows.ListEfSourceMappingsAsync(assetId, inputParameterId, repository, logger, cancellationToken);
+            return Results.Ok(list);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "ListEfSourceMappings failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanRead")
+    .WithName("ListEfSourceMappings")
+    .WithTags("Assets")
+    .WithSummary("List EF source mappings")
+    .WithDescription("Lists EF source mapping rows under an input parameter (asset scoped).")
+    .Produces<IReadOnlyList<EfSourceMappingDto>>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
 // Data input values
 app.MapPost("/api/assets/{assetId:long}/input-parameters/{inputParameterId:long}/data-input-values", async (
         long assetId,

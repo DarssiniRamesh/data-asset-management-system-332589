@@ -1,23 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TestRun id="07b6ba25-2b70-4c02-914e-6fda89d4d519" name="@0560d8799d65 2026-03-15 18:15:35" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
-  <Times creation="2026-03-15T18:15:35.4383118+00:00" queuing="2026-03-15T18:15:35.4383118+00:00" start="2026-03-15T18:15:33.6561240+00:00" finish="2026-03-15T18:15:35.5119676+00:00" />
-  <TestSettings name="default" id="3b99d044-f761-4b6f-95ad-6ed3a274e808">
-    <Deployment runDeploymentRoot="_0560d8799d65_2026-03-15_18_15_35" />
+<TestRun id="4906994e-f7d9-4fc1-a3ed-d311f96c8cf2" name="@0560d8799d65 2026-03-15 18:22:02" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-03-15T18:22:02.6078722+00:00" queuing="2026-03-15T18:22:02.6078723+00:00" start="2026-03-15T18:22:00.7848928+00:00" finish="2026-03-15T18:22:02.7436458+00:00" />
+  <TestSettings name="default" id="23ba4ad2-2226-4a37-a2a2-7c88853fa834">
+    <Deployment runDeploymentRoot="_0560d8799d65_2026-03-15_18_22_02" />
   </TestSettings>
   <Results>
-    <UnitTestResult executionId="9575178e-3580-4b29-8065-a2c1eec12f16" testId="98344893-0b44-4f54-d694-3a07bdac6449" testName="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_requires_parentPseudoAssetId_when_requiresParentPseudo_is_true" computerName="0560d8799d65" duration="00:00:00.0027505" startTime="2026-03-15T18:15:35.3967687+00:00" endTime="2026-03-15T18:15:35.3967688+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9575178e-3580-4b29-8065-a2c1eec12f16" />
-    <UnitTestResult executionId="b95f6d94-bcbc-45a9-ad35-9a37ed9a9afd" testId="c53367c8-b6b8-1749-10c6-4933e3d207b7" testName="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_data_input_value_requires_reporting_year_and_period_400" computerName="0560d8799d65" duration="00:00:00.0068443" startTime="2026-03-15T18:15:35.3990424+00:00" endTime="2026-03-15T18:15:35.3990425+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b95f6d94-bcbc-45a9-ad35-9a37ed9a9afd">
-      <Output>
-        <ErrorInfo>
-          <Message>Assert.Equal() Failure: Values differ
-Expected: BadRequest
-Actual:   ServiceUnavailable</Message>
-          <StackTrace>   at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_data_input_value_requires_reporting_year_and_period_400() in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs:line 170
---- End of stack trace from previous location ---</StackTrace>
-        </ErrorInfo>
-      </Output>
-    </UnitTestResult>
-    <UnitTestResult executionId="4cc5e892-063a-4556-b766-e373c4fd637a" testId="3fb92784-9c93-8ae6-59fe-2a8500a73940" testName="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_status_log_requires_required_fields_400" computerName="0560d8799d65" duration="00:00:00.0061808" startTime="2026-03-15T18:15:35.3966239+00:00" endTime="2026-03-15T18:15:35.3966240+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4cc5e892-063a-4556-b766-e373c4fd637a">
+    <UnitTestResult executionId="5aa79325-3657-44c6-9a14-d668235198a2" testId="76622523-719f-35fb-d115-a60f5fe8c1b1" testName="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_control_device_mapping_requires_required_fields_400" computerName="0560d8799d65" duration="00:00:00.0116167" startTime="2026-03-15T18:22:02.5739507+00:00" endTime="2026-03-15T18:22:02.5739508+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5aa79325-3657-44c6-9a14-d668235198a2" />
+    <UnitTestResult executionId="85aba620-e1a9-4795-9783-00de8cf2e454" testId="94a26727-50d9-7d1c-a956-8c447e7efed8" testName="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Validity_check_rejects_empty_value" computerName="0560d8799d65" duration="00:00:00.0058971" startTime="2026-03-15T18:22:02.5253842+00:00" endTime="2026-03-15T18:22:02.5253843+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="85aba620-e1a9-4795-9783-00de8cf2e454" />
+    <UnitTestResult executionId="db741277-8682-423b-930c-7bb34a67f57e" testId="9dc94cb5-9259-f153-7d0a-ad76274acc5d" testName="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_requires_processGroupOtherText_when_processGroup_is_other" computerName="0560d8799d65" duration="00:00:00.0118186" startTime="2026-03-15T18:22:02.5653995+00:00" endTime="2026-03-15T18:22:02.5653997+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="db741277-8682-423b-930c-7bb34a67f57e" />
+    <UnitTestResult executionId="3de5c969-b1c7-4c99-86ef-1c651230f2a0" testId="3f488ea6-4a44-5a41-d5ae-5a900eb848fd" testName="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_requires_requiresParentPseudo_field" computerName="0560d8799d65" duration="00:00:01.0759569" startTime="2026-03-15T18:22:02.5251600+00:00" endTime="2026-03-15T18:22:02.5251601+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3de5c969-b1c7-4c99-86ef-1c651230f2a0" />
+    <UnitTestResult executionId="46502288-6b4d-45ac-ae76-9419e500e7b3" testId="6baa96e8-64cb-1c3a-b6a3-162fc2c29087" testName="DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests.Legacy_manageSiteAssets_requires_mode" computerName="0560d8799d65" duration="00:00:01.0758889" startTime="2026-03-15T18:22:02.5243238+00:00" endTime="2026-03-15T18:22:02.5243240+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="46502288-6b4d-45ac-ae76-9419e500e7b3" />
+    <UnitTestResult executionId="80e36ff1-fc74-4157-998a-4bb8f143d90f" testId="d48094bc-97b3-20af-92fb-dced6c0610d5" testName="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_input_parameter_when_in_use_requires_uom_and_reporting_program_400" computerName="0560d8799d65" duration="00:00:01.0759576" startTime="2026-03-15T18:22:02.5251301+00:00" endTime="2026-03-15T18:22:02.5251303+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="80e36ff1-fc74-4157-998a-4bb8f143d90f" />
+    <UnitTestResult executionId="04751540-6ca7-4beb-85f8-2579d5171932" testId="3fb92784-9c93-8ae6-59fe-2a8500a73940" testName="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_status_log_requires_required_fields_400" computerName="0560d8799d65" duration="00:00:00.0054678" startTime="2026-03-15T18:22:02.5785911+00:00" endTime="2026-03-15T18:22:02.5785913+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="04751540-6ca7-4beb-85f8-2579d5171932">
       <Output>
         <ErrorInfo>
           <Message>Assert.Equal() Failure: Values differ
@@ -28,73 +22,12 @@ Actual:   ServiceUnavailable</Message>
         </ErrorInfo>
       </Output>
     </UnitTestResult>
-    <UnitTestResult executionId="44158081-4d26-49de-baa4-8c4d698cf36f" testId="4a5d8b18-0ba2-1016-f32d-d5bd8e0d61c3" testName="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Root_health_returns_200" computerName="0560d8799d65" duration="00:00:00.0028363" startTime="2026-03-15T18:15:35.3920288+00:00" endTime="2026-03-15T18:15:35.3920289+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="44158081-4d26-49de-baa4-8c4d698cf36f" />
-    <UnitTestResult executionId="12086a9f-14ee-4d0f-ad30-645dce14d104" testId="76622523-719f-35fb-d115-a60f5fe8c1b1" testName="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_control_device_mapping_requires_required_fields_400" computerName="0560d8799d65" duration="00:00:00.0085256" startTime="2026-03-15T18:15:35.3925235+00:00" endTime="2026-03-15T18:15:35.3925236+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="12086a9f-14ee-4d0f-ad30-645dce14d104">
-      <Output>
-        <ErrorInfo>
-          <Message>Assert.Equal() Failure: Values differ
-Expected: BadRequest
-Actual:   MethodNotAllowed</Message>
-          <StackTrace>   at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_control_device_mapping_requires_required_fields_400() in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs:line 45
---- End of stack trace from previous location ---</StackTrace>
-        </ErrorInfo>
-      </Output>
-    </UnitTestResult>
-    <UnitTestResult executionId="c084a730-aa40-43d4-b078-2b3afe9bb698" testId="c520d0c0-8b06-7c91-f0fa-2795e082a988" testName="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Healthz_returns_200_even_when_db_is_not_configured" computerName="0560d8799d65" duration="00:00:00.0091751" startTime="2026-03-15T18:15:35.3905506+00:00" endTime="2026-03-15T18:15:35.3905507+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c084a730-aa40-43d4-b078-2b3afe9bb698" />
-    <UnitTestResult executionId="75488a85-2491-4d47-9f1b-392ca0495798" testId="92d69c0b-5cae-d6e5-220a-e33caf6957cb" testName="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Validity_check_accepts_simple_value" computerName="0560d8799d65" duration="00:00:01.0179764" startTime="2026-03-15T18:15:35.3268067+00:00" endTime="2026-03-15T18:15:35.3268392+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="75488a85-2491-4d47-9f1b-392ca0495798" />
-    <UnitTestResult executionId="8a278b25-814f-4ccb-b6bf-b22a7190342b" testId="b061f3bb-2690-dcdb-7561-0346ae7644fc" testName="DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests.Legacy_removeSiteAsset_requires_required_fields" computerName="0560d8799d65" duration="00:00:00.0136601" startTime="2026-03-15T18:15:35.3928745+00:00" endTime="2026-03-15T18:15:35.3928746+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8a278b25-814f-4ccb-b6bf-b22a7190342b" />
-    <UnitTestResult executionId="0f54df9f-d965-4463-9dd0-d13189ba923e" testId="24c2c749-4fe1-f7f6-bfd5-1b2eea52ecdd" testName="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_input_parameter_requires_required_fields_400" computerName="0560d8799d65" duration="00:00:00.0046755" startTime="2026-03-15T18:15:35.3951949+00:00" endTime="2026-03-15T18:15:35.3951950+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0f54df9f-d965-4463-9dd0-d13189ba923e">
-      <Output>
-        <ErrorInfo>
-          <Message>Assert.Equal() Failure: Values differ
-Expected: BadRequest
-Actual:   MethodNotAllowed</Message>
-          <StackTrace>   at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_input_parameter_requires_required_fields_400() in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs:line 76
---- End of stack trace from previous location ---</StackTrace>
-        </ErrorInfo>
-      </Output>
-    </UnitTestResult>
-    <UnitTestResult executionId="52a14dc9-7ab0-4bc1-8e8b-00d9f30e62fc" testId="38880e80-b1c2-f05c-fb7e-469ae4e861ec" testName="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_rejects_nonexistent_parentPseudoAssetId_with_validation_or_db_unavailable" computerName="0560d8799d65" duration="00:00:00.0129202" startTime="2026-03-15T18:15:35.3961325+00:00" endTime="2026-03-15T18:15:35.3961326+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="52a14dc9-7ab0-4bc1-8e8b-00d9f30e62fc" />
-    <UnitTestResult executionId="1489c394-68aa-4d11-86bd-fa601b8b3094" testId="9dc94cb5-9259-f153-7d0a-ad76274acc5d" testName="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_requires_processGroupOtherText_when_processGroup_is_other" computerName="0560d8799d65" duration="00:00:00.0130934" startTime="2026-03-15T18:15:35.3926718+00:00" endTime="2026-03-15T18:15:35.3926719+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1489c394-68aa-4d11-86bd-fa601b8b3094" />
-    <UnitTestResult executionId="4601bb27-cc0f-454c-9c49-6ceb9acfaa87" testId="3f488ea6-4a44-5a41-d5ae-5a900eb848fd" testName="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_requires_requiresParentPseudo_field" computerName="0560d8799d65" duration="00:00:01.0433622" startTime="2026-03-15T18:15:35.3449934+00:00" endTime="2026-03-15T18:15:35.3449935+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4601bb27-cc0f-454c-9c49-6ceb9acfaa87" />
-    <UnitTestResult executionId="0eb95f8f-48b9-4b88-8340-6fbc8b895636" testId="4778574f-6af0-87b2-7664-55fe3572d973" testName="DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests.Legacy_manageSiteAssets_update_requires_assetId_and_update_payload" computerName="0560d8799d65" duration="00:00:00.0083567" startTime="2026-03-15T18:15:35.3960365+00:00" endTime="2026-03-15T18:15:35.3960366+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0eb95f8f-48b9-4b88-8340-6fbc8b895636" />
-    <UnitTestResult executionId="7edd1d41-5aba-4987-be2b-10e858122910" testId="c52f33bb-80e6-7dfc-c301-78017ebaf2c8" testName="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_rejects_parentPseudoAssetId_when_requiresParentPseudo_is_false_with_validation_or_db_unavailable" computerName="0560d8799d65" duration="00:00:00.0020163" startTime="2026-03-15T18:15:35.3968880+00:00" endTime="2026-03-15T18:15:35.3968881+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7edd1d41-5aba-4987-be2b-10e858122910" />
-    <UnitTestResult executionId="a66727a8-d07a-4d34-a252-e2fad6691b74" testId="9ec77f39-6c27-839c-cc22-34f449e1b22b" testName="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_additional_asset_id_requires_required_fields_400" computerName="0560d8799d65" duration="00:00:00.0152872" startTime="2026-03-15T18:15:35.3917226+00:00" endTime="2026-03-15T18:15:35.3917227+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a66727a8-d07a-4d34-a252-e2fad6691b74">
-      <Output>
-        <ErrorInfo>
-          <Message>Assert.Equal() Failure: Values differ
-Expected: BadRequest
-Actual:   ServiceUnavailable</Message>
-          <StackTrace>   at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_additional_asset_id_requires_required_fields_400() in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs:line 110
---- End of stack trace from previous location ---</StackTrace>
-        </ErrorInfo>
-      </Output>
-    </UnitTestResult>
-    <UnitTestResult executionId="7c755bc0-a0ab-461f-936b-163d2583ffe9" testId="bbe68020-3189-91ab-4371-bfb533633678" testName="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.List_asset_properties_route_is_mapped_and_not_404" computerName="0560d8799d65" duration="00:00:00.0062372" startTime="2026-03-15T18:15:35.3918895+00:00" endTime="2026-03-15T18:15:35.3918896+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7c755bc0-a0ab-461f-936b-163d2583ffe9" />
-    <UnitTestResult executionId="98ceb8c0-3fa6-42f4-9a38-7ce4c91acb7a" testId="98b0ad11-8d94-7d90-fbc5-167912da7dea" testName="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_throughput_scalar_accepts_alias_scalarName_but_requires_one_of_scalarType_or_scalarName" computerName="0560d8799d65" duration="00:00:00.0066384" startTime="2026-03-15T18:15:35.4006684+00:00" endTime="2026-03-15T18:15:35.4006685+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="98ceb8c0-3fa6-42f4-9a38-7ce4c91acb7a">
-      <Output>
-        <ErrorInfo>
-          <Message>Assert.Equal() Failure: Values differ
-Expected: BadRequest
-Actual:   ServiceUnavailable</Message>
-          <StackTrace>   at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_throughput_scalar_accepts_alias_scalarName_but_requires_one_of_scalarType_or_scalarName() in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs:line 156
---- End of stack trace from previous location ---</StackTrace>
-        </ErrorInfo>
-      </Output>
-    </UnitTestResult>
-    <UnitTestResult executionId="6a1113c8-0d8c-4430-b20f-a7a207b0eae3" testId="fa76d406-c1b8-14ed-b381-8515091b3cb5" testName="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_asset_property_requires_required_fields_400" computerName="0560d8799d65" duration="00:00:00.0038628" startTime="2026-03-15T18:15:35.3958329+00:00" endTime="2026-03-15T18:15:35.3958339+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6a1113c8-0d8c-4430-b20f-a7a207b0eae3">
-      <Output>
-        <ErrorInfo>
-          <Message>Assert.Equal() Failure: Values differ
-Expected: BadRequest
-Actual:   MethodNotAllowed</Message>
-          <StackTrace>   at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_asset_property_requires_required_fields_400() in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs:line 30
---- End of stack trace from previous location ---</StackTrace>
-        </ErrorInfo>
-      </Output>
-    </UnitTestResult>
-    <UnitTestResult executionId="8125d862-6c6c-48c5-ad61-962875f70cd5" testId="94a26727-50d9-7d1c-a956-8c447e7efed8" testName="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Validity_check_rejects_empty_value" computerName="0560d8799d65" duration="00:00:00.0063798" startTime="2026-03-15T18:15:35.3402941+00:00" endTime="2026-03-15T18:15:35.3402942+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8125d862-6c6c-48c5-ad61-962875f70cd5" />
-    <UnitTestResult executionId="57d62067-6eee-4775-b9ad-16864fd06b60" testId="beaa5798-299a-1dea-d285-4ec5c3b0ea8e" testName="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_throughput_equation_requires_required_fields_and_supports_aliases_400_when_missing" computerName="0560d8799d65" duration="00:00:00.0055438" startTime="2026-03-15T18:15:35.3978157+00:00" endTime="2026-03-15T18:15:35.3978158+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="57d62067-6eee-4775-b9ad-16864fd06b60">
+    <UnitTestResult executionId="2e28529f-c698-418f-b9ce-dd542e95b32b" testId="38880e80-b1c2-f05c-fb7e-469ae4e861ec" testName="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_rejects_nonexistent_parentPseudoAssetId_with_validation_or_db_unavailable" computerName="0560d8799d65" duration="00:00:00.0157426" startTime="2026-03-15T18:22:02.5737902+00:00" endTime="2026-03-15T18:22:02.5737904+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2e28529f-c698-418f-b9ce-dd542e95b32b" />
+    <UnitTestResult executionId="7519de50-9a83-4fe4-b28d-d245c36540bb" testId="537b57b5-6c6c-38ff-523e-a20a1c20a18c" testName="DataAssetBackend.Tests.AssetChildModuleValidationTests.List_child_routes_are_mapped_and_not_404" computerName="0560d8799d65" duration="00:00:00.0247944" startTime="2026-03-15T18:22:02.6309733+00:00" endTime="2026-03-15T18:22:02.6309734+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7519de50-9a83-4fe4-b28d-d245c36540bb" />
+    <UnitTestResult executionId="f7b50bce-1d25-4378-94d4-aa5fca78028f" testId="fa76d406-c1b8-14ed-b381-8515091b3cb5" testName="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_asset_property_requires_required_fields_400" computerName="0560d8799d65" duration="00:00:00.0068109" startTime="2026-03-15T18:22:02.5740609+00:00" endTime="2026-03-15T18:22:02.5740610+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f7b50bce-1d25-4378-94d4-aa5fca78028f" />
+    <UnitTestResult executionId="465c0f26-5908-4b57-b381-2694a0c63424" testId="4778574f-6af0-87b2-7664-55fe3572d973" testName="DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests.Legacy_manageSiteAssets_update_requires_assetId_and_update_payload" computerName="0560d8799d65" duration="00:00:00.0091688" startTime="2026-03-15T18:22:02.5656954+00:00" endTime="2026-03-15T18:22:02.5656955+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="465c0f26-5908-4b57-b381-2694a0c63424" />
+    <UnitTestResult executionId="1bbaed82-5518-4952-9d72-521c5ab5dfca" testId="7d424f24-4c6d-c882-e7a1-1fb5dfe04239" testName="DataAssetBackend.Tests.IdempotencyCopyAssetTests.CopyAsset_with_same_idempotency_key_returns_same_response_on_retry" computerName="0560d8799d65" duration="00:00:01.0921881" startTime="2026-03-15T18:22:02.5655253+00:00" endTime="2026-03-15T18:22:02.5655254+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1bbaed82-5518-4952-9d72-521c5ab5dfca" />
+    <UnitTestResult executionId="32a3fe7c-d6f9-4936-84ce-725b82395f93" testId="beaa5798-299a-1dea-d285-4ec5c3b0ea8e" testName="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_throughput_equation_requires_required_fields_and_supports_aliases_400_when_missing" computerName="0560d8799d65" duration="00:00:00.0055987" startTime="2026-03-15T18:22:02.5912018+00:00" endTime="2026-03-15T18:22:02.5912020+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="32a3fe7c-d6f9-4936-84ce-725b82395f93">
       <Output>
         <ErrorInfo>
           <Message>Assert.Equal() Failure: Values differ
@@ -105,7 +38,33 @@ Actual:   ServiceUnavailable</Message>
         </ErrorInfo>
       </Output>
     </UnitTestResult>
-    <UnitTestResult executionId="7e1493c8-0673-460c-af80-242801d35ca5" testId="9d4cb019-7844-2091-6714-f88b3f12b597" testName="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_reporting_attribute_mapping_requires_required_fields_400" computerName="0560d8799d65" duration="00:00:00.0081864" startTime="2026-03-15T18:15:35.3973159+00:00" endTime="2026-03-15T18:15:35.3973160+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7e1493c8-0673-460c-af80-242801d35ca5">
+    <UnitTestResult executionId="63216df1-acee-4c4d-b894-29f2215b1113" testId="24c2c749-4fe1-f7f6-bfd5-1b2eea52ecdd" testName="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_input_parameter_requires_required_fields_400" computerName="0560d8799d65" duration="00:00:00.0045386" startTime="2026-03-15T18:22:02.5740052+00:00" endTime="2026-03-15T18:22:02.5740053+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="63216df1-acee-4c4d-b894-29f2215b1113" />
+    <UnitTestResult executionId="5c30ab97-8944-43da-9ad6-141e864f512a" testId="92d69c0b-5cae-d6e5-220a-e33caf6957cb" testName="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Validity_check_accepts_simple_value" computerName="0560d8799d65" duration="00:00:01.0630892" startTime="2026-03-15T18:22:02.5172691+00:00" endTime="2026-03-15T18:22:02.5173165+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5c30ab97-8944-43da-9ad6-141e864f512a" />
+    <UnitTestResult executionId="257394cf-985a-49c8-8717-7f0ffdf7391e" testId="c52f33bb-80e6-7dfc-c301-78017ebaf2c8" testName="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_rejects_parentPseudoAssetId_when_requiresParentPseudo_is_false_with_validation_or_db_unavailable" computerName="0560d8799d65" duration="00:00:00.0023599" startTime="2026-03-15T18:22:02.5739122+00:00" endTime="2026-03-15T18:22:02.5739122+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="257394cf-985a-49c8-8717-7f0ffdf7391e" />
+    <UnitTestResult executionId="8452931b-3f0c-46a1-992d-d1629dd14f77" testId="9ec77f39-6c27-839c-cc22-34f449e1b22b" testName="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_additional_asset_id_requires_required_fields_400" computerName="0560d8799d65" duration="00:00:00.0178478" startTime="2026-03-15T18:22:02.5716336+00:00" endTime="2026-03-15T18:22:02.5716338+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8452931b-3f0c-46a1-992d-d1629dd14f77">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ
+Expected: BadRequest
+Actual:   ServiceUnavailable</Message>
+          <StackTrace>   at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_additional_asset_id_requires_required_fields_400() in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs:line 110
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="f4aa6f5b-8d5f-4d06-9a95-a48875e1224a" testId="4a5d8b18-0ba2-1016-f32d-d5bd8e0d61c3" testName="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Root_health_returns_200" computerName="0560d8799d65" duration="00:00:00.0029907" startTime="2026-03-15T18:22:02.5656112+00:00" endTime="2026-03-15T18:22:02.5656113+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f4aa6f5b-8d5f-4d06-9a95-a48875e1224a" />
+    <UnitTestResult executionId="ed4866fd-fd10-4728-8c4f-0b0846342d2a" testId="98b0ad11-8d94-7d90-fbc5-167912da7dea" testName="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_throughput_scalar_accepts_alias_scalarName_but_requires_one_of_scalarType_or_scalarName" computerName="0560d8799d65" duration="00:00:00.0070836" startTime="2026-03-15T18:22:02.6063727+00:00" endTime="2026-03-15T18:22:02.6063729+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ed4866fd-fd10-4728-8c4f-0b0846342d2a">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ
+Expected: BadRequest
+Actual:   ServiceUnavailable</Message>
+          <StackTrace>   at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_throughput_scalar_accepts_alias_scalarName_but_requires_one_of_scalarType_or_scalarName() in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs:line 156
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="d9eb8aff-75a8-42d4-923b-08d0a12dca0f" testId="9d4cb019-7844-2091-6714-f88b3f12b597" testName="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_reporting_attribute_mapping_requires_required_fields_400" computerName="0560d8799d65" duration="00:00:00.0063660" startTime="2026-03-15T18:22:02.5851894+00:00" endTime="2026-03-15T18:22:02.5851895+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d9eb8aff-75a8-42d4-923b-08d0a12dca0f">
       <Output>
         <ErrorInfo>
           <Message>Assert.Equal() Failure: Values differ
@@ -116,254 +75,219 @@ Actual:   ServiceUnavailable</Message>
         </ErrorInfo>
       </Output>
     </UnitTestResult>
-    <UnitTestResult executionId="3ea4af1a-064d-40b0-9944-f538b0a498c7" testId="6baa96e8-64cb-1c3a-b6a3-162fc2c29087" testName="DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests.Legacy_manageSiteAssets_requires_mode" computerName="0560d8799d65" duration="00:00:01.0433680" startTime="2026-03-15T18:15:35.3450153+00:00" endTime="2026-03-15T18:15:35.3450154+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3ea4af1a-064d-40b0-9944-f538b0a498c7" />
-    <UnitTestResult executionId="23e73134-2f89-4791-9744-9f581e0308f3" testId="7d424f24-4c6d-c882-e7a1-1fb5dfe04239" testName="DataAssetBackend.Tests.IdempotencyCopyAssetTests.CopyAsset_with_same_idempotency_key_returns_same_response_on_retry" computerName="0560d8799d65" duration="00:00:01.0566739" startTime="2026-03-15T18:15:35.3927639+00:00" endTime="2026-03-15T18:15:35.3927640+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="23e73134-2f89-4791-9744-9f581e0308f3" />
-    <UnitTestResult executionId="2ff486c3-ded1-4935-b06a-9b4adfdd5303" testId="537b57b5-6c6c-38ff-523e-a20a1c20a18c" testName="DataAssetBackend.Tests.AssetChildModuleValidationTests.List_child_routes_are_mapped_and_not_404" computerName="0560d8799d65" duration="00:00:00.0252008" startTime="2026-03-15T18:15:35.4256039+00:00" endTime="2026-03-15T18:15:35.4256041+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2ff486c3-ded1-4935-b06a-9b4adfdd5303" />
-    <UnitTestResult executionId="bf32fe80-17ff-44ce-937c-732aeb78a1d2" testId="d48094bc-97b3-20af-92fb-dced6c0610d5" testName="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_input_parameter_when_in_use_requires_uom_and_reporting_program_400" computerName="0560d8799d65" duration="00:00:01.0155407" startTime="2026-03-15T18:15:35.3399712+00:00" endTime="2026-03-15T18:15:35.3399714+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bf32fe80-17ff-44ce-937c-732aeb78a1d2">
+    <UnitTestResult executionId="35358a5c-c8d0-4d9e-af16-26cc594c1845" testId="c520d0c0-8b06-7c91-f0fa-2795e082a988" testName="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Healthz_returns_200_even_when_db_is_not_configured" computerName="0560d8799d65" duration="00:00:00.0098254" startTime="2026-03-15T18:22:02.5651382+00:00" endTime="2026-03-15T18:22:02.5651384+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="35358a5c-c8d0-4d9e-af16-26cc594c1845" />
+    <UnitTestResult executionId="6a334870-c1ed-4f9e-8c11-3f2e4d6353a2" testId="bbe68020-3189-91ab-4371-bfb533633678" testName="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.List_asset_properties_route_is_mapped_and_not_404" computerName="0560d8799d65" duration="00:00:00.0069796" startTime="2026-03-15T18:22:02.5655523+00:00" endTime="2026-03-15T18:22:02.5655524+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6a334870-c1ed-4f9e-8c11-3f2e4d6353a2" />
+    <UnitTestResult executionId="099d6af2-38b6-4dc7-82e5-7180b5d017dc" testId="c53367c8-b6b8-1749-10c6-4933e3d207b7" testName="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_data_input_value_requires_reporting_year_and_period_400" computerName="0560d8799d65" duration="00:00:00.0072509" startTime="2026-03-15T18:22:02.5989235+00:00" endTime="2026-03-15T18:22:02.5989236+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="099d6af2-38b6-4dc7-82e5-7180b5d017dc">
       <Output>
         <ErrorInfo>
           <Message>Assert.Equal() Failure: Values differ
 Expected: BadRequest
-Actual:   MethodNotAllowed</Message>
-          <StackTrace>   at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_input_parameter_when_in_use_requires_uom_and_reporting_program_400() in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs:line 96
+Actual:   ServiceUnavailable</Message>
+          <StackTrace>   at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_data_input_value_requires_reporting_year_and_period_400() in /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs:line 170
 --- End of stack trace from previous location ---</StackTrace>
         </ErrorInfo>
       </Output>
     </UnitTestResult>
+    <UnitTestResult executionId="c089b1b0-db6e-4908-9961-25af2fbe91aa" testId="98344893-0b44-4f54-d694-3a07bdac6449" testName="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_requires_parentPseudoAssetId_when_requiresParentPseudo_is_true" computerName="0560d8799d65" duration="00:00:00.0027069" startTime="2026-03-15T18:22:02.5738563+00:00" endTime="2026-03-15T18:22:02.5738567+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c089b1b0-db6e-4908-9961-25af2fbe91aa" />
+    <UnitTestResult executionId="26ffcc47-b4a2-4dff-9a0a-9341a2e867e6" testId="b061f3bb-2690-dcdb-7561-0346ae7644fc" testName="DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests.Legacy_removeSiteAsset_requires_required_fields" computerName="0560d8799d65" duration="00:00:00.0146095" startTime="2026-03-15T18:22:02.5654680+00:00" endTime="2026-03-15T18:22:02.5654681+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="26ffcc47-b4a2-4dff-9a0a-9341a2e867e6" />
   </Results>
   <TestDefinitions>
     <UnitTest name="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_requires_parentPseudoAssetId_when_requiresParentPseudo_is_true" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="98344893-0b44-4f54-d694-3a07bdac6449">
-      <Execution id="9575178e-3580-4b29-8065-a2c1eec12f16" />
+      <Execution id="c089b1b0-db6e-4908-9961-25af2fbe91aa" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.AssetCreateValidationTests" name="Create_asset_requires_parentPseudoAssetId_when_requiresParentPseudo_is_true" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_asset_property_requires_required_fields_400" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="fa76d406-c1b8-14ed-b381-8515091b3cb5">
-      <Execution id="6a1113c8-0d8c-4430-b20f-a7a207b0eae3" />
+      <Execution id="f7b50bce-1d25-4378-94d4-aa5fca78028f" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.AssetChildModuleValidationTests" name="Create_asset_property_requires_required_fields_400" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Healthz_returns_200_even_when_db_is_not_configured" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="c520d0c0-8b06-7c91-f0fa-2795e082a988">
-      <Execution id="c084a730-aa40-43d4-b078-2b3afe9bb698" />
+      <Execution id="35358a5c-c8d0-4d9e-af16-26cc594c1845" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.HealthAndValidationEndpointsTests" name="Healthz_returns_200_even_when_db_is_not_configured" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_input_parameter_when_in_use_requires_uom_and_reporting_program_400" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="d48094bc-97b3-20af-92fb-dced6c0610d5">
-      <Execution id="bf32fe80-17ff-44ce-937c-732aeb78a1d2" />
+      <Execution id="80e36ff1-fc74-4157-998a-4bb8f143d90f" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.AssetChildModuleValidationTests" name="Create_input_parameter_when_in_use_requires_uom_and_reporting_program_400" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.IdempotencyCopyAssetTests.CopyAsset_with_same_idempotency_key_returns_same_response_on_retry" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="7d424f24-4c6d-c882-e7a1-1fb5dfe04239">
-      <Execution id="23e73134-2f89-4791-9744-9f581e0308f3" />
+      <Execution id="1bbaed82-5518-4952-9d72-521c5ab5dfca" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.IdempotencyCopyAssetTests" name="CopyAsset_with_same_idempotency_key_returns_same_response_on_retry" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.List_asset_properties_route_is_mapped_and_not_404" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="bbe68020-3189-91ab-4371-bfb533633678">
-      <Execution id="7c755bc0-a0ab-461f-936b-163d2583ffe9" />
+      <Execution id="6a334870-c1ed-4f9e-8c11-3f2e4d6353a2" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.HealthAndValidationEndpointsTests" name="List_asset_properties_route_is_mapped_and_not_404" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests.Legacy_manageSiteAssets_update_requires_assetId_and_update_payload" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="4778574f-6af0-87b2-7664-55fe3572d973">
-      <Execution id="0eb95f8f-48b9-4b88-8340-6fbc8b895636" />
+      <Execution id="465c0f26-5908-4b57-b381-2694a0c63424" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests" name="Legacy_manageSiteAssets_update_requires_assetId_and_update_payload" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_additional_asset_id_requires_required_fields_400" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="9ec77f39-6c27-839c-cc22-34f449e1b22b">
-      <Execution id="a66727a8-d07a-4d34-a252-e2fad6691b74" />
+      <Execution id="8452931b-3f0c-46a1-992d-d1629dd14f77" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.AssetChildModuleValidationTests" name="Create_additional_asset_id_requires_required_fields_400" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Validity_check_rejects_empty_value" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="94a26727-50d9-7d1c-a956-8c447e7efed8">
-      <Execution id="8125d862-6c6c-48c5-ad61-962875f70cd5" />
+      <Execution id="85aba620-e1a9-4795-9783-00de8cf2e454" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.HealthAndValidationEndpointsTests" name="Validity_check_rejects_empty_value" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_status_log_requires_required_fields_400" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="3fb92784-9c93-8ae6-59fe-2a8500a73940">
-      <Execution id="4cc5e892-063a-4556-b766-e373c4fd637a" />
+      <Execution id="04751540-6ca7-4beb-85f8-2579d5171932" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.AssetChildModuleValidationTests" name="Create_status_log_requires_required_fields_400" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests.Legacy_removeSiteAsset_requires_required_fields" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="b061f3bb-2690-dcdb-7561-0346ae7644fc">
-      <Execution id="8a278b25-814f-4ccb-b6bf-b22a7190342b" />
+      <Execution id="26ffcc47-b4a2-4dff-9a0a-9341a2e867e6" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests" name="Legacy_removeSiteAsset_requires_required_fields" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.AssetChildModuleValidationTests.List_child_routes_are_mapped_and_not_404" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="537b57b5-6c6c-38ff-523e-a20a1c20a18c">
-      <Execution id="2ff486c3-ded1-4935-b06a-9b4adfdd5303" />
+      <Execution id="7519de50-9a83-4fe4-b28d-d245c36540bb" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.AssetChildModuleValidationTests" name="List_child_routes_are_mapped_and_not_404" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_throughput_equation_requires_required_fields_and_supports_aliases_400_when_missing" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="beaa5798-299a-1dea-d285-4ec5c3b0ea8e">
-      <Execution id="57d62067-6eee-4775-b9ad-16864fd06b60" />
+      <Execution id="32a3fe7c-d6f9-4936-84ce-725b82395f93" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.AssetChildModuleValidationTests" name="Create_throughput_equation_requires_required_fields_and_supports_aliases_400_when_missing" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_control_device_mapping_requires_required_fields_400" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="76622523-719f-35fb-d115-a60f5fe8c1b1">
-      <Execution id="12086a9f-14ee-4d0f-ad30-645dce14d104" />
+      <Execution id="5aa79325-3657-44c6-9a14-d668235198a2" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.AssetChildModuleValidationTests" name="Create_control_device_mapping_requires_required_fields_400" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_input_parameter_requires_required_fields_400" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="24c2c749-4fe1-f7f6-bfd5-1b2eea52ecdd">
-      <Execution id="0f54df9f-d965-4463-9dd0-d13189ba923e" />
+      <Execution id="63216df1-acee-4c4d-b894-29f2215b1113" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.AssetChildModuleValidationTests" name="Create_input_parameter_requires_required_fields_400" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_reporting_attribute_mapping_requires_required_fields_400" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="9d4cb019-7844-2091-6714-f88b3f12b597">
-      <Execution id="7e1493c8-0673-460c-af80-242801d35ca5" />
+      <Execution id="d9eb8aff-75a8-42d4-923b-08d0a12dca0f" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.AssetChildModuleValidationTests" name="Create_reporting_attribute_mapping_requires_required_fields_400" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_rejects_parentPseudoAssetId_when_requiresParentPseudo_is_false_with_validation_or_db_unavailable" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="c52f33bb-80e6-7dfc-c301-78017ebaf2c8">
-      <Execution id="7edd1d41-5aba-4987-be2b-10e858122910" />
+      <Execution id="257394cf-985a-49c8-8717-7f0ffdf7391e" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.AssetCreateValidationTests" name="Create_asset_rejects_parentPseudoAssetId_when_requiresParentPseudo_is_false_with_validation_or_db_unavailable" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_data_input_value_requires_reporting_year_and_period_400" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="c53367c8-b6b8-1749-10c6-4933e3d207b7">
-      <Execution id="b95f6d94-bcbc-45a9-ad35-9a37ed9a9afd" />
+      <Execution id="099d6af2-38b6-4dc7-82e5-7180b5d017dc" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.AssetChildModuleValidationTests" name="Create_data_input_value_requires_reporting_year_and_period_400" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_throughput_scalar_accepts_alias_scalarName_but_requires_one_of_scalarType_or_scalarName" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="98b0ad11-8d94-7d90-fbc5-167912da7dea">
-      <Execution id="98ceb8c0-3fa6-42f4-9a38-7ce4c91acb7a" />
+      <Execution id="ed4866fd-fd10-4728-8c4f-0b0846342d2a" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.AssetChildModuleValidationTests" name="Create_throughput_scalar_accepts_alias_scalarName_but_requires_one_of_scalarType_or_scalarName" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests.Legacy_manageSiteAssets_requires_mode" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="6baa96e8-64cb-1c3a-b6a3-162fc2c29087">
-      <Execution id="3ea4af1a-064d-40b0-9944-f538b0a498c7" />
+      <Execution id="46502288-6b4d-45ac-ae76-9419e500e7b3" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.LegacyObservedEndpointsValidationTests" name="Legacy_manageSiteAssets_requires_mode" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_requires_requiresParentPseudo_field" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="3f488ea6-4a44-5a41-d5ae-5a900eb848fd">
-      <Execution id="4601bb27-cc0f-454c-9c49-6ceb9acfaa87" />
+      <Execution id="3de5c969-b1c7-4c99-86ef-1c651230f2a0" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.AssetCreateValidationTests" name="Create_asset_requires_requiresParentPseudo_field" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Root_health_returns_200" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="4a5d8b18-0ba2-1016-f32d-d5bd8e0d61c3">
-      <Execution id="44158081-4d26-49de-baa4-8c4d698cf36f" />
+      <Execution id="f4aa6f5b-8d5f-4d06-9a95-a48875e1224a" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.HealthAndValidationEndpointsTests" name="Root_health_returns_200" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_rejects_nonexistent_parentPseudoAssetId_with_validation_or_db_unavailable" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="38880e80-b1c2-f05c-fb7e-469ae4e861ec">
-      <Execution id="52a14dc9-7ab0-4bc1-8e8b-00d9f30e62fc" />
+      <Execution id="2e28529f-c698-418f-b9ce-dd542e95b32b" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.AssetCreateValidationTests" name="Create_asset_rejects_nonexistent_parentPseudoAssetId_with_validation_or_db_unavailable" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.HealthAndValidationEndpointsTests.Validity_check_accepts_simple_value" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="92d69c0b-5cae-d6e5-220a-e33caf6957cb">
-      <Execution id="75488a85-2491-4d47-9f1b-392ca0495798" />
+      <Execution id="5c30ab97-8944-43da-9ad6-141e864f512a" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.HealthAndValidationEndpointsTests" name="Validity_check_accepts_simple_value" />
     </UnitTest>
     <UnitTest name="DataAssetBackend.Tests.AssetCreateValidationTests.Create_asset_requires_processGroupOtherText_when_processGroup_is_other" storage="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.tests/bin/release/net8.0/dataassetbackend.tests.dll" id="9dc94cb5-9259-f153-7d0a-ad76274acc5d">
-      <Execution id="1489c394-68aa-4d11-86bd-fa601b8b3094" />
+      <Execution id="db741277-8682-423b-930c-7bb34a67f57e" />
       <TestMethod codeBase="/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/DataAssetBackend.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DataAssetBackend.Tests.AssetCreateValidationTests" name="Create_asset_requires_processGroupOtherText_when_processGroup_is_other" />
     </UnitTest>
   </TestDefinitions>
   <TestEntries>
-    <TestEntry testId="98344893-0b44-4f54-d694-3a07bdac6449" executionId="9575178e-3580-4b29-8065-a2c1eec12f16" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="c53367c8-b6b8-1749-10c6-4933e3d207b7" executionId="b95f6d94-bcbc-45a9-ad35-9a37ed9a9afd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="3fb92784-9c93-8ae6-59fe-2a8500a73940" executionId="4cc5e892-063a-4556-b766-e373c4fd637a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="4a5d8b18-0ba2-1016-f32d-d5bd8e0d61c3" executionId="44158081-4d26-49de-baa4-8c4d698cf36f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="76622523-719f-35fb-d115-a60f5fe8c1b1" executionId="12086a9f-14ee-4d0f-ad30-645dce14d104" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="c520d0c0-8b06-7c91-f0fa-2795e082a988" executionId="c084a730-aa40-43d4-b078-2b3afe9bb698" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="92d69c0b-5cae-d6e5-220a-e33caf6957cb" executionId="75488a85-2491-4d47-9f1b-392ca0495798" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="b061f3bb-2690-dcdb-7561-0346ae7644fc" executionId="8a278b25-814f-4ccb-b6bf-b22a7190342b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="24c2c749-4fe1-f7f6-bfd5-1b2eea52ecdd" executionId="0f54df9f-d965-4463-9dd0-d13189ba923e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="38880e80-b1c2-f05c-fb7e-469ae4e861ec" executionId="52a14dc9-7ab0-4bc1-8e8b-00d9f30e62fc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="9dc94cb5-9259-f153-7d0a-ad76274acc5d" executionId="1489c394-68aa-4d11-86bd-fa601b8b3094" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="3f488ea6-4a44-5a41-d5ae-5a900eb848fd" executionId="4601bb27-cc0f-454c-9c49-6ceb9acfaa87" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="4778574f-6af0-87b2-7664-55fe3572d973" executionId="0eb95f8f-48b9-4b88-8340-6fbc8b895636" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="c52f33bb-80e6-7dfc-c301-78017ebaf2c8" executionId="7edd1d41-5aba-4987-be2b-10e858122910" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="9ec77f39-6c27-839c-cc22-34f449e1b22b" executionId="a66727a8-d07a-4d34-a252-e2fad6691b74" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="bbe68020-3189-91ab-4371-bfb533633678" executionId="7c755bc0-a0ab-461f-936b-163d2583ffe9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="98b0ad11-8d94-7d90-fbc5-167912da7dea" executionId="98ceb8c0-3fa6-42f4-9a38-7ce4c91acb7a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="fa76d406-c1b8-14ed-b381-8515091b3cb5" executionId="6a1113c8-0d8c-4430-b20f-a7a207b0eae3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="94a26727-50d9-7d1c-a956-8c447e7efed8" executionId="8125d862-6c6c-48c5-ad61-962875f70cd5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="beaa5798-299a-1dea-d285-4ec5c3b0ea8e" executionId="57d62067-6eee-4775-b9ad-16864fd06b60" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="9d4cb019-7844-2091-6714-f88b3f12b597" executionId="7e1493c8-0673-460c-af80-242801d35ca5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="6baa96e8-64cb-1c3a-b6a3-162fc2c29087" executionId="3ea4af1a-064d-40b0-9944-f538b0a498c7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="7d424f24-4c6d-c882-e7a1-1fb5dfe04239" executionId="23e73134-2f89-4791-9744-9f581e0308f3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="537b57b5-6c6c-38ff-523e-a20a1c20a18c" executionId="2ff486c3-ded1-4935-b06a-9b4adfdd5303" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="d48094bc-97b3-20af-92fb-dced6c0610d5" executionId="bf32fe80-17ff-44ce-937c-732aeb78a1d2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="76622523-719f-35fb-d115-a60f5fe8c1b1" executionId="5aa79325-3657-44c6-9a14-d668235198a2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="94a26727-50d9-7d1c-a956-8c447e7efed8" executionId="85aba620-e1a9-4795-9783-00de8cf2e454" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9dc94cb5-9259-f153-7d0a-ad76274acc5d" executionId="db741277-8682-423b-930c-7bb34a67f57e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3f488ea6-4a44-5a41-d5ae-5a900eb848fd" executionId="3de5c969-b1c7-4c99-86ef-1c651230f2a0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6baa96e8-64cb-1c3a-b6a3-162fc2c29087" executionId="46502288-6b4d-45ac-ae76-9419e500e7b3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d48094bc-97b3-20af-92fb-dced6c0610d5" executionId="80e36ff1-fc74-4157-998a-4bb8f143d90f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3fb92784-9c93-8ae6-59fe-2a8500a73940" executionId="04751540-6ca7-4beb-85f8-2579d5171932" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="38880e80-b1c2-f05c-fb7e-469ae4e861ec" executionId="2e28529f-c698-418f-b9ce-dd542e95b32b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="537b57b5-6c6c-38ff-523e-a20a1c20a18c" executionId="7519de50-9a83-4fe4-b28d-d245c36540bb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fa76d406-c1b8-14ed-b381-8515091b3cb5" executionId="f7b50bce-1d25-4378-94d4-aa5fca78028f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4778574f-6af0-87b2-7664-55fe3572d973" executionId="465c0f26-5908-4b57-b381-2694a0c63424" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7d424f24-4c6d-c882-e7a1-1fb5dfe04239" executionId="1bbaed82-5518-4952-9d72-521c5ab5dfca" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="beaa5798-299a-1dea-d285-4ec5c3b0ea8e" executionId="32a3fe7c-d6f9-4936-84ce-725b82395f93" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="24c2c749-4fe1-f7f6-bfd5-1b2eea52ecdd" executionId="63216df1-acee-4c4d-b894-29f2215b1113" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="92d69c0b-5cae-d6e5-220a-e33caf6957cb" executionId="5c30ab97-8944-43da-9ad6-141e864f512a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c52f33bb-80e6-7dfc-c301-78017ebaf2c8" executionId="257394cf-985a-49c8-8717-7f0ffdf7391e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9ec77f39-6c27-839c-cc22-34f449e1b22b" executionId="8452931b-3f0c-46a1-992d-d1629dd14f77" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4a5d8b18-0ba2-1016-f32d-d5bd8e0d61c3" executionId="f4aa6f5b-8d5f-4d06-9a95-a48875e1224a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="98b0ad11-8d94-7d90-fbc5-167912da7dea" executionId="ed4866fd-fd10-4728-8c4f-0b0846342d2a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9d4cb019-7844-2091-6714-f88b3f12b597" executionId="d9eb8aff-75a8-42d4-923b-08d0a12dca0f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c520d0c0-8b06-7c91-f0fa-2795e082a988" executionId="35358a5c-c8d0-4d9e-af16-26cc594c1845" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bbe68020-3189-91ab-4371-bfb533633678" executionId="6a334870-c1ed-4f9e-8c11-3f2e4d6353a2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c53367c8-b6b8-1749-10c6-4933e3d207b7" executionId="099d6af2-38b6-4dc7-82e5-7180b5d017dc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="98344893-0b44-4f54-d694-3a07bdac6449" executionId="c089b1b0-db6e-4908-9961-25af2fbe91aa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b061f3bb-2690-dcdb-7561-0346ae7644fc" executionId="26ffcc47-b4a2-4dff-9a0a-9341a2e867e6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
   </TestEntries>
   <TestLists>
     <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
     <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
   </TestLists>
   <ResultSummary outcome="Failed">
-    <Counters total="25" executed="25" passed="15" failed="10" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Counters total="25" executed="25" passed="19" failed="6" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
     <Output>
       <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.7+8f2703126a (64-bit .NET 8.0.22)
 [xUnit.net 00:00:00.10]   Discovering: DataAssetBackend.Tests
 [xUnit.net 00:00:00.14]   Discovered:  DataAssetBackend.Tests
-[xUnit.net 00:00:00.15]   Starting:    DataAssetBackend.Tests
-[xUnit.net 00:00:01.24]       Assert.Equal() Failure: Values differ
-[xUnit.net 00:00:01.24]       Expected: BadRequest
-[xUnit.net 00:00:01.24]       Actual:   MethodNotAllowed
-[xUnit.net 00:00:01.24]       Stack Trace:
-[xUnit.net 00:00:01.24]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs(96,0): at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_input_parameter_when_in_use_requires_uom_and_reporting_program_400()
-[xUnit.net 00:00:01.24]         --- End of stack trace from previous location ---
-[xUnit.net 00:00:01.29]       Assert.Equal() Failure: Values differ
-[xUnit.net 00:00:01.29]       Expected: BadRequest
-[xUnit.net 00:00:01.29]       Actual:   ServiceUnavailable
-[xUnit.net 00:00:01.30]       Stack Trace:
-[xUnit.net 00:00:01.30]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs(110,0): at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_additional_asset_id_requires_required_fields_400()
-[xUnit.net 00:00:01.30]         --- End of stack trace from previous location ---
-[xUnit.net 00:00:01.30]       Assert.Equal() Failure: Values differ
-[xUnit.net 00:00:01.30]       Expected: BadRequest
-[xUnit.net 00:00:01.30]       Actual:   MethodNotAllowed
-[xUnit.net 00:00:01.30]       Stack Trace:
-[xUnit.net 00:00:01.30]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs(45,0): at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_control_device_mapping_requires_required_fields_400()
-[xUnit.net 00:00:01.30]         --- End of stack trace from previous location ---
-[xUnit.net 00:00:01.30]       Assert.Equal() Failure: Values differ
-[xUnit.net 00:00:01.30]       Expected: BadRequest
-[xUnit.net 00:00:01.30]       Actual:   MethodNotAllowed
-[xUnit.net 00:00:01.30]       Stack Trace:
-[xUnit.net 00:00:01.30]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs(76,0): at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_input_parameter_requires_required_fields_400()
-[xUnit.net 00:00:01.30]         --- End of stack trace from previous location ---
-[xUnit.net 00:00:01.30]       Assert.Equal() Failure: Values differ
-[xUnit.net 00:00:01.30]       Expected: BadRequest
-[xUnit.net 00:00:01.30]       Actual:   MethodNotAllowed
-[xUnit.net 00:00:01.30]       Stack Trace:
-[xUnit.net 00:00:01.30]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs(30,0): at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_asset_property_requires_required_fields_400()
-[xUnit.net 00:00:01.30]         --- End of stack trace from previous location ---
-[xUnit.net 00:00:01.30]       Assert.Equal() Failure: Values differ
-[xUnit.net 00:00:01.30]       Expected: BadRequest
-[xUnit.net 00:00:01.30]       Actual:   ServiceUnavailable
-[xUnit.net 00:00:01.30]       Stack Trace:
-[xUnit.net 00:00:01.30]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs(124,0): at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_status_log_requires_required_fields_400()
-[xUnit.net 00:00:01.30]         --- End of stack trace from previous location ---
-[xUnit.net 00:00:01.30]       Assert.Equal() Failure: Values differ
-[xUnit.net 00:00:01.30]       Expected: BadRequest
-[xUnit.net 00:00:01.30]       Actual:   ServiceUnavailable
-[xUnit.net 00:00:01.30]       Stack Trace:
-[xUnit.net 00:00:01.30]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs(60,0): at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_reporting_attribute_mapping_requires_required_fields_400()
-[xUnit.net 00:00:01.30]         --- End of stack trace from previous location ---
-[xUnit.net 00:00:01.30]       Assert.Equal() Failure: Values differ
-[xUnit.net 00:00:01.30]       Expected: BadRequest
-[xUnit.net 00:00:01.30]       Actual:   ServiceUnavailable
-[xUnit.net 00:00:01.30]       Stack Trace:
-[xUnit.net 00:00:01.30]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs(141,0): at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_throughput_equation_requires_required_fields_and_supports_aliases_400_when_missing()
-[xUnit.net 00:00:01.30]         --- End of stack trace from previous location ---
-[xUnit.net 00:00:01.30]       Assert.Equal() Failure: Values differ
-[xUnit.net 00:00:01.30]       Expected: BadRequest
-[xUnit.net 00:00:01.30]       Actual:   ServiceUnavailable
-[xUnit.net 00:00:01.30]       Stack Trace:
-[xUnit.net 00:00:01.30]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs(170,0): at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_data_input_value_requires_reporting_year_and_period_400()
-[xUnit.net 00:00:01.30]         --- End of stack trace from previous location ---
-[xUnit.net 00:00:01.30]       Assert.Equal() Failure: Values differ
-[xUnit.net 00:00:01.30]       Expected: BadRequest
-[xUnit.net 00:00:01.30]       Actual:   ServiceUnavailable
-[xUnit.net 00:00:01.30]       Stack Trace:
-[xUnit.net 00:00:01.30]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs(156,0): at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_throughput_scalar_accepts_alias_scalarName_but_requires_one_of_scalarType_or_scalarName()
-[xUnit.net 00:00:01.30]         --- End of stack trace from previous location ---
-[xUnit.net 00:00:01.33]   Finished:    DataAssetBackend.Tests
+[xUnit.net 00:00:00.14]   Starting:    DataAssetBackend.Tests
+[xUnit.net 00:00:01.33]       Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:01.33]       Expected: BadRequest
+[xUnit.net 00:00:01.33]       Actual:   ServiceUnavailable
+[xUnit.net 00:00:01.33]       Stack Trace:
+[xUnit.net 00:00:01.33]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs(110,0): at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_additional_asset_id_requires_required_fields_400()
+[xUnit.net 00:00:01.33]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:01.34]       Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:01.34]       Expected: BadRequest
+[xUnit.net 00:00:01.34]       Actual:   ServiceUnavailable
+[xUnit.net 00:00:01.34]       Stack Trace:
+[xUnit.net 00:00:01.34]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs(124,0): at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_status_log_requires_required_fields_400()
+[xUnit.net 00:00:01.34]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:01.35]       Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:01.35]       Expected: BadRequest
+[xUnit.net 00:00:01.35]       Actual:   ServiceUnavailable
+[xUnit.net 00:00:01.35]       Stack Trace:
+[xUnit.net 00:00:01.35]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs(60,0): at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_reporting_attribute_mapping_requires_required_fields_400()
+[xUnit.net 00:00:01.35]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:01.35]       Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:01.35]       Expected: BadRequest
+[xUnit.net 00:00:01.35]       Actual:   ServiceUnavailable
+[xUnit.net 00:00:01.35]       Stack Trace:
+[xUnit.net 00:00:01.35]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs(141,0): at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_throughput_equation_requires_required_fields_and_supports_aliases_400_when_missing()
+[xUnit.net 00:00:01.35]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:01.36]       Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:01.36]       Expected: BadRequest
+[xUnit.net 00:00:01.36]       Actual:   ServiceUnavailable
+[xUnit.net 00:00:01.36]       Stack Trace:
+[xUnit.net 00:00:01.36]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs(170,0): at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_data_input_value_requires_reporting_year_and_period_400()
+[xUnit.net 00:00:01.36]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:01.37]       Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:01.37]       Expected: BadRequest
+[xUnit.net 00:00:01.37]       Actual:   ServiceUnavailable
+[xUnit.net 00:00:01.37]       Stack Trace:
+[xUnit.net 00:00:01.37]         /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/test_AssetChildModuleValidationTests.cs(156,0): at DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_throughput_scalar_accepts_alias_scalarName_but_requires_one_of_scalarType_or_scalarName()
+[xUnit.net 00:00:01.37]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:01.42]   Finished:    DataAssetBackend.Tests
 </StdOut>
     </Output>
     <RunInfos>
-      <RunInfo computerName="0560d8799d65" outcome="Error" timestamp="2026-03-15T18:15:35.3367134+00:00">
-        <Text>[xUnit.net 00:00:01.24]     DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_input_parameter_when_in_use_requires_uom_and_reporting_program_400 [FAIL]</Text>
+      <RunInfo computerName="0560d8799d65" outcome="Error" timestamp="2026-03-15T18:22:02.6180524+00:00">
+        <Text>[xUnit.net 00:00:01.33]     DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_additional_asset_id_requires_required_fields_400 [FAIL]</Text>
       </RunInfo>
-      <RunInfo computerName="0560d8799d65" outcome="Error" timestamp="2026-03-15T18:15:35.4485480+00:00">
-        <Text>[xUnit.net 00:00:01.29]     DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_additional_asset_id_requires_required_fields_400 [FAIL]</Text>
+      <RunInfo computerName="0560d8799d65" outcome="Error" timestamp="2026-03-15T18:22:02.6209499+00:00">
+        <Text>[xUnit.net 00:00:01.34]     DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_status_log_requires_required_fields_400 [FAIL]</Text>
       </RunInfo>
-      <RunInfo computerName="0560d8799d65" outcome="Error" timestamp="2026-03-15T18:15:35.4486264+00:00">
-        <Text>[xUnit.net 00:00:01.30]     DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_control_device_mapping_requires_required_fields_400 [FAIL]</Text>
+      <RunInfo computerName="0560d8799d65" outcome="Error" timestamp="2026-03-15T18:22:02.6210356+00:00">
+        <Text>[xUnit.net 00:00:01.35]     DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_reporting_attribute_mapping_requires_required_fields_400 [FAIL]</Text>
       </RunInfo>
-      <RunInfo computerName="0560d8799d65" outcome="Error" timestamp="2026-03-15T18:15:35.4508119+00:00">
-        <Text>[xUnit.net 00:00:01.30]     DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_input_parameter_requires_required_fields_400 [FAIL]</Text>
+      <RunInfo computerName="0560d8799d65" outcome="Error" timestamp="2026-03-15T18:22:02.6210879+00:00">
+        <Text>[xUnit.net 00:00:01.35]     DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_throughput_equation_requires_required_fields_and_supports_aliases_400_when_missing [FAIL]</Text>
       </RunInfo>
-      <RunInfo computerName="0560d8799d65" outcome="Error" timestamp="2026-03-15T18:15:35.4508795+00:00">
-        <Text>[xUnit.net 00:00:01.30]     DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_asset_property_requires_required_fields_400 [FAIL]</Text>
+      <RunInfo computerName="0560d8799d65" outcome="Error" timestamp="2026-03-15T18:22:02.6220820+00:00">
+        <Text>[xUnit.net 00:00:01.36]     DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_data_input_value_requires_reporting_year_and_period_400 [FAIL]</Text>
       </RunInfo>
-      <RunInfo computerName="0560d8799d65" outcome="Error" timestamp="2026-03-15T18:15:35.4509403+00:00">
-        <Text>[xUnit.net 00:00:01.30]     DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_status_log_requires_required_fields_400 [FAIL]</Text>
-      </RunInfo>
-      <RunInfo computerName="0560d8799d65" outcome="Error" timestamp="2026-03-15T18:15:35.4509922+00:00">
-        <Text>[xUnit.net 00:00:01.30]     DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_reporting_attribute_mapping_requires_required_fields_400 [FAIL]</Text>
-      </RunInfo>
-      <RunInfo computerName="0560d8799d65" outcome="Error" timestamp="2026-03-15T18:15:35.4510400+00:00">
-        <Text>[xUnit.net 00:00:01.30]     DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_throughput_equation_requires_required_fields_and_supports_aliases_400_when_missing [FAIL]</Text>
-      </RunInfo>
-      <RunInfo computerName="0560d8799d65" outcome="Error" timestamp="2026-03-15T18:15:35.4523598+00:00">
-        <Text>[xUnit.net 00:00:01.30]     DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_data_input_value_requires_reporting_year_and_period_400 [FAIL]</Text>
-      </RunInfo>
-      <RunInfo computerName="0560d8799d65" outcome="Error" timestamp="2026-03-15T18:15:35.4524233+00:00">
-        <Text>[xUnit.net 00:00:01.30]     DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_throughput_scalar_accepts_alias_scalarName_but_requires_one_of_scalarType_or_scalarName [FAIL]</Text>
+      <RunInfo computerName="0560d8799d65" outcome="Error" timestamp="2026-03-15T18:22:02.6221471+00:00">
+        <Text>[xUnit.net 00:00:01.37]     DataAssetBackend.Tests.AssetChildModuleValidationTests.Create_throughput_scalar_accepts_alias_scalarName_but_requires_one_of_scalarType_or_scalarName [FAIL]</Text>
       </RunInfo>
     </RunInfos>
   </ResultSummary>

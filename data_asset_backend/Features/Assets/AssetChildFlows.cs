@@ -808,6 +808,22 @@ public static class AssetChildFlows
             throw new AssetRepository.EntityNotFoundException("input_parameter", inputParameterId);
         }
 
+        // BRD/DB rule: ef_source_set_or_table is TEXT NOT NULL and must not be blank.
+        // DataAnnotations [Required] catches null/empty, but we also trim-check whitespace-only values.
+        if (string.IsNullOrWhiteSpace(request.EfSourceSetOrTable))
+        {
+            throw new RequestValidationException(new Dictionary<string, string[]>
+            {
+                [nameof(request.EfSourceSetOrTable)] = new[]
+                {
+                    "efSourceSetOrTable is required."
+                }
+            });
+        }
+
+        // Normalize to keep persisted values clean.
+        request.EfSourceSetOrTable = request.EfSourceSetOrTable.Trim();
+
         return await repository.CreateEfSourceMappingAsync(inputParameterId, request, cancellationToken);
     }
 
@@ -877,6 +893,20 @@ public static class AssetChildFlows
         {
             throw new AssetRepository.EntityNotFoundException("input_parameter", inputParameterId);
         }
+
+        // BRD/DB rule: ef_source_set_or_table is TEXT NOT NULL and must not be blank.
+        if (string.IsNullOrWhiteSpace(request.EfSourceSetOrTable))
+        {
+            throw new RequestValidationException(new Dictionary<string, string[]>
+            {
+                [nameof(request.EfSourceSetOrTable)] = new[]
+                {
+                    "efSourceSetOrTable is required."
+                }
+            });
+        }
+
+        request.EfSourceSetOrTable = request.EfSourceSetOrTable.Trim();
 
         return await repository.UpdateEfSourceMappingAsync(inputParameterId, efSourceMappingId, request, cancellationToken);
     }

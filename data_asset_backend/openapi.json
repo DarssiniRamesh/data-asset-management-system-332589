@@ -624,6 +624,86 @@
             "Bearer": []
           }
         ]
+      },
+      "post": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "CreateInputParameter",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateInputParameterRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InputParameterDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/api/assets/{assetId}/control-device-mappings": {
@@ -677,6 +757,86 @@
             "Bearer": []
           }
         ]
+      },
+      "post": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "CreateControlDeviceMapping",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateControlDeviceMappingRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ControlDeviceMappingDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/api/assets/{assetId}/properties": {
@@ -715,6 +875,86 @@
             "description": ""
           },
           "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "CreateAssetProperty",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAssetPropertyRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssetPropertyDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
             "description": "",
             "content": {
               "application/json": {
@@ -6526,6 +6766,57 @@
           }
         }
       },
+      "CreateInputParameterRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "inputParameterName",
+          "inputType",
+          "dataEntryFrequency",
+          "inUseFlag",
+          "createdBy",
+          "correlationId"
+        ],
+        "properties": {
+          "inputParameterName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uomId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "reportingProgramId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "inputType": {
+            "type": "string",
+            "minLength": 1
+          },
+          "dataEntryFrequency": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fuelMapping": {
+            "type": "string",
+            "nullable": true
+          },
+          "inUseFlag": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "string",
+            "minLength": 1
+          },
+          "correlationId": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
       "ControlDeviceMappingDto": {
         "type": "object",
         "additionalProperties": false,
@@ -6567,6 +6858,38 @@
           },
           "correlationId": {
             "type": "string"
+          }
+        }
+      },
+      "CreateControlDeviceMappingRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "controlDeviceId",
+          "controlDeviceNameOrRef",
+          "inUseFlag",
+          "createdBy",
+          "correlationId"
+        ],
+        "properties": {
+          "controlDeviceId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "controlDeviceNameOrRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "inUseFlag": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "string",
+            "minLength": 1
+          },
+          "correlationId": {
+            "type": "string",
+            "minLength": 1
           }
         }
       },
@@ -6614,6 +6937,45 @@
           },
           "correlationId": {
             "type": "string"
+          }
+        }
+      },
+      "CreateAssetPropertyRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "propertyName",
+          "propertyValue",
+          "fromDate",
+          "notes",
+          "createdBy",
+          "correlationId"
+        ],
+        "properties": {
+          "propertyName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "propertyValue": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fromDate": {
+            "type": "string",
+            "format": "date",
+            "minLength": 1
+          },
+          "notes": {
+            "type": "string",
+            "minLength": 1
+          },
+          "createdBy": {
+            "type": "string",
+            "minLength": 1
+          },
+          "correlationId": {
+            "type": "string",
+            "minLength": 1
           }
         }
       },

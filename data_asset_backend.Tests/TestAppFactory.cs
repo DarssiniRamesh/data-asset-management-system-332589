@@ -1,8 +1,5 @@
 using System.Security.Claims;
 using System.Text.Encodings.Web;
-using DataAssetBackend.Features.Assets;
-using DataAssetBackend.Features.Masters;
-using DataAssetBackend.Features.Section4;
 using DataAssetBackend.Infrastructure.Database;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
@@ -61,23 +58,20 @@ public sealed class TestAppFactory : WebApplicationFactory<Program>
 
             // -----------------------------------------------------------------
             // DB-independent override:
-            // Replace DB-backed repositories with stubs that throw InvalidOperationException
-            // when invoked. This keeps the host startable without a DB and ensures request
-            // validation (400) is not masked by DB failures (503) for invalid payloads.
+            // Replace the DB connection factory with a stub that throws immediately
+            // if anything attempts DB access.
+            //
+            // Why this works:
+            // - All repositories depend on NpgsqlConnectionFactory.
+            // - Validation tests should return 400 before any DB call is needed.
+            // - If a test exercises a code path that *does* reach DB, we want a
+            //   deterministic failure rather than a flaky environment-dependent one.
+            //
+            // NOTE:
+            // We do NOT inherit from repositories here because many repositories are sealed.
             // -----------------------------------------------------------------
             services.RemoveAll<NpgsqlConnectionFactory>();
-            services.RemoveAll<AssetRepository>();
-            services.RemoveAll<AssetCopyRepository>();
-            services.RemoveAll<AssetCopyLineageRepository>();
-            services.RemoveAll<MasterRepository>();
-            services.RemoveAll<Section4Repository>();
-
-            services.AddSingleton<NpgsqlConnectionFactory>(_ => new ThrowingNpgsqlConnectionFactory());
-            services.AddSingleton<AssetRepository>(_ => new ThrowingAssetRepository());
-            services.AddSingleton<AssetCopyRepository>(_ => new ThrowingAssetCopyRepository());
-            services.AddSingleton<AssetCopyLineageRepository>(_ => new ThrowingAssetCopyLineageRepository());
-            services.AddSingleton<MasterRepository>(_ => new ThrowingMasterRepository());
-            services.AddSingleton<Section4Repository>(_ => new ThrowingSection4Repository());
+            services.AddSingleton<NpgsqlConnectionFactory, ThrowingNpgsqlConnectionFactory>();
         });
     }
 
@@ -119,6 +113,9 @@ public sealed class TestAppFactory : WebApplicationFactory<Program>
     private static InvalidOperationException DbNotConfigured()
         => new("Database is not configured (tests run DB-independent).");
 
+    /// <summary>
+    /// Npgsql connection factory that always throws, preventing any real DB access in tests.
+    /// </summary>
     private sealed class ThrowingNpgsqlConnectionFactory : NpgsqlConnectionFactory
     {
         public ThrowingNpgsqlConnectionFactory()
@@ -130,55 +127,5 @@ public sealed class TestAppFactory : WebApplicationFactory<Program>
 
         public override Task<Npgsql.NpgsqlConnection> OpenAsync(CancellationToken cancellationToken = default)
             => throw DbNotConfigured();
-    }
-
-    private sealed class ThrowingAssetRepository : AssetRepository
-    {
-        public ThrowingAssetRepository()
-            : base(
-                connectionFactory: new ThrowingNpgsqlConnectionFactory(),
-                logger: LoggerFactory.Create(b => b.AddDebug()).CreateLogger<AssetRepository>())
-        {
-        }
-    }
-
-    private sealed class ThrowingAssetCopyRepository : AssetCopyRepository
-    {
-        public ThrowingAssetCopyRepository()
-            : base(
-                connectionFactory: new ThrowingNpgsqlConnectionFactory(),
-                logger: LoggerFactory.Create(b => b.AddDebug()).CreateLogger<AssetCopyRepository>())
-        {
-        }
-    }
-
-    private sealed class ThrowingAssetCopyLineageRepository : AssetCopyLineageRepository
-    {
-        public ThrowingAssetCopyLineageRepository()
-            : base(
-                connectionFactory: new ThrowingNpgsqlConnectionFactory(),
-                logger: LoggerFactory.Create(b => b.AddDebug()).CreateLogger<AssetCopyLineageRepository>())
-        {
-        }
-    }
-
-    private sealed class ThrowingMasterRepository : MasterRepository
-    {
-        public ThrowingMasterRepository()
-            : base(
-                connectionFactory: new ThrowingNpgsqlConnectionFactory(),
-                logger: LoggerFactory.Create(b => b.AddDebug()).CreateLogger<MasterRepository>())
-        {
-        }
-    }
-
-    private sealed class ThrowingSection4Repository : Section4Repository
-    {
-        public ThrowingSection4Repository()
-            : base(
-                connectionFactory: new ThrowingNpgsqlConnectionFactory(),
-                logger: LoggerFactory.Create(b => b.AddDebug()).CreateLogger<Section4Repository>())
-        {
-        }
     }
 }

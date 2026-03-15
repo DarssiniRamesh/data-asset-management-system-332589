@@ -1,10 +1,15 @@
 using System.Security.Claims;
 using System.Text.Encodings.Web;
+using DataAssetBackend.Features.Assets;
+using DataAssetBackend.Features.Masters;
+using DataAssetBackend.Features.Section4;
+using DataAssetBackend.Infrastructure.Database;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -29,14 +34,7 @@ public sealed class TestAppFactory : WebApplicationFactory<Program>
         //
         // Why:
         // - CI environments for this kata often do not provide a running Postgres.
-        // - The API itself is designed to start even when DB isn't configured, returning
-        //   503 ("Database not configured") for DB-backed endpoints.
-        //
-        // If a future pipeline wants DB-backed integration tests, it can set:
-        // - TEST_DATABASE_CONNECTION_STRING (preferred), or
-        // - ConnectionStrings__Default / DATABASE_URL
-        //
-        // and also update tests to expect DB-backed behavior.
+        // - For validation-focused tests, we want 400 (validation) responses even when DB is absent.
         builder.ConfigureAppConfiguration((_, config) =>
         {
             // Intentionally no-op: do not inject a localhost connection string fallback.
@@ -60,6 +58,26 @@ public sealed class TestAppFactory : WebApplicationFactory<Program>
                 .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
                     TestAuthHandler.SchemeName,
                     _ => { });
+
+            // -----------------------------------------------------------------
+            // DB-independent override:
+            // Replace DB-backed repositories with stubs that throw InvalidOperationException
+            // when invoked. This keeps the host startable without a DB and ensures request
+            // validation (400) is not masked by DB failures (503) for invalid payloads.
+            // -----------------------------------------------------------------
+            services.RemoveAll<NpgsqlConnectionFactory>();
+            services.RemoveAll<AssetRepository>();
+            services.RemoveAll<AssetCopyRepository>();
+            services.RemoveAll<AssetCopyLineageRepository>();
+            services.RemoveAll<MasterRepository>();
+            services.RemoveAll<Section4Repository>();
+
+            services.AddSingleton<NpgsqlConnectionFactory>(_ => new ThrowingNpgsqlConnectionFactory());
+            services.AddSingleton<AssetRepository>(_ => new ThrowingAssetRepository());
+            services.AddSingleton<AssetCopyRepository>(_ => new ThrowingAssetCopyRepository());
+            services.AddSingleton<AssetCopyLineageRepository>(_ => new ThrowingAssetCopyLineageRepository());
+            services.AddSingleton<MasterRepository>(_ => new ThrowingMasterRepository());
+            services.AddSingleton<Section4Repository>(_ => new ThrowingSection4Repository());
         });
     }
 
@@ -92,6 +110,75 @@ public sealed class TestAppFactory : WebApplicationFactory<Program>
             var principal = new ClaimsPrincipal(identity);
             var ticket = new AuthenticationTicket(principal, SchemeName);
             return Task.FromResult(AuthenticateResult.Success(ticket));
+        }
+    }
+
+    /// <summary>
+    /// Throws when any DB access is attempted.
+    /// </summary>
+    private static InvalidOperationException DbNotConfigured()
+        => new("Database is not configured (tests run DB-independent).");
+
+    private sealed class ThrowingNpgsqlConnectionFactory : NpgsqlConnectionFactory
+    {
+        public ThrowingNpgsqlConnectionFactory()
+            : base(
+                configProvider: new DatabaseConfigProvider(),
+                logger: LoggerFactory.Create(b => b.AddDebug()).CreateLogger<NpgsqlConnectionFactory>())
+        {
+        }
+
+        public override Task<Npgsql.NpgsqlConnection> OpenAsync(CancellationToken cancellationToken = default)
+            => throw DbNotConfigured();
+    }
+
+    private sealed class ThrowingAssetRepository : AssetRepository
+    {
+        public ThrowingAssetRepository()
+            : base(
+                connectionFactory: new ThrowingNpgsqlConnectionFactory(),
+                logger: LoggerFactory.Create(b => b.AddDebug()).CreateLogger<AssetRepository>())
+        {
+        }
+    }
+
+    private sealed class ThrowingAssetCopyRepository : AssetCopyRepository
+    {
+        public ThrowingAssetCopyRepository()
+            : base(
+                connectionFactory: new ThrowingNpgsqlConnectionFactory(),
+                logger: LoggerFactory.Create(b => b.AddDebug()).CreateLogger<AssetCopyRepository>())
+        {
+        }
+    }
+
+    private sealed class ThrowingAssetCopyLineageRepository : AssetCopyLineageRepository
+    {
+        public ThrowingAssetCopyLineageRepository()
+            : base(
+                connectionFactory: new ThrowingNpgsqlConnectionFactory(),
+                logger: LoggerFactory.Create(b => b.AddDebug()).CreateLogger<AssetCopyLineageRepository>())
+        {
+        }
+    }
+
+    private sealed class ThrowingMasterRepository : MasterRepository
+    {
+        public ThrowingMasterRepository()
+            : base(
+                connectionFactory: new ThrowingNpgsqlConnectionFactory(),
+                logger: LoggerFactory.Create(b => b.AddDebug()).CreateLogger<MasterRepository>())
+        {
+        }
+    }
+
+    private sealed class ThrowingSection4Repository : Section4Repository
+    {
+        public ThrowingSection4Repository()
+            : base(
+                connectionFactory: new ThrowingNpgsqlConnectionFactory(),
+                logger: LoggerFactory.Create(b => b.AddDebug()).CreateLogger<Section4Repository>())
+        {
         }
     }
 }

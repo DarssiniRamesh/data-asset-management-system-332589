@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <!-- Keep test compilation consistent across environments -->
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+</Project>

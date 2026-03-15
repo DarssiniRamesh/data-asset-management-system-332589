@@ -6,7 +6,7 @@ namespace DataAssetBackend.Infrastructure.Database;
 /// <summary>
 /// Factory for opening Npgsql connections using the application's configured Postgres connection string.
 /// </summary>
-public sealed class NpgsqlConnectionFactory
+public class NpgsqlConnectionFactory
 {
     private readonly DatabaseConfigProvider _configProvider;
     private readonly ILogger<NpgsqlConnectionFactory> _logger;
@@ -33,7 +33,7 @@ public sealed class NpgsqlConnectionFactory
     ///   - throws <see cref="NpgsqlException"/> / <see cref="TimeoutException"/> for connectivity issues
     /// - Side effects: network connection to Postgres
     /// </remarks>
-    public async Task<NpgsqlConnection> OpenAsync(CancellationToken cancellationToken = default)
+    public virtual async Task<NpgsqlConnection> OpenAsync(CancellationToken cancellationToken = default)
     {
         var resolution = _configProvider.TryResolveConnectionString(_logger);
         if (!resolution.IsConfigured || string.IsNullOrWhiteSpace(resolution.ConnectionString))

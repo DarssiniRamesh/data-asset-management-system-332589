@@ -2594,6 +2594,10 @@ public sealed class AssetRepository
     {
         await using var conn = await _connectionFactory.OpenAsync(cancellationToken);
 
+        // Normalize compatibility fields (equationMasterId/equationText/year) into canonical DB columns.
+        // This prevents FK violations like fk_throughput_equation_master and ensures DB NOT NULL constraints are met.
+        request.Normalize();
+
         const string sql = """
             INSERT INTO throughput_equation (
                 input_parameter_id,
@@ -2702,6 +2706,9 @@ public sealed class AssetRepository
     {
         await using var conn = await _connectionFactory.OpenAsync(cancellationToken);
 
+        // Normalize compatibility fields (equationMasterId/equationText/year) into canonical DB columns.
+        request.Normalize();
+
         const string sql = """
             UPDATE throughput_equation
             SET
@@ -2757,6 +2764,8 @@ public sealed class AssetRepository
     public async Task<ThroughputScalarDto> CreateThroughputScalarAsync(long throughputEquationId, CreateThroughputScalarRequest request, CancellationToken cancellationToken)
     {
         await using var conn = await _connectionFactory.OpenAsync(cancellationToken);
+
+        request.Normalize();
 
         const string sql = """
             INSERT INTO throughput_scalar (
@@ -2875,6 +2884,8 @@ public sealed class AssetRepository
         CancellationToken cancellationToken)
     {
         await using var conn = await _connectionFactory.OpenAsync(cancellationToken);
+
+        request.Normalize();
 
         const string sql = """
             UPDATE throughput_scalar

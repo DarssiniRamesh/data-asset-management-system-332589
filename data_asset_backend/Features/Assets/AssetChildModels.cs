@@ -595,43 +595,173 @@ public sealed record ThroughputEquationDto(
 /// <summary>
 /// Request payload for creating a throughput equation row.
 /// </summary>
-public sealed class CreateThroughputEquationRequest
+public sealed class CreateThroughputEquationRequest : IValidatableObject
 {
+    /// <summary>
+    /// Canonical BRD/DB FK to equation_master (table column: throughput_equation.master_equation_id).
+    /// </summary>
     [Required]
     public long MasterEquationId { get; set; }
 
+    /// <summary>
+    /// Alias for <see cref="MasterEquationId"/> used by some frontend payloads.
+    /// Keep this for compatibility so UI can send equationMasterId without triggering FK violations.
+    /// </summary>
+    public long? EquationMasterId { get; set; }
+
+    /// <summary>
+    /// Canonical equation text stored on throughput_equation.generated_equation.
+    /// </summary>
     [Required(AllowEmptyStrings = false)]
     public string GeneratedEquation { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Alias for <see cref="GeneratedEquation"/> used by some frontend payloads.
+    /// </summary>
+    public string? EquationText { get; set; }
+
+    /// <summary>
+    /// Canonical reporting year (table column: throughput_equation.reporting_year).
+    /// </summary>
     [Required]
     public int ReportingYear { get; set; }
+
+    /// <summary>
+    /// Optional alias. If provided and <see cref="ReportingYear"/> is not set, backend will default ReportingYear.
+    /// (DB requires reporting_year, so we still validate.)
+    /// </summary>
+    public int? Year { get; set; }
+
+    // UI-only flag; not persisted in this table. Accept for compatibility and ignore.
+    public bool? IsActive { get; set; }
 
     [Required(AllowEmptyStrings = false)]
     public string CreatedBy { get; set; } = string.Empty;
 
     [Required(AllowEmptyStrings = false)]
     public string CorrelationId { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Normalize legacy/alternate payload shapes into the canonical DB fields.
+    /// This is used by repository flows to avoid FK/NOT NULL violations.
+    /// </summary>
+    public void Normalize()
+    {
+        if (MasterEquationId <= 0 && EquationMasterId.HasValue)
+        {
+            MasterEquationId = EquationMasterId.Value;
+        }
+
+        if (string.IsNullOrWhiteSpace(GeneratedEquation) && !string.IsNullOrWhiteSpace(EquationText))
+        {
+            GeneratedEquation = EquationText.Trim();
+        }
+
+        if (ReportingYear <= 0 && Year.HasValue)
+        {
+            ReportingYear = Year.Value;
+        }
+    }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        // Ensure normalization has occurred if model binder populated only alias fields.
+        Normalize();
+
+        if (MasterEquationId <= 0)
+        {
+            yield return new ValidationResult(
+                "masterEquationId is required and must be > 0 (FK to equation_master).",
+                new[] { nameof(MasterEquationId), nameof(EquationMasterId) });
+        }
+
+        if (string.IsNullOrWhiteSpace(GeneratedEquation))
+        {
+            yield return new ValidationResult(
+                "generatedEquation is required (or provide equationText).",
+                new[] { nameof(GeneratedEquation), nameof(EquationText) });
+        }
+
+        if (ReportingYear <= 0)
+        {
+            yield return new ValidationResult(
+                "reportingYear is required and must be > 0.",
+                new[] { nameof(ReportingYear), nameof(Year) });
+        }
+    }
 }
 
 /// <summary>
 /// Request payload for updating a throughput equation row.
 /// </summary>
-public sealed class UpdateThroughputEquationRequest
+public sealed class UpdateThroughputEquationRequest : IValidatableObject
 {
     [Required]
     public long MasterEquationId { get; set; }
 
+    public long? EquationMasterId { get; set; }
+
     [Required(AllowEmptyStrings = false)]
     public string GeneratedEquation { get; set; } = string.Empty;
 
+    public string? EquationText { get; set; }
+
     [Required]
     public int ReportingYear { get; set; }
+
+    public int? Year { get; set; }
+
+    public bool? IsActive { get; set; }
 
     [Required(AllowEmptyStrings = false)]
     public string ModifiedBy { get; set; } = string.Empty;
 
     [Required(AllowEmptyStrings = false)]
     public string CorrelationId { get; set; } = string.Empty;
+
+    public void Normalize()
+    {
+        if (MasterEquationId <= 0 && EquationMasterId.HasValue)
+        {
+            MasterEquationId = EquationMasterId.Value;
+        }
+
+        if (string.IsNullOrWhiteSpace(GeneratedEquation) && !string.IsNullOrWhiteSpace(EquationText))
+        {
+            GeneratedEquation = EquationText.Trim();
+        }
+
+        if (ReportingYear <= 0 && Year.HasValue)
+        {
+            ReportingYear = Year.Value;
+        }
+    }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        Normalize();
+
+        if (MasterEquationId <= 0)
+        {
+            yield return new ValidationResult(
+                "masterEquationId is required and must be > 0 (FK to equation_master).",
+                new[] { nameof(MasterEquationId), nameof(EquationMasterId) });
+        }
+
+        if (string.IsNullOrWhiteSpace(GeneratedEquation))
+        {
+            yield return new ValidationResult(
+                "generatedEquation is required (or provide equationText).",
+                new[] { nameof(GeneratedEquation), nameof(EquationText) });
+        }
+
+        if (ReportingYear <= 0)
+        {
+            yield return new ValidationResult(
+                "reportingYear is required and must be > 0.",
+                new[] { nameof(ReportingYear), nameof(Year) });
+        }
+    }
 }
 
 /// <summary>
@@ -655,8 +785,11 @@ public sealed record ThroughputScalarDto(
 /// <summary>
 /// Request payload for creating a throughput scalar row.
 /// </summary>
-public sealed class CreateThroughputScalarRequest
+public sealed class CreateThroughputScalarRequest : IValidatableObject
 {
+    /// <summary>
+    /// Canonical scalar type (required by DB).
+    /// </summary>
     [Required(AllowEmptyStrings = false)]
     public string ScalarType { get; set; } = string.Empty;
 
@@ -667,18 +800,58 @@ public sealed class CreateThroughputScalarRequest
     public string? ScalarValue { get; set; }
 
     public string? ScalarBasis { get; set; }
+
+    // ---------- Compatibility aliases (UI payload shape) ----------
+    public string? ScalarName { get; set; }
+    public decimal? ScalarNumberValue { get; set; }
+    public long? UomId { get; set; }
+    public bool? IsActive { get; set; }
 
     [Required(AllowEmptyStrings = false)]
     public string CreatedBy { get; set; } = string.Empty;
 
     [Required(AllowEmptyStrings = false)]
     public string CorrelationId { get; set; } = string.Empty;
+
+    public void Normalize()
+    {
+        // If UI sends scalarName but not scalarType, treat scalarName as the type label.
+        if (string.IsNullOrWhiteSpace(ScalarType) && !string.IsNullOrWhiteSpace(ScalarName))
+        {
+            ScalarType = ScalarName.Trim();
+        }
+
+        // If UI sends numeric scalar value, store as string (DB column is text in this schema).
+        if (ScalarNumberValue.HasValue && string.IsNullOrWhiteSpace(ScalarValue))
+        {
+            ScalarValue = ScalarNumberValue.Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        // If UI sends uomId, store in scalar_basis as a tagged value (schema has no uom FK here).
+        // This keeps data round-trippable without inventing new columns.
+        if (UomId.HasValue && string.IsNullOrWhiteSpace(ScalarBasis))
+        {
+            ScalarBasis = $"uomId:{UomId.Value}";
+        }
+    }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        Normalize();
+
+        if (string.IsNullOrWhiteSpace(ScalarType))
+        {
+            yield return new ValidationResult(
+                "scalarType is required (or provide scalarName).",
+                new[] { nameof(ScalarType), nameof(ScalarName) });
+        }
+    }
 }
 
 /// <summary>
 /// Request payload for updating a throughput scalar row.
 /// </summary>
-public sealed class UpdateThroughputScalarRequest
+public sealed class UpdateThroughputScalarRequest : IValidatableObject
 {
     [Required(AllowEmptyStrings = false)]
     public string ScalarType { get; set; } = string.Empty;
@@ -691,11 +864,47 @@ public sealed class UpdateThroughputScalarRequest
 
     public string? ScalarBasis { get; set; }
 
+    // Compatibility aliases (UI payload shape)
+    public string? ScalarName { get; set; }
+    public decimal? ScalarNumberValue { get; set; }
+    public long? UomId { get; set; }
+    public bool? IsActive { get; set; }
+
     [Required(AllowEmptyStrings = false)]
     public string ModifiedBy { get; set; } = string.Empty;
 
     [Required(AllowEmptyStrings = false)]
     public string CorrelationId { get; set; } = string.Empty;
+
+    public void Normalize()
+    {
+        if (string.IsNullOrWhiteSpace(ScalarType) && !string.IsNullOrWhiteSpace(ScalarName))
+        {
+            ScalarType = ScalarName.Trim();
+        }
+
+        if (ScalarNumberValue.HasValue && string.IsNullOrWhiteSpace(ScalarValue))
+        {
+            ScalarValue = ScalarNumberValue.Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        if (UomId.HasValue && string.IsNullOrWhiteSpace(ScalarBasis))
+        {
+            ScalarBasis = $"uomId:{UomId.Value}";
+        }
+    }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        Normalize();
+
+        if (string.IsNullOrWhiteSpace(ScalarType))
+        {
+            yield return new ValidationResult(
+                "scalarType is required (or provide scalarName).",
+                new[] { nameof(ScalarType), nameof(ScalarName) });
+        }
+    }
 }
 
 // ------------------------------------------------------------

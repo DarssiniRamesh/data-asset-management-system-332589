@@ -534,8 +534,11 @@ public sealed class CreateEfSourceMappingRequest
 
     public string? ScalarValues { get; set; }
 
-    [Required]
-    public long ReportingProgramId { get; set; }
+    /// <summary>
+    /// Optional in request payload.
+    /// If not provided (or provided as &lt;= 0), the backend derives it from the parent input_parameter row.
+    /// </summary>
+    public long? ReportingProgramId { get; set; }
 
     [Required(AllowEmptyStrings = false)]
     public string CreatedBy { get; set; } = string.Empty;
@@ -556,8 +559,11 @@ public sealed class UpdateEfSourceMappingRequest
 
     public string? ScalarValues { get; set; }
 
-    [Required]
-    public long ReportingProgramId { get; set; }
+    /// <summary>
+    /// Optional in request payload.
+    /// If not provided (or provided as &lt;= 0), the backend derives it from the parent input_parameter row.
+    /// </summary>
+    public long? ReportingProgramId { get; set; }
 
     [Required(AllowEmptyStrings = false)]
     public string ModifiedBy { get; set; } = string.Empty;

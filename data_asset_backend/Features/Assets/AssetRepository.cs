@@ -2325,11 +2325,13 @@ public sealed class AssetRepository
         // BRD: ef_source_mapping has a required FK to reporting_program_master.
         // The UI may not always send reportingProgramId (older clients / partial-tab implementations).
         // To prevent FK violations, we derive reporting_program_id from the parent input_parameter row when missing/invalid.
-        long ResolveReportingProgramId(long candidate)
+        //
+        // IMPORTANT: If neither the request nor the parent input_parameter has a reporting_program_id, this is a
+        // client/workflow validation issue, NOT "DB not configured". We therefore return a 400 via RequestValidationException.
+        static long ResolveReportingProgramId(long? candidate)
         {
-            // Candidate is required by model validation, but if client sends 0 it will pass default(long)=0 and fail FK.
-            // Treat <=0 as "not provided".
-            return candidate > 0 ? candidate : 0;
+            // Treat null/<=0 as "not provided".
+            return candidate.HasValue && candidate.Value > 0 ? candidate.Value : 0;
         }
 
         var resolvedReportingProgramId = ResolveReportingProgramId(request.ReportingProgramId);
@@ -2348,15 +2350,29 @@ public sealed class AssetRepository
             var scalar = await rpCmd.ExecuteScalarAsync(cancellationToken);
             if (scalar is null || scalar is DBNull)
             {
-                throw new InvalidOperationException(
-                    "Cannot create ef_source_mapping: reporting_program_id is missing and could not be derived from input_parameter.");
+                throw new DataAssetBackend.Infrastructure.Api.RequestValidationException(
+                    new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase)
+                    {
+                        ["reportingProgramId"] = new[]
+                        {
+                            "reportingProgramId is required (either provide it on the EF Source Mapping request, or set it on the Input Parameter).",
+                            "Missing: reportingProgramId was not provided and could not be derived from the parent input parameter."
+                        }
+                    });
             }
 
             resolvedReportingProgramId = Convert.ToInt64(scalar);
             if (resolvedReportingProgramId <= 0)
             {
-                throw new InvalidOperationException(
-                    "Cannot create ef_source_mapping: derived reporting_program_id from input_parameter was invalid.");
+                throw new DataAssetBackend.Infrastructure.Api.RequestValidationException(
+                    new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase)
+                    {
+                        ["reportingProgramId"] = new[]
+                        {
+                            "reportingProgramId is required (either provide it on the EF Source Mapping request, or set it on the Input Parameter).",
+                            "Invalid: derived reportingProgramId from the parent input parameter was <= 0."
+                        }
+                    });
             }
         }
 
@@ -2475,7 +2491,7 @@ public sealed class AssetRepository
 
         // See CreateEfSourceMappingAsync for rationale: protect against FK violations by deriving reporting_program_id
         // from the parent input_parameter when client omits/sends invalid id.
-        long ResolveReportingProgramId(long candidate) => candidate > 0 ? candidate : 0;
+        static long ResolveReportingProgramId(long? candidate) => candidate.HasValue && candidate.Value > 0 ? candidate.Value : 0;
 
         var resolvedReportingProgramId = ResolveReportingProgramId(request.ReportingProgramId);
         if (resolvedReportingProgramId <= 0)
@@ -2493,15 +2509,29 @@ public sealed class AssetRepository
             var scalar = await rpCmd.ExecuteScalarAsync(cancellationToken);
             if (scalar is null || scalar is DBNull)
             {
-                throw new InvalidOperationException(
-                    "Cannot update ef_source_mapping: reporting_program_id is missing and could not be derived from input_parameter.");
+                throw new DataAssetBackend.Infrastructure.Api.RequestValidationException(
+                    new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase)
+                    {
+                        ["reportingProgramId"] = new[]
+                        {
+                            "reportingProgramId is required (either provide it on the EF Source Mapping request, or set it on the Input Parameter).",
+                            "Missing: reportingProgramId was not provided and could not be derived from the parent input parameter."
+                        }
+                    });
             }
 
             resolvedReportingProgramId = Convert.ToInt64(scalar);
             if (resolvedReportingProgramId <= 0)
             {
-                throw new InvalidOperationException(
-                    "Cannot update ef_source_mapping: derived reporting_program_id from input_parameter was invalid.");
+                throw new DataAssetBackend.Infrastructure.Api.RequestValidationException(
+                    new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase)
+                    {
+                        ["reportingProgramId"] = new[]
+                        {
+                            "reportingProgramId is required (either provide it on the EF Source Mapping request, or set it on the Input Parameter).",
+                            "Invalid: derived reportingProgramId from the parent input parameter was <= 0."
+                        }
+                    });
             }
         }
 

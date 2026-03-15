@@ -180,6 +180,20 @@ public static class ApiErrorHandling
             );
         }
 
+        // Guardrail: EF Source Mapping "missing reporting_program_id" is a client/workflow validation issue,
+        // not an infrastructure outage. If any older code path still throws InvalidOperationException for this,
+        // map it to 400 to avoid misleading 503 responses.
+        if (ex is InvalidOperationException ioeEf &&
+            (ioeEf.Message.StartsWith("Cannot create ef_source_mapping", StringComparison.OrdinalIgnoreCase)
+             || ioeEf.Message.StartsWith("Cannot update ef_source_mapping", StringComparison.OrdinalIgnoreCase)))
+        {
+            return (
+                StatusCodes.Status400BadRequest,
+                "Validation failed",
+                ioeEf.Message
+            );
+        }
+
         // Postgres constraint errors (FK/unique/etc). Conservative mapping:
         // - SQLSTATE class 23 (integrity constraint violation) -> 409
         if (ex is PostgresException pg)

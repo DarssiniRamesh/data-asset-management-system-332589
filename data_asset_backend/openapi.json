@@ -7637,7 +7637,6 @@
         "additionalProperties": false,
         "required": [
           "efSourceSetOrTable",
-          "reportingProgramId",
           "createdBy",
           "correlationId"
         ],
@@ -7656,7 +7655,8 @@
           },
           "reportingProgramId": {
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "nullable": true
           },
           "createdBy": {
             "type": "string",
@@ -7673,7 +7673,6 @@
         "additionalProperties": false,
         "required": [
           "efSourceSetOrTable",
-          "reportingProgramId",
           "modifiedBy",
           "correlationId"
         ],
@@ -7692,7 +7691,8 @@
           },
           "reportingProgramId": {
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "nullable": true
           },
           "modifiedBy": {
             "type": "string",

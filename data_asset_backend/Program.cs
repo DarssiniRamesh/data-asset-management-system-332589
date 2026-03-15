@@ -2660,6 +2660,12 @@ app.MapPut("/api/masters/status-codes/{statusCodeId:long}", async (
 var section4 = app.MapGroup("/api/section4")
     .WithTags("Section4");
 
+/*
+ * NOTE:
+ * Section 4 endpoints must be explicitly registered here; otherwise the frontend receives 404
+ * and the endpoints do not appear in Swagger/OpenAPI.
+ */
+
 // -------------------------
 // Site Profiles
 // -------------------------
@@ -2815,6 +2821,324 @@ section4.MapDelete("/site-profiles/{siteProfileId:long}", async (
     .WithName("Section4_DeleteSiteProfile")
     .WithSummary("Delete site profile")
     .WithDescription("Soft-deletes a Section 4 Site Profile by ID.")
+    .Accepts<DeleteAssetRequest>("application/json")
+    .Produces(StatusCodes.Status204NoContent)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
+
+// -------------------------
+// Chemical Raw Materials (FIX for frontend 404: /api/section4/chemical-raw-materials)
+// -------------------------
+section4.MapGet("/chemical-raw-materials", async (
+        string? siteId,
+        int? limit,
+        Section4Repository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("Section4.ListChemicalRawMaterials");
+
+        try
+        {
+            var rows = await Section4Flows.ListChemicalRawMaterialsAsync(siteId, limit, repository, logger, cancellationToken);
+            return Results.Ok(rows);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "ListChemicalRawMaterials failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanRead")
+    .WithName("Section4_ListChemicalRawMaterials")
+    .WithSummary("List chemical raw materials")
+    .WithDescription("Lists Section 4 Chemical Raw Materials with optional siteId filter and limit.")
+    .Produces<IReadOnlyList<ChemicalRawMaterialDto>>(StatusCodes.Status200OK)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+section4.MapPost("/chemical-raw-materials", async (
+        CreateChemicalRawMaterialRequest request,
+        Section4Repository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("Section4.CreateChemicalRawMaterial");
+
+        RequestValidation.ValidateAndThrow(request, nameof(CreateChemicalRawMaterialRequest));
+
+        try
+        {
+            var created = await repository.CreateChemicalRawMaterialAsync(request, cancellationToken);
+            return Results.Created($"/api/section4/chemical-raw-materials/{created.ChemicalRawMaterialId}", created);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "CreateChemicalRawMaterial failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            logger.LogWarning(ex, "CreateChemicalRawMaterial failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("Section4_CreateChemicalRawMaterial")
+    .WithSummary("Create chemical raw material")
+    .WithDescription("Creates a Section 4 Chemical Raw Material.")
+    .Accepts<CreateChemicalRawMaterialRequest>("application/json")
+    .Produces<ChemicalRawMaterialDto>(StatusCodes.Status201Created)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
+
+section4.MapPut("/chemical-raw-materials/{chemicalRawMaterialId:long}", async (
+        long chemicalRawMaterialId,
+        UpdateChemicalRawMaterialRequest request,
+        Section4Repository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("Section4.UpdateChemicalRawMaterial");
+
+        RequestValidation.ValidateAndThrow(request, nameof(UpdateChemicalRawMaterialRequest));
+
+        try
+        {
+            var updated = await repository.UpdateChemicalRawMaterialAsync(chemicalRawMaterialId, request, cancellationToken);
+            return updated is null ? Results.NotFound() : Results.Ok(updated);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "UpdateChemicalRawMaterial failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("Section4_UpdateChemicalRawMaterial")
+    .WithSummary("Update chemical raw material")
+    .WithDescription("Updates a Section 4 Chemical Raw Material by ID.")
+    .Accepts<UpdateChemicalRawMaterialRequest>("application/json")
+    .Produces<ChemicalRawMaterialDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+section4.MapDelete("/chemical-raw-materials/{chemicalRawMaterialId:long}", async (
+        long chemicalRawMaterialId,
+        [FromBody] DeleteAssetRequest request,
+        Section4Repository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("Section4.DeleteChemicalRawMaterial");
+
+        RequestValidation.ValidateAndThrow(request, nameof(DeleteAssetRequest));
+
+        try
+        {
+            var deleted = await repository.DeleteChemicalRawMaterialAsync(
+                chemicalRawMaterialId,
+                modifiedBy: request.ModifiedBy,
+                correlationId: request.CorrelationId,
+                cancellationToken: cancellationToken);
+
+            return deleted ? Results.NoContent() : Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "DeleteChemicalRawMaterial failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            logger.LogWarning(ex, "DeleteChemicalRawMaterial failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .RequireAuthorization("AdminOnly")
+    .WithName("Section4_DeleteChemicalRawMaterial")
+    .WithSummary("Delete chemical raw material")
+    .WithDescription("Soft-deletes a Section 4 Chemical Raw Material by ID.")
+    .Accepts<DeleteAssetRequest>("application/json")
+    .Produces(StatusCodes.Status204NoContent)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
+
+// -------------------------
+// Chemical SDS (FIX for frontend 404: /api/section4/chemical-sds)
+// -------------------------
+section4.MapGet("/chemical-sds", async (
+        string? siteId,
+        int? limit,
+        Section4Repository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("Section4.ListChemicalSds");
+
+        try
+        {
+            var rows = await Section4Flows.ListChemicalSdsAsync(siteId, limit, repository, logger, cancellationToken);
+            return Results.Ok(rows);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "ListChemicalSds failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanRead")
+    .WithName("Section4_ListChemicalSds")
+    .WithSummary("List chemical SDS")
+    .WithDescription("Lists Section 4 Chemical SDS rows with optional siteId filter and limit.")
+    .Produces<IReadOnlyList<ChemicalSdsDto>>(StatusCodes.Status200OK)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+section4.MapPost("/chemical-sds", async (
+        CreateChemicalSdsRequest request,
+        Section4Repository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("Section4.CreateChemicalSds");
+
+        RequestValidation.ValidateAndThrow(request, nameof(CreateChemicalSdsRequest));
+
+        try
+        {
+            var created = await repository.CreateChemicalSdsAsync(request, cancellationToken);
+            return Results.Created($"/api/section4/chemical-sds/{created.ChemicalSdsId}", created);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "CreateChemicalSds failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            logger.LogWarning(ex, "CreateChemicalSds failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("Section4_CreateChemicalSds")
+    .WithSummary("Create chemical SDS")
+    .WithDescription("Creates a Section 4 Chemical SDS row.")
+    .Accepts<CreateChemicalSdsRequest>("application/json")
+    .Produces<ChemicalSdsDto>(StatusCodes.Status201Created)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
+
+section4.MapPut("/chemical-sds/{chemicalSdsId:long}", async (
+        long chemicalSdsId,
+        UpdateChemicalSdsRequest request,
+        Section4Repository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("Section4.UpdateChemicalSds");
+
+        RequestValidation.ValidateAndThrow(request, nameof(UpdateChemicalSdsRequest));
+
+        try
+        {
+            var updated = await repository.UpdateChemicalSdsAsync(chemicalSdsId, request, cancellationToken);
+            return updated is null ? Results.NotFound() : Results.Ok(updated);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "UpdateChemicalSds failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("Section4_UpdateChemicalSds")
+    .WithSummary("Update chemical SDS")
+    .WithDescription("Updates a Section 4 Chemical SDS row by ID.")
+    .Accepts<UpdateChemicalSdsRequest>("application/json")
+    .Produces<ChemicalSdsDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+section4.MapDelete("/chemical-sds/{chemicalSdsId:long}", async (
+        long chemicalSdsId,
+        [FromBody] DeleteAssetRequest request,
+        Section4Repository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("Section4.DeleteChemicalSds");
+
+        RequestValidation.ValidateAndThrow(request, nameof(DeleteAssetRequest));
+
+        try
+        {
+            var deleted = await repository.DeleteChemicalSdsAsync(
+                chemicalSdsId,
+                modifiedBy: request.ModifiedBy,
+                correlationId: request.CorrelationId,
+                cancellationToken: cancellationToken);
+
+            return deleted ? Results.NoContent() : Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "DeleteChemicalSds failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            logger.LogWarning(ex, "DeleteChemicalSds failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .RequireAuthorization("AdminOnly")
+    .WithName("Section4_DeleteChemicalSds")
+    .WithSummary("Delete chemical SDS")
+    .WithDescription("Soft-deletes a Section 4 Chemical SDS row by ID.")
     .Accepts<DeleteAssetRequest>("application/json")
     .Produces(StatusCodes.Status204NoContent)
     .Produces(StatusCodes.Status404NotFound)

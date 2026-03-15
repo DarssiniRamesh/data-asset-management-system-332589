@@ -963,11 +963,21 @@ app.MapPost("/api/assets/{assetId:long}/copy", async (
 // Asset child endpoints (BRD-evidenced asset-scoped child resources)
 // ---------------------------------------------------------------------
 //
-// Fix for frontend 404s:
-// - GET /api/assets/{assetId}/input-parameters
-// - GET /api/assets/{assetId}/control-device-mappings
-// - GET /api/assets/{assetId}/properties
+// NOTE:
+// The test suite expects *create* endpoints to accept POST so that model binding + validation
+// runs and returns 400 (not 405). These were previously only mapped as GET (list) endpoints.
 //
+// Child modules covered here:
+// - properties
+// - control-device-mappings
+// - input-parameters
+//
+
+// -------------------------
+// Input parameters
+// -------------------------
+
+// List input parameters
 app.MapGet("/api/assets/{assetId:long}/input-parameters", async (
         long assetId,
         AssetRepository repository,
@@ -1003,6 +1013,62 @@ app.MapGet("/api/assets/{assetId:long}/input-parameters", async (
     .Produces(StatusCodes.Status404NotFound)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
 
+// Create input parameter (FIX for 405 on POST /api/assets/{assetId}/input-parameters)
+app.MapPost("/api/assets/{assetId:long}/input-parameters", async (
+        long assetId,
+        CreateInputParameterRequest request,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("CreateInputParameter");
+
+        try
+        {
+            // Ensure missing required fields fail fast (400) before any DB access.
+            RequestValidation.ValidateAndThrow(request, nameof(CreateInputParameterRequest));
+
+            var created = await AssetChildFlows.CreateInputParameterAsync(assetId, request, repository, logger, cancellationToken);
+            return Results.Created($"/api/assets/{assetId}/input-parameters/{created.InputParameterId}", created);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "CreateInputParameter failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            logger.LogWarning(ex, "CreateInputParameter failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("CreateInputParameter")
+    .WithTags("Assets")
+    .WithSummary("Create input parameter")
+    .WithDescription("Creates an input parameter row under an asset scope (BRD child module).")
+    .Accepts<CreateInputParameterRequest>("application/json")
+    .Produces<InputParameterDto>(StatusCodes.Status201Created)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
+
+// -------------------------
+// Control device mappings
+// -------------------------
+
+// List control device mappings
 app.MapGet("/api/assets/{assetId:long}/control-device-mappings", async (
         long assetId,
         AssetRepository repository,
@@ -1038,6 +1104,62 @@ app.MapGet("/api/assets/{assetId:long}/control-device-mappings", async (
     .Produces(StatusCodes.Status404NotFound)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
 
+// Create control device mapping (FIX for 405 on POST /api/assets/{assetId}/control-device-mappings)
+app.MapPost("/api/assets/{assetId:long}/control-device-mappings", async (
+        long assetId,
+        CreateControlDeviceMappingRequest request,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("CreateControlDeviceMapping");
+
+        try
+        {
+            // Ensure missing required fields fail fast (400) before any DB access.
+            RequestValidation.ValidateAndThrow(request, nameof(CreateControlDeviceMappingRequest));
+
+            var created = await AssetChildFlows.CreateControlDeviceMappingAsync(assetId, request, repository, logger, cancellationToken);
+            return Results.Created($"/api/assets/{assetId}/control-device-mappings/{created.ControlDeviceMappingId}", created);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "CreateControlDeviceMapping failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            logger.LogWarning(ex, "CreateControlDeviceMapping failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("CreateControlDeviceMapping")
+    .WithTags("Assets")
+    .WithSummary("Create control device mapping")
+    .WithDescription("Creates a control device mapping row under an asset scope (BRD child module).")
+    .Accepts<CreateControlDeviceMappingRequest>("application/json")
+    .Produces<ControlDeviceMappingDto>(StatusCodes.Status201Created)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
+
+// -------------------------
+// Asset properties
+// -------------------------
+
+// List asset properties
 app.MapGet("/api/assets/{assetId:long}/properties", async (
         long assetId,
         AssetRepository repository,
@@ -1072,6 +1194,57 @@ app.MapGet("/api/assets/{assetId:long}/properties", async (
     .Produces<IReadOnlyList<AssetPropertyDto>>(StatusCodes.Status200OK)
     .Produces(StatusCodes.Status404NotFound)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+// Create asset property (FIX for 405 on POST /api/assets/{assetId}/properties)
+app.MapPost("/api/assets/{assetId:long}/properties", async (
+        long assetId,
+        CreateAssetPropertyRequest request,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("CreateAssetProperty");
+
+        try
+        {
+            // Ensure missing required fields fail fast (400) before any DB access.
+            RequestValidation.ValidateAndThrow(request, nameof(CreateAssetPropertyRequest));
+
+            var created = await AssetChildFlows.CreateAssetPropertyAsync(assetId, request, repository, logger, cancellationToken);
+            return Results.Created($"/api/assets/{assetId}/properties/{created.AssetPropertyId}", created);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "CreateAssetProperty failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            logger.LogWarning(ex, "CreateAssetProperty failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("CreateAssetProperty")
+    .WithTags("Assets")
+    .WithSummary("Create asset property")
+    .WithDescription("Creates an asset property row under an asset scope (BRD child module).")
+    .Accepts<CreateAssetPropertyRequest>("application/json")
+    .Produces<AssetPropertyDto>(StatusCodes.Status201Created)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
 
 // ---------------------------------------------------------------------
 // Missing asset child endpoints (previously implemented in flows/repo but

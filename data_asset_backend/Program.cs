@@ -187,7 +187,19 @@ builder.Services.AddCors(options =>
                 // Hosted preview environment (example host: vscode-internal-34811-beta.beta01.cloud.kavia.ai)
                 // In many cases frontend is :3000 and backend is :3001, but some preview/proxy setups
                 // present the same hosts on default ports (443/80) while routing internally.
-                if (uri.Host.Contains("kavia.ai", StringComparison.OrdinalIgnoreCase) &&
+                //
+                // NOTE:
+                // We must match subdomains like: vscode-internal-18008-beta.beta01.cloud.kavia.ai
+                // Those hosts end with ".cloud.kavia.ai" but do NOT necessarily contain "kavia.ai"
+                // as a raw substring (because of the dot boundary).
+                var host = uri.Host;
+                var isKaviaPreviewHost =
+                    host.EndsWith(".kavia.ai", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(host, "kavia.ai", StringComparison.OrdinalIgnoreCase) ||
+                    host.EndsWith(".cloud.kavia.ai", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(host, "cloud.kavia.ai", StringComparison.OrdinalIgnoreCase);
+
+                if (isKaviaPreviewHost &&
                     (uri.Port == 3000 || uri.Port == 3001 || uri.Port == 443 || uri.Port == 80) &&
                     (string.Equals(uri.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase) ||
                      string.Equals(uri.Scheme, Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase)))
@@ -293,9 +305,13 @@ static bool IsAllowedCorsOriginForPreflight(string origin)
     }
 
     // Hosted preview (frontend typically :3000, backend typically :3001).
+    // Match both the apex domains and any subdomains.
+    var host = uri.Host;
     var isKaviaPreviewHost =
-        uri.Host.Contains("kavia.ai", StringComparison.OrdinalIgnoreCase) ||
-        uri.Host.Contains("cloud.kavia.ai", StringComparison.OrdinalIgnoreCase);
+        host.EndsWith(".kavia.ai", StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(host, "kavia.ai", StringComparison.OrdinalIgnoreCase) ||
+        host.EndsWith(".cloud.kavia.ai", StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(host, "cloud.kavia.ai", StringComparison.OrdinalIgnoreCase);
 
     if (isKaviaPreviewHost &&
         (uri.Port == 3000 || uri.Port == 3001 || uri.Port == 443 || uri.Port == 80) &&

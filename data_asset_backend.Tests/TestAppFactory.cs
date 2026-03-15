@@ -120,7 +120,12 @@ public sealed class TestAppFactory : WebApplicationFactory<Program>
     {
         public ThrowingNpgsqlConnectionFactory()
             : base(
-                configProvider: new DatabaseConfigProvider(),
+                // DatabaseConfigProvider requires IConfiguration; for DB-independent tests we can provide
+                // a minimal, empty configuration so nothing accidentally resolves a real connection string.
+                configProvider: new DatabaseConfigProvider(
+                    new ConfigurationBuilder()
+                        .AddInMemoryCollection(new Dictionary<string, string?>())
+                        .Build()),
                 logger: LoggerFactory.Create(b => b.AddDebug()).CreateLogger<NpgsqlConnectionFactory>())
         {
         }

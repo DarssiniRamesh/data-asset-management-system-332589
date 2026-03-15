@@ -935,6 +935,84 @@ app.MapPost("/api/assets/{assetId:long}/copy", async (
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
     .ProducesProblem(StatusCodes.Status409Conflict);
 
+// ---------------------------------------------------------------------
+// Asset child endpoints (BRD-evidenced asset-scoped child resources)
+// ---------------------------------------------------------------------
+//
+// Fix for frontend 404s:
+// - GET /api/assets/{assetId}/input-parameters
+// - GET /api/assets/{assetId}/control-device-mappings
+//
+app.MapGet("/api/assets/{assetId:long}/input-parameters", async (
+        long assetId,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("ListInputParameters");
+
+        try
+        {
+            var list = await AssetChildFlows.ListInputParametersAsync(assetId, repository, logger, cancellationToken);
+            return Results.Ok(list);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "ListInputParameters failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanRead")
+    .WithName("ListInputParameters")
+    .WithTags("Assets")
+    .WithSummary("List input parameters")
+    .WithDescription("Lists input parameter rows for the given asset.")
+    .Produces<IReadOnlyList<InputParameterDto>>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapGet("/api/assets/{assetId:long}/control-device-mappings", async (
+        long assetId,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("ListControlDeviceMappings");
+
+        try
+        {
+            var list = await AssetChildFlows.ListControlDeviceMappingsAsync(assetId, repository, logger, cancellationToken);
+            return Results.Ok(list);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "ListControlDeviceMappings failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanRead")
+    .WithName("ListControlDeviceMappings")
+    .WithTags("Assets")
+    .WithSummary("List control device mappings")
+    .WithDescription("Lists control device mapping rows for the given asset.")
+    .Produces<IReadOnlyList<ControlDeviceMappingDto>>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
 //
 // Copy lineage endpoints (BRD §6.13; table: asset_copy_lineage)
 //

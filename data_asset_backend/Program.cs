@@ -3146,6 +3146,105 @@ section4.MapDelete("/chemical-sds/{chemicalSdsId:long}", async (
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
     .ProducesProblem(StatusCodes.Status409Conflict);
 
+// -------------------------
+// WWTS Process Streams (FIX for frontend 404: /api/section4/wwts-process-streams)
+// -------------------------
+section4.MapGet("/wwts-process-streams", async (
+        string? siteId,
+        int? limit,
+        Section4Repository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("Section4.ListWwtsProcessStreams");
+
+        try
+        {
+            var rows = await Section4Flows.ListWwtsProcessStreamsAsync(siteId, limit, repository, logger, cancellationToken);
+            return Results.Ok(rows);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "ListWwtsProcessStreams failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanRead")
+    .WithName("Section4_ListWwtsProcessStreams")
+    .WithSummary("List WWTS process streams")
+    .WithDescription("Lists Section 4 WWTS Process Streams with optional siteId filter and limit.")
+    .Produces<IReadOnlyList<WwtsProcessStreamDto>>(StatusCodes.Status200OK)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+// -------------------------
+// Lab Data Configurations (FIX for frontend 404: /api/section4/lab-data-configurations)
+// -------------------------
+section4.MapGet("/lab-data-configurations", async (
+        string? siteId,
+        int? limit,
+        Section4Repository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("Section4.ListLabDataConfigurations");
+
+        try
+        {
+            var rows = await Section4Flows.ListLabDataConfigurationsAsync(siteId, limit, repository, logger, cancellationToken);
+            return Results.Ok(rows);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "ListLabDataConfigurations failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanRead")
+    .WithName("Section4_ListLabDataConfigurations")
+    .WithSummary("List lab data configurations")
+    .WithDescription("Lists Section 4 Lab Data Configurations with optional siteId filter and limit.")
+    .Produces<IReadOnlyList<LabDataConfigurationDto>>(StatusCodes.Status200OK)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+// -------------------------
+// Water Process Configurations (FIX for frontend 404: /api/section4/water-process-configurations)
+// -------------------------
+section4.MapGet("/water-process-configurations", async (
+        string? siteId,
+        int? limit,
+        Section4Repository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("Section4.ListWaterProcessConfigurations");
+
+        try
+        {
+            var rows = await Section4Flows.ListWaterProcessConfigurationsAsync(siteId, limit, repository, logger, cancellationToken);
+            return Results.Ok(rows);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "ListWaterProcessConfigurations failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanRead")
+    .WithName("Section4_ListWaterProcessConfigurations")
+    .WithSummary("List water process configurations")
+    .WithDescription("Lists Section 4 Water Process Configurations with optional siteId filter and limit.")
+    .Produces<IReadOnlyList<WaterProcessConfigurationDto>>(StatusCodes.Status200OK)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
 // ---------------------------------------------------------------------
 // BRD §9 Legacy/Observed API inventory endpoints (compatibility shims)
 // ---------------------------------------------------------------------

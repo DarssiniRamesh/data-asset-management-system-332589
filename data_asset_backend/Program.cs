@@ -2930,7 +2930,17 @@ app.MapPost("/api/masters/control-devices", async (
     .ProducesProblem(StatusCodes.Status409Conflict);
 
 app.MapGet("/api/masters/control-devices", async (
-        string? siteId,
+        // NOTE: The frontend may send either `siteId` or `SiteId` (and sometimes both).
+        // Bind both explicitly so filtering is deterministic.
+        [FromQuery(Name = "siteId")] string? siteId,
+        [FromQuery(Name = "SiteId")] string? siteIdPascal,
+
+        // NOTE: Our shared QueryMasterRequest uses PascalCase property names (ActiveOnly, Limit).
+        // Some clients send `Limit` while others may send `limit`; bind both and merge so
+        // we do not depend on framework-specific case sensitivity quirks.
+        [FromQuery(Name = "limit")] int? limitLower,
+        [FromQuery(Name = "Limit")] int? limitPascal,
+
         [AsParameters] QueryMasterRequest request,
         MasterRepository repository,
         ILoggerFactory loggerFactory,
@@ -2940,7 +2950,22 @@ app.MapGet("/api/masters/control-devices", async (
 
         try
         {
-            var list = await MasterFlows.QueryControlDevicesAsync(siteId, request, repository, logger, cancellationToken);
+            // Prefer an explicit non-empty siteId, normalized for whitespace.
+            var effectiveSiteId = (siteIdPascal ?? siteId)?.Trim();
+            if (string.IsNullOrWhiteSpace(effectiveSiteId))
+            {
+                effectiveSiteId = null;
+            }
+
+            // Prefer explicitly provided limit query values (either casing),
+            // otherwise fall back to what `[AsParameters]` bound into request.
+            var effectiveLimit = limitPascal ?? limitLower ?? request.Limit;
+
+            // QueryMasterRequest is a mutable class (not a record), so update in-place.
+            // This keeps binding behavior predictable without requiring a new type.
+            request.Limit = effectiveLimit;
+
+            var list = await MasterFlows.QueryControlDevicesAsync(effectiveSiteId, request, repository, logger, cancellationToken);
             return Results.Ok(list);
         }
         catch (InvalidOperationException ex)
@@ -2955,7 +2980,7 @@ app.MapGet("/api/masters/control-devices", async (
     .WithName("QueryControlDeviceMasters")
     .WithTags("Masters")
     .WithSummary("Query control device masters")
-    .WithDescription("Queries control device master rows (BRD §6.14). Optional: siteId, activeOnly.")
+    .WithDescription("Queries control device master rows (BRD §6.14). Optional: siteId/SiteId, activeOnly, limit/Limit.")
     .Produces<IReadOnlyList<ControlDeviceMasterDto>>(StatusCodes.Status200OK)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
 

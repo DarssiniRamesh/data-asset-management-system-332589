@@ -472,7 +472,14 @@ app.UseOpenApi(settings =>
 
 app.UseSwaggerUi(config =>
 {
+    // Serve Swagger UI at /docs.
     config.Path = "/docs";
+
+    // Explicitly set the OpenAPI endpoint used by the UI. Without this, the UI index.html
+    // can default to /swagger/v1/swagger.json and render blank if the route does not match
+    // the published OpenAPI document in this app.
+    config.SwaggerRoutes.Clear();
+    config.SwaggerRoutes.Add(new NSwag.AspNetCore.SwaggerUiRoute("/openapi.json", "v1"));
 });
 
 /*

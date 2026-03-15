@@ -432,3 +432,4 @@
 /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/obj/Release/net8.0/DataAssetBackend.Tests.genruntimeconfig.cache
 /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/obj/Release/net8.0/ref/DataAssetBackend.Tests.dll
 /home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/openapi.runtime.json
+/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/bin/Release/net8.0/openapi.from-running.json

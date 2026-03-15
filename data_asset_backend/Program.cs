@@ -1263,6 +1263,9 @@ app.MapPost("/api/assets/{assetId:long}/status-logs", async (
 
         try
         {
+            // Fail fast with 400 (validation) before any DB/repository access.
+            RequestValidation.ValidateAndThrow(request, nameof(CreateAssetStatusLogRequest));
+
             var created = await AssetChildFlows.CreateAssetStatusLogAsync(assetId, request, repository, logger, cancellationToken);
             return Results.Created($"/api/assets/{assetId}/status-logs/{created.AssetStatusLogId}", created);
         }
@@ -1412,6 +1415,9 @@ app.MapPost("/api/assets/{assetId:long}/additional-ids", async (
 
         try
         {
+            // Fail fast with 400 (validation) before any DB/repository access.
+            RequestValidation.ValidateAndThrow(request, nameof(CreateAdditionalAssetIdRequest));
+
             var created = await AssetChildFlows.CreateAdditionalAssetIdAsync(assetId, request, repository, logger, cancellationToken);
             return Results.Created($"/api/assets/{assetId}/additional-ids/{created.AdditionalAssetId}", created);
         }
@@ -1561,6 +1567,9 @@ app.MapPost("/api/assets/{assetId:long}/reporting-attribute-mappings", async (
 
         try
         {
+            // Fail fast with 400 (validation) before any DB/repository access.
+            RequestValidation.ValidateAndThrow(request, nameof(CreateReportingAttributeMappingRequest));
+
             var created = await AssetChildFlows.CreateReportingAttributeMappingAsync(assetId, request, repository, logger, cancellationToken);
             return Results.Created($"/api/assets/{assetId}/reporting-attribute-mappings/{created.ReportingAttributeMappingId}", created);
         }
@@ -1711,6 +1720,9 @@ app.MapPost("/api/assets/{assetId:long}/input-parameters/{childInputParameterId:
 
         try
         {
+            // Fail fast with 400 (validation) before any DB/repository access.
+            RequestValidation.ValidateAndThrow(request, nameof(CreateParentInputMappingRequest));
+
             var created = await AssetChildFlows.CreateParentInputMappingAsync(assetId, childInputParameterId, request, repository, logger, cancellationToken);
             return Results.Created($"/api/assets/{assetId}/input-parameters/{childInputParameterId}/parent-input-mappings/{created.ParentInputMappingId}", created);
         }
@@ -1835,6 +1847,9 @@ app.MapPost("/api/assets/{assetId:long}/input-parameters/{inputParameterId:long}
 
         try
         {
+            // Fail fast with 400 (validation) before any DB/repository access.
+            RequestValidation.ValidateAndThrow(request, nameof(CreateThroughputEquationRequest));
+
             var created = await AssetChildFlows.CreateThroughputEquationAsync(assetId, inputParameterId, request, repository, logger, cancellationToken);
             return Results.Created($"/api/assets/{assetId}/input-parameters/{inputParameterId}/throughput-equations/{created.ThroughputEquationId}", created);
         }
@@ -2007,6 +2022,9 @@ app.MapPost("/api/assets/{assetId:long}/input-parameters/{inputParameterId:long}
 
         try
         {
+            // Fail fast with 400 (validation) before any DB/repository access.
+            RequestValidation.ValidateAndThrow(request, nameof(CreateEfSourceMappingRequest));
+
             var created = await AssetChildFlows.CreateEfSourceMappingAsync(assetId, inputParameterId, request, repository, logger, cancellationToken);
             return Results.Created(
                 $"/api/assets/{assetId}/input-parameters/{inputParameterId}/ef-source-mappings/{created.EfSourceMappingId}",
@@ -2058,6 +2076,9 @@ app.MapPost("/api/assets/{assetId:long}/input-parameters/{inputParameterId:long}
 
         try
         {
+            // Fail fast with 400 (validation) before any DB/repository access.
+            RequestValidation.ValidateAndThrow(request, nameof(CreateDataInputValueRequest));
+
             var created = await AssetChildFlows.CreateDataInputValueAsync(assetId, inputParameterId, request, repository, logger, cancellationToken);
             return Results.Created($"/api/assets/{assetId}/input-parameters/{inputParameterId}/data-input-values/{created.DataInputValueId}", created);
         }
@@ -3384,6 +3405,9 @@ app.MapPost("/api/assets/{assetId:long}/input-parameters/{inputParameterId:long}
 
         try
         {
+            // Fail fast with 400 (validation) before any DB/repository access.
+            RequestValidation.ValidateAndThrow(request, nameof(CreateThroughputScalarRequest));
+
             var created = await AssetChildFlows.CreateThroughputScalarAsync(assetId, inputParameterId, throughputEquationId, request, repository, logger, cancellationToken);
             return Results.Created(
                 $"/api/assets/{assetId}/input-parameters/{inputParameterId}/throughput-equations/{throughputEquationId}/throughput-scalars/{created.ThroughputScalarId}",

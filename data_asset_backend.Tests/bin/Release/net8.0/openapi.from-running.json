@@ -8,7 +8,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:5999"
+      "url": "https://vscode-internal-21654-beta.beta01.cloud.kavia.ai:3001"
     }
   ],
   "paths": {

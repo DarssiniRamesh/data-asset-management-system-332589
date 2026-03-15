@@ -1602,6 +1602,180 @@ app.MapPut("/api/masters/status-codes/{statusCodeId:long}", async (
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
 
 // ---------------------------------------------------------------------
+// BRD §4 Section 4 module endpoints
+// ---------------------------------------------------------------------
+//
+// These must be explicitly mapped; having repository/flows/models is not enough.
+// Frontend contract (authoritative): GET /api/section4/site-profiles?limit=200 (optionally siteId)
+//
+// Note: Keep query parameter names aligned with frontend usage (`siteId`, `limit`) to avoid
+// subtle casing/binding mismatches across environments.
+var section4 = app.MapGroup("/api/section4")
+    .WithTags("Section4");
+
+// -------------------------
+// Site Profiles
+// -------------------------
+section4.MapGet("/site-profiles", async (
+        string? siteId,
+        int? limit,
+        Section4Repository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("Section4.ListSiteProfiles");
+
+        try
+        {
+            var rows = await Section4Flows.ListSiteProfilesAsync(siteId, limit, repository, logger, cancellationToken);
+            return Results.Ok(rows);
+        }
+        catch (InvalidOperationException ex)
+        {
+            // DB not configured
+            logger.LogWarning(ex, "ListSiteProfiles failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanRead")
+    .WithName("Section4_ListSiteProfiles")
+    .WithSummary("List site profiles")
+    .WithDescription("Lists Section 4 Site Profiles with optional siteId filter and limit.")
+    .Produces<IReadOnlyList<SiteProfileDto>>(StatusCodes.Status200OK)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+section4.MapPost("/site-profiles", async (
+        CreateSiteProfileRequest request,
+        Section4Repository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("Section4.CreateSiteProfile");
+
+        // Ensure 400s on missing required fields.
+        RequestValidation.ValidateAndThrow(request, nameof(CreateSiteProfileRequest));
+
+        try
+        {
+            var created = await repository.CreateSiteProfileAsync(request, cancellationToken);
+            return Results.Created($"/api/section4/site-profiles/{created.SiteProfileId}", created);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "CreateSiteProfile failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            logger.LogWarning(ex, "CreateSiteProfile failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("Section4_CreateSiteProfile")
+    .WithSummary("Create site profile")
+    .WithDescription("Creates a Section 4 Site Profile.")
+    .Accepts<CreateSiteProfileRequest>("application/json")
+    .Produces<SiteProfileDto>(StatusCodes.Status201Created)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
+
+section4.MapPut("/site-profiles/{siteProfileId:long}", async (
+        long siteProfileId,
+        UpdateSiteProfileRequest request,
+        Section4Repository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("Section4.UpdateSiteProfile");
+
+        RequestValidation.ValidateAndThrow(request, nameof(UpdateSiteProfileRequest));
+
+        try
+        {
+            var updated = await repository.UpdateSiteProfileAsync(siteProfileId, request, cancellationToken);
+            return updated is null ? Results.NotFound() : Results.Ok(updated);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "UpdateSiteProfile failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("Section4_UpdateSiteProfile")
+    .WithSummary("Update site profile")
+    .WithDescription("Updates a Section 4 Site Profile by ID.")
+    .Accepts<UpdateSiteProfileRequest>("application/json")
+    .Produces<SiteProfileDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+section4.MapDelete("/site-profiles/{siteProfileId:long}", async (
+        long siteProfileId,
+        [FromBody] DeleteAssetRequest request,
+        Section4Repository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("Section4.DeleteSiteProfile");
+
+        // Reuse existing delete request contract (modifiedBy, correlationId).
+        RequestValidation.ValidateAndThrow(request, nameof(DeleteAssetRequest));
+
+        try
+        {
+            var deleted = await repository.DeleteSiteProfileAsync(
+                siteProfileId,
+                modifiedBy: request.ModifiedBy,
+                correlationId: request.CorrelationId,
+                cancellationToken: cancellationToken);
+
+            return deleted ? Results.NoContent() : Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "DeleteSiteProfile failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            logger.LogWarning(ex, "DeleteSiteProfile failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .RequireAuthorization("AdminOnly")
+    .WithName("Section4_DeleteSiteProfile")
+    .WithSummary("Delete site profile")
+    .WithDescription("Soft-deletes a Section 4 Site Profile by ID.")
+    .Accepts<DeleteAssetRequest>("application/json")
+    .Produces(StatusCodes.Status204NoContent)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
+
+// ---------------------------------------------------------------------
 // BRD §9 Legacy/Observed API inventory endpoints (compatibility shims)
 // ---------------------------------------------------------------------
 app.MapLegacyObservedApiEndpoints();

@@ -1015,19 +1015,32 @@ app.MapGet("/api/asset-copy-lineage", async (
 // ---------------------------------------------------------------------
 app.MapLegacyObservedApiEndpoints();
 
-// ---------------------------------------------------------------------
-// CORS preflight support
-// ---------------------------------------------------------------------
-//
-// Some hosting/proxy setups can cause OPTIONS requests to miss endpoint matching and return
-// a response without CORS headers. Provide an explicit fallback OPTIONS handler to ensure
-// preflight always succeeds and the CORS middleware can attach the correct headers.
-//
-// IMPORTANT: This must be registered after other endpoints so more specific matches win.
-app.MapMethods("{*path}", new[] { "OPTIONS" }, () => Results.NoContent())
-   .AllowAnonymous()
-   .WithName("CorsPreflightFallback")
-   .ExcludeFromDescription();
+/*
+ * ---------------------------------------------------------------------
+ * CORS preflight support (OPTIONS fallback)
+ * ---------------------------------------------------------------------
+ *
+ * IMPORTANT:
+ * Do NOT register a catch-all endpoint route like `MapMethods("{*path}", new[] { "OPTIONS" }, ...)`.
+ * Even when restricted to OPTIONS, that endpoint can still match other verbs and cause ASP.NET Core
+ * to return 405 for GET/POST routes (including NSwag's embedded Swagger UI assets under /docs/*).
+ *
+ * Instead, use middleware that only handles true OPTIONS requests that weren't already handled.
+ */
+app.Use(async (context, next) =>
+{
+    if (HttpMethods.IsOptions(context.Request.Method))
+    {
+        // If an endpoint was matched, let it handle the request (more specific wins).
+        if (context.GetEndpoint() is null)
+        {
+            context.Response.StatusCode = StatusCodes.Status204NoContent;
+            return;
+        }
+    }
+
+    await next();
+});
 
 app.Run();
 

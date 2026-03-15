@@ -34,7 +34,7 @@ public sealed record AssetStatusLogDto(
 /// <summary>
 /// Request payload for creating an asset status log row.
 /// </summary>
-public sealed class CreateAssetStatusLogRequest
+public sealed class CreateAssetStatusLogRequest : IValidatableObject
 {
     [Required(AllowEmptyStrings = false)]
     public string OperatingStatus { get; set; } = string.Empty;
@@ -52,6 +52,18 @@ public sealed class CreateAssetStatusLogRequest
 
     [Required(AllowEmptyStrings = false)]
     public string CorrelationId { get; set; } = string.Empty;
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        // BRD 6.2: Status To Date must be >= Status From Date (if present).
+        // This is a pure payload rule and must not require DB access.
+        if (StatusToDate.HasValue && StatusToDate.Value < StatusFromDate)
+        {
+            yield return new ValidationResult(
+                "statusToDate must be on or after statusFromDate.",
+                new[] { nameof(StatusToDate), nameof(StatusFromDate) });
+        }
+    }
 }
 
 /// <summary>
@@ -525,7 +537,7 @@ public sealed record EfSourceMappingDto(
 /// <summary>
 /// Request payload for creating an EF source mapping row.
 /// </summary>
-public sealed class CreateEfSourceMappingRequest
+public sealed class CreateEfSourceMappingRequest : IValidatableObject
 {
     [Required(AllowEmptyStrings = false)]
     public string EfSourceSetOrTable { get; set; } = string.Empty;
@@ -535,8 +547,9 @@ public sealed class CreateEfSourceMappingRequest
     public string? ScalarValues { get; set; }
 
     /// <summary>
-    /// Optional in request payload.
-    /// If not provided (or provided as &lt;= 0), the backend derives it from the parent input_parameter row.
+    /// BRD 6.8: Reporting Program Mapping required.
+    /// Note: even if the backend can derive this from the parent input_parameter row,
+    /// validation must reject missing values without requiring any DB access.
     /// </summary>
     public long? ReportingProgramId { get; set; }
 
@@ -545,6 +558,16 @@ public sealed class CreateEfSourceMappingRequest
 
     [Required(AllowEmptyStrings = false)]
     public string CorrelationId { get; set; } = string.Empty;
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (!ReportingProgramId.HasValue || ReportingProgramId.Value <= 0)
+        {
+            yield return new ValidationResult(
+                "reportingProgramId is required and must be > 0.",
+                new[] { nameof(ReportingProgramId) });
+        }
+    }
 }
 
 /// <summary>

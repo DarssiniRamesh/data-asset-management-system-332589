@@ -942,6 +942,7 @@ app.MapPost("/api/assets/{assetId:long}/copy", async (
 // Fix for frontend 404s:
 // - GET /api/assets/{assetId}/input-parameters
 // - GET /api/assets/{assetId}/control-device-mappings
+// - GET /api/assets/{assetId}/properties
 //
 app.MapGet("/api/assets/{assetId:long}/input-parameters", async (
         long assetId,
@@ -1010,6 +1011,41 @@ app.MapGet("/api/assets/{assetId:long}/control-device-mappings", async (
     .WithSummary("List control device mappings")
     .WithDescription("Lists control device mapping rows for the given asset.")
     .Produces<IReadOnlyList<ControlDeviceMappingDto>>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+app.MapGet("/api/assets/{assetId:long}/properties", async (
+        long assetId,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("ListAssetProperties");
+
+        try
+        {
+            var list = await AssetChildFlows.ListAssetPropertiesAsync(assetId, repository, logger, cancellationToken);
+            return Results.Ok(list);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "ListAssetProperties failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanRead")
+    .WithName("ListAssetProperties")
+    .WithTags("Assets")
+    .WithSummary("List asset properties")
+    .WithDescription("Lists asset property rows for the given asset.")
+    .Produces<IReadOnlyList<AssetPropertyDto>>(StatusCodes.Status200OK)
     .Produces(StatusCodes.Status404NotFound)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
 

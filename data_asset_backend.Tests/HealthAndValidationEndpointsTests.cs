@@ -55,6 +55,16 @@ public sealed class HealthAndValidationEndpointsTests : IClassFixture<TestAppFac
         Assert.True(string.IsNullOrWhiteSpace(body.Reason));
     }
 
+    [Fact]
+    public async Task List_asset_properties_route_is_mapped_and_not_404()
+    {
+        // This is a route-mapping regression test:
+        // - In the test host, DB is typically not configured, so many endpoints return 503.
+        // - The key assertion here is that we should NOT get 404 (missing route).
+        var resp = await _client.GetAsync("/api/assets/1/properties");
+        Assert.NotEqual(HttpStatusCode.NotFound, resp.StatusCode);
+    }
+
     private sealed class ValidityCheckResponse
     {
         public bool IsValid { get; set; }

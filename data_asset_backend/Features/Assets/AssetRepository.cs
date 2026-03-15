@@ -2322,6 +2322,44 @@ public sealed class AssetRepository
     {
         await using var conn = await _connectionFactory.OpenAsync(cancellationToken);
 
+        // BRD: ef_source_mapping has a required FK to reporting_program_master.
+        // The UI may not always send reportingProgramId (older clients / partial-tab implementations).
+        // To prevent FK violations, we derive reporting_program_id from the parent input_parameter row when missing/invalid.
+        long ResolveReportingProgramId(long candidate)
+        {
+            // Candidate is required by model validation, but if client sends 0 it will pass default(long)=0 and fail FK.
+            // Treat <=0 as "not provided".
+            return candidate > 0 ? candidate : 0;
+        }
+
+        var resolvedReportingProgramId = ResolveReportingProgramId(request.ReportingProgramId);
+        if (resolvedReportingProgramId <= 0)
+        {
+            const string rpSql = """
+                SELECT reporting_program_id
+                FROM input_parameter
+                WHERE input_parameter_id = @input_parameter_id
+                  AND is_deleted = FALSE;
+                """;
+
+            await using var rpCmd = new NpgsqlCommand(rpSql, conn);
+            AddParam(rpCmd, "input_parameter_id", inputParameterId);
+
+            var scalar = await rpCmd.ExecuteScalarAsync(cancellationToken);
+            if (scalar is null || scalar is DBNull)
+            {
+                throw new InvalidOperationException(
+                    "Cannot create ef_source_mapping: reporting_program_id is missing and could not be derived from input_parameter.");
+            }
+
+            resolvedReportingProgramId = Convert.ToInt64(scalar);
+            if (resolvedReportingProgramId <= 0)
+            {
+                throw new InvalidOperationException(
+                    "Cannot create ef_source_mapping: derived reporting_program_id from input_parameter was invalid.");
+            }
+        }
+
         const string sql = """
             INSERT INTO ef_source_mapping (
                 input_parameter_id,
@@ -2369,7 +2407,7 @@ public sealed class AssetRepository
         AddParam(cmd, "ef_source_set_or_table", request.EfSourceSetOrTable);
         AddParam(cmd, "equation_setup", (object?)request.EquationSetup ?? DBNull.Value);
         AddParam(cmd, "scalar_values", (object?)request.ScalarValues ?? DBNull.Value);
-        AddParam(cmd, "reporting_program_id", request.ReportingProgramId);
+        AddParam(cmd, "reporting_program_id", resolvedReportingProgramId);
         AddParam(cmd, "created_by", request.CreatedBy);
         AddParam(cmd, "correlation_id", request.CorrelationId);
 
@@ -2435,6 +2473,38 @@ public sealed class AssetRepository
     {
         await using var conn = await _connectionFactory.OpenAsync(cancellationToken);
 
+        // See CreateEfSourceMappingAsync for rationale: protect against FK violations by deriving reporting_program_id
+        // from the parent input_parameter when client omits/sends invalid id.
+        long ResolveReportingProgramId(long candidate) => candidate > 0 ? candidate : 0;
+
+        var resolvedReportingProgramId = ResolveReportingProgramId(request.ReportingProgramId);
+        if (resolvedReportingProgramId <= 0)
+        {
+            const string rpSql = """
+                SELECT reporting_program_id
+                FROM input_parameter
+                WHERE input_parameter_id = @input_parameter_id
+                  AND is_deleted = FALSE;
+                """;
+
+            await using var rpCmd = new NpgsqlCommand(rpSql, conn);
+            AddParam(rpCmd, "input_parameter_id", inputParameterId);
+
+            var scalar = await rpCmd.ExecuteScalarAsync(cancellationToken);
+            if (scalar is null || scalar is DBNull)
+            {
+                throw new InvalidOperationException(
+                    "Cannot update ef_source_mapping: reporting_program_id is missing and could not be derived from input_parameter.");
+            }
+
+            resolvedReportingProgramId = Convert.ToInt64(scalar);
+            if (resolvedReportingProgramId <= 0)
+            {
+                throw new InvalidOperationException(
+                    "Cannot update ef_source_mapping: derived reporting_program_id from input_parameter was invalid.");
+            }
+        }
+
         const string sql = """
             UPDATE ef_source_mapping
             SET
@@ -2469,7 +2539,7 @@ public sealed class AssetRepository
         AddParam(cmd, "ef_source_set_or_table", request.EfSourceSetOrTable);
         AddParam(cmd, "equation_setup", (object?)request.EquationSetup ?? DBNull.Value);
         AddParam(cmd, "scalar_values", (object?)request.ScalarValues ?? DBNull.Value);
-        AddParam(cmd, "reporting_program_id", request.ReportingProgramId);
+        AddParam(cmd, "reporting_program_id", resolvedReportingProgramId);
         AddParam(cmd, "modified_by", request.ModifiedBy);
         AddParam(cmd, "correlation_id", request.CorrelationId);
 

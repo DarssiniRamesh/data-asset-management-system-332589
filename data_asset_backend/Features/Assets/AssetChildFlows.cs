@@ -1116,6 +1116,88 @@ public static class AssetChildFlows
 
     // PUBLIC_INTERFACE
     /// <summary>
+    /// Gets a throughput scalar by id under an asset scope (ensures it belongs to the asset/input/equation route).
+    /// </summary>
+    public static async Task<ThroughputScalarDto?> GetThroughputScalarByIdAsync(
+        long assetId,
+        long inputParameterId,
+        long throughputEquationId,
+        long throughputScalarId,
+        AssetRepository repository,
+        ILogger logger,
+        CancellationToken cancellationToken = default)
+    {
+        logger.LogInformation(
+            "AssetChildFlows.GetThroughputScalarById starting. asset_id={AssetId}, input_parameter_id={InputId}, throughput_equation_id={EqId}, throughput_scalar_id={ScalarId}",
+            assetId,
+            inputParameterId,
+            throughputEquationId,
+            throughputScalarId);
+
+        if (!await repository.AssetExistsAsync(assetId, cancellationToken))
+        {
+            throw new AssetRepository.EntityNotFoundException("asset", assetId);
+        }
+
+        if (!await repository.InputParameterBelongsToAssetAsync(assetId, inputParameterId, cancellationToken))
+        {
+            throw new AssetRepository.EntityNotFoundException("input_parameter", inputParameterId);
+        }
+
+        if (!await repository.ThroughputEquationBelongsToInputAsync(inputParameterId, throughputEquationId, cancellationToken))
+        {
+            throw new AssetRepository.EntityNotFoundException("throughput_equation", throughputEquationId);
+        }
+
+        return await repository.GetThroughputScalarByIdAsync(throughputEquationId, throughputScalarId, cancellationToken);
+    }
+
+    // PUBLIC_INTERFACE
+    /// <summary>
+    /// Soft-deletes a throughput scalar under an asset scope (ensures it belongs to the asset/input/equation route).
+    /// </summary>
+    public static async Task<bool> DeleteThroughputScalarAsync(
+        long assetId,
+        long inputParameterId,
+        long throughputEquationId,
+        long throughputScalarId,
+        DeleteAssetRequest request,
+        AssetRepository repository,
+        ILogger logger,
+        CancellationToken cancellationToken = default)
+    {
+        logger.LogInformation(
+            "AssetChildFlows.DeleteThroughputScalar starting. asset_id={AssetId}, input_parameter_id={InputId}, throughput_equation_id={EqId}, throughput_scalar_id={ScalarId}",
+            assetId,
+            inputParameterId,
+            throughputEquationId,
+            throughputScalarId);
+
+        if (!await repository.AssetExistsAsync(assetId, cancellationToken))
+        {
+            throw new AssetRepository.EntityNotFoundException("asset", assetId);
+        }
+
+        if (!await repository.InputParameterBelongsToAssetAsync(assetId, inputParameterId, cancellationToken))
+        {
+            throw new AssetRepository.EntityNotFoundException("input_parameter", inputParameterId);
+        }
+
+        if (!await repository.ThroughputEquationBelongsToInputAsync(inputParameterId, throughputEquationId, cancellationToken))
+        {
+            throw new AssetRepository.EntityNotFoundException("throughput_equation", throughputEquationId);
+        }
+
+        return await repository.DeleteThroughputScalarAsync(
+            throughputEquationId,
+            throughputScalarId,
+            modifiedBy: request.ModifiedBy,
+            correlationId: request.CorrelationId,
+            cancellationToken: cancellationToken);
+    }
+
+    // PUBLIC_INTERFACE
+    /// <summary>
     /// Creates a data input value under an asset scope for a given input parameter.
     /// </summary>
     public static async Task<DataInputValueDto> CreateDataInputValueAsync(

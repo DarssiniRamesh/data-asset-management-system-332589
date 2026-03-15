@@ -3146,6 +3146,263 @@ section4.MapDelete("/chemical-sds/{chemicalSdsId:long}", async (
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
     .ProducesProblem(StatusCodes.Status409Conflict);
 
+/*
+ * ---------------------------------------------------------------------
+ * Throughput scalars (asset scoped) - FULL CRUD
+ * Route: /api/assets/{assetId}/input-parameters/{inputParameterId}/throughput-equations/{throughputEquationId}/throughput-scalars
+ * ---------------------------------------------------------------------
+ */
+
+// List throughput scalars
+app.MapGet("/api/assets/{assetId:long}/input-parameters/{inputParameterId:long}/throughput-equations/{throughputEquationId:long}/throughput-scalars", async (
+        long assetId,
+        long inputParameterId,
+        long throughputEquationId,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("ListThroughputScalars");
+
+        try
+        {
+            var list = await AssetChildFlows.ListThroughputScalarsAsync(assetId, inputParameterId, throughputEquationId, repository, logger, cancellationToken);
+            return Results.Ok(list);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "ListThroughputScalars failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanRead")
+    .WithName("ListThroughputScalars")
+    .WithTags("Assets")
+    .WithSummary("List throughput scalars")
+    .WithDescription("Lists throughput scalar rows under a throughput equation (asset scoped).")
+    .Produces<IReadOnlyList<ThroughputScalarDto>>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+// Create throughput scalar
+app.MapPost("/api/assets/{assetId:long}/input-parameters/{inputParameterId:long}/throughput-equations/{throughputEquationId:long}/throughput-scalars", async (
+        long assetId,
+        long inputParameterId,
+        long throughputEquationId,
+        CreateThroughputScalarRequest request,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("CreateThroughputScalar");
+
+        try
+        {
+            var created = await AssetChildFlows.CreateThroughputScalarAsync(assetId, inputParameterId, throughputEquationId, request, repository, logger, cancellationToken);
+            return Results.Created(
+                $"/api/assets/{assetId}/input-parameters/{inputParameterId}/throughput-equations/{throughputEquationId}/throughput-scalars/{created.ThroughputScalarId}",
+                created);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "CreateThroughputScalar failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            logger.LogWarning(ex, "CreateThroughputScalar failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("CreateThroughputScalar")
+    .WithTags("Assets")
+    .WithSummary("Create throughput scalar")
+    .WithDescription("Creates a throughput scalar row under a throughput equation (asset scoped).")
+    .Accepts<CreateThroughputScalarRequest>("application/json")
+    .Produces<ThroughputScalarDto>(StatusCodes.Status201Created)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
+
+// Get throughput scalar by id
+app.MapGet("/api/assets/{assetId:long}/input-parameters/{inputParameterId:long}/throughput-equations/{throughputEquationId:long}/throughput-scalars/{throughputScalarId:long}", async (
+        long assetId,
+        long inputParameterId,
+        long throughputEquationId,
+        long throughputScalarId,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("GetThroughputScalarById");
+
+        try
+        {
+            var row = await AssetChildFlows.GetThroughputScalarByIdAsync(
+                assetId,
+                inputParameterId,
+                throughputEquationId,
+                throughputScalarId,
+                repository,
+                logger,
+                cancellationToken);
+
+            return row is null ? Results.NotFound() : Results.Ok(row);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "GetThroughputScalarById failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanRead")
+    .WithName("GetThroughputScalarById")
+    .WithTags("Assets")
+    .WithSummary("Get throughput scalar by ID")
+    .WithDescription("Gets a throughput scalar row by ID under a throughput equation (asset scoped).")
+    .Produces<ThroughputScalarDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+// Update throughput scalar
+app.MapPut("/api/assets/{assetId:long}/input-parameters/{inputParameterId:long}/throughput-equations/{throughputEquationId:long}/throughput-scalars/{throughputScalarId:long}", async (
+        long assetId,
+        long inputParameterId,
+        long throughputEquationId,
+        long throughputScalarId,
+        UpdateThroughputScalarRequest request,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("UpdateThroughputScalar");
+
+        try
+        {
+            var updated = await AssetChildFlows.UpdateThroughputScalarAsync(
+                assetId,
+                inputParameterId,
+                throughputEquationId,
+                throughputScalarId,
+                request,
+                repository,
+                logger,
+                cancellationToken);
+
+            return updated is null ? Results.NotFound() : Results.Ok(updated);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "UpdateThroughputScalar failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("UpdateThroughputScalar")
+    .WithTags("Assets")
+    .WithSummary("Update throughput scalar")
+    .WithDescription("Updates a throughput scalar row by ID under a throughput equation (asset scoped).")
+    .Accepts<UpdateThroughputScalarRequest>("application/json")
+    .Produces<ThroughputScalarDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+// Delete throughput scalar
+app.MapDelete("/api/assets/{assetId:long}/input-parameters/{inputParameterId:long}/throughput-equations/{throughputEquationId:long}/throughput-scalars/{throughputScalarId:long}", async (
+        long assetId,
+        long inputParameterId,
+        long throughputEquationId,
+        long throughputScalarId,
+        [FromBody] DeleteAssetRequest request,
+        AssetRepository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("DeleteThroughputScalar");
+
+        RequestValidation.ValidateAndThrow(request, nameof(DeleteAssetRequest));
+
+        try
+        {
+            var deleted = await AssetChildFlows.DeleteThroughputScalarAsync(
+                assetId,
+                inputParameterId,
+                throughputEquationId,
+                throughputScalarId,
+                request,
+                repository,
+                logger,
+                cancellationToken);
+
+            return deleted ? Results.NoContent() : Results.NotFound();
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "DeleteThroughputScalar failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            logger.LogWarning(ex, "DeleteThroughputScalar failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .RequireAuthorization("AdminOnly")
+    .WithName("DeleteThroughputScalar")
+    .WithTags("Assets")
+    .WithSummary("Delete throughput scalar")
+    .WithDescription("Soft-deletes a throughput scalar row by ID under a throughput equation (asset scoped).")
+    .Accepts<DeleteAssetRequest>("application/json")
+    .Produces(StatusCodes.Status204NoContent)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
+
 // -------------------------
 // WWTS Process Streams (FIX for frontend 404: /api/section4/wwts-process-streams)
 // -------------------------
@@ -3178,6 +3435,132 @@ section4.MapGet("/wwts-process-streams", async (
     .WithDescription("Lists Section 4 WWTS Process Streams with optional siteId filter and limit.")
     .Produces<IReadOnlyList<WwtsProcessStreamDto>>(StatusCodes.Status200OK)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+section4.MapPost("/wwts-process-streams", async (
+        CreateWwtsProcessStreamRequest request,
+        Section4Repository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("Section4.CreateWwtsProcessStream");
+
+        RequestValidation.ValidateAndThrow(request, nameof(CreateWwtsProcessStreamRequest));
+
+        try
+        {
+            var created = await repository.CreateWwtsProcessStreamAsync(request, cancellationToken);
+            return Results.Created($"/api/section4/wwts-process-streams/{created.WwtsProcessStreamId}", created);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "CreateWwtsProcessStream failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            logger.LogWarning(ex, "CreateWwtsProcessStream failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("Section4_CreateWwtsProcessStream")
+    .WithSummary("Create WWTS process stream")
+    .WithDescription("Creates a Section 4 WWTS Process Stream.")
+    .Accepts<CreateWwtsProcessStreamRequest>("application/json")
+    .Produces<WwtsProcessStreamDto>(StatusCodes.Status201Created)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
+
+section4.MapPut("/wwts-process-streams/{wwtsProcessStreamId:long}", async (
+        long wwtsProcessStreamId,
+        UpdateWwtsProcessStreamRequest request,
+        Section4Repository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("Section4.UpdateWwtsProcessStream");
+
+        RequestValidation.ValidateAndThrow(request, nameof(UpdateWwtsProcessStreamRequest));
+
+        try
+        {
+            var updated = await repository.UpdateWwtsProcessStreamAsync(wwtsProcessStreamId, request, cancellationToken);
+            return updated is null ? Results.NotFound() : Results.Ok(updated);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "UpdateWwtsProcessStream failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("Section4_UpdateWwtsProcessStream")
+    .WithSummary("Update WWTS process stream")
+    .WithDescription("Updates a Section 4 WWTS Process Stream by ID.")
+    .Accepts<UpdateWwtsProcessStreamRequest>("application/json")
+    .Produces<WwtsProcessStreamDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+section4.MapDelete("/wwts-process-streams/{wwtsProcessStreamId:long}", async (
+        long wwtsProcessStreamId,
+        [FromBody] DeleteAssetRequest request,
+        Section4Repository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("Section4.DeleteWwtsProcessStream");
+
+        RequestValidation.ValidateAndThrow(request, nameof(DeleteAssetRequest));
+
+        try
+        {
+            var deleted = await repository.DeleteWwtsProcessStreamAsync(
+                wwtsProcessStreamId,
+                modifiedBy: request.ModifiedBy,
+                correlationId: request.CorrelationId,
+                cancellationToken: cancellationToken);
+
+            return deleted ? Results.NoContent() : Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "DeleteWwtsProcessStream failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            logger.LogWarning(ex, "DeleteWwtsProcessStream failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .RequireAuthorization("AdminOnly")
+    .WithName("Section4_DeleteWwtsProcessStream")
+    .WithSummary("Delete WWTS process stream")
+    .WithDescription("Soft-deletes a Section 4 WWTS Process Stream by ID.")
+    .Accepts<DeleteAssetRequest>("application/json")
+    .Produces(StatusCodes.Status204NoContent)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
 
 // -------------------------
 // Lab Data Configurations (FIX for frontend 404: /api/section4/lab-data-configurations)
@@ -3212,6 +3595,132 @@ section4.MapGet("/lab-data-configurations", async (
     .Produces<IReadOnlyList<LabDataConfigurationDto>>(StatusCodes.Status200OK)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
 
+section4.MapPost("/lab-data-configurations", async (
+        CreateLabDataConfigurationRequest request,
+        Section4Repository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("Section4.CreateLabDataConfiguration");
+
+        RequestValidation.ValidateAndThrow(request, nameof(CreateLabDataConfigurationRequest));
+
+        try
+        {
+            var created = await repository.CreateLabDataConfigurationAsync(request, cancellationToken);
+            return Results.Created($"/api/section4/lab-data-configurations/{created.LabDataConfigurationId}", created);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "CreateLabDataConfiguration failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            logger.LogWarning(ex, "CreateLabDataConfiguration failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("Section4_CreateLabDataConfiguration")
+    .WithSummary("Create lab data configuration")
+    .WithDescription("Creates a Section 4 Lab Data Configuration.")
+    .Accepts<CreateLabDataConfigurationRequest>("application/json")
+    .Produces<LabDataConfigurationDto>(StatusCodes.Status201Created)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
+
+section4.MapPut("/lab-data-configurations/{labDataConfigurationId:long}", async (
+        long labDataConfigurationId,
+        UpdateLabDataConfigurationRequest request,
+        Section4Repository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("Section4.UpdateLabDataConfiguration");
+
+        RequestValidation.ValidateAndThrow(request, nameof(UpdateLabDataConfigurationRequest));
+
+        try
+        {
+            var updated = await repository.UpdateLabDataConfigurationAsync(labDataConfigurationId, request, cancellationToken);
+            return updated is null ? Results.NotFound() : Results.Ok(updated);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "UpdateLabDataConfiguration failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("Section4_UpdateLabDataConfiguration")
+    .WithSummary("Update lab data configuration")
+    .WithDescription("Updates a Section 4 Lab Data Configuration by ID.")
+    .Accepts<UpdateLabDataConfigurationRequest>("application/json")
+    .Produces<LabDataConfigurationDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+section4.MapDelete("/lab-data-configurations/{labDataConfigurationId:long}", async (
+        long labDataConfigurationId,
+        [FromBody] DeleteAssetRequest request,
+        Section4Repository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("Section4.DeleteLabDataConfiguration");
+
+        RequestValidation.ValidateAndThrow(request, nameof(DeleteAssetRequest));
+
+        try
+        {
+            var deleted = await repository.DeleteLabDataConfigurationAsync(
+                labDataConfigurationId,
+                modifiedBy: request.ModifiedBy,
+                correlationId: request.CorrelationId,
+                cancellationToken: cancellationToken);
+
+            return deleted ? Results.NoContent() : Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "DeleteLabDataConfiguration failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            logger.LogWarning(ex, "DeleteLabDataConfiguration failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .RequireAuthorization("AdminOnly")
+    .WithName("Section4_DeleteLabDataConfiguration")
+    .WithSummary("Delete lab data configuration")
+    .WithDescription("Soft-deletes a Section 4 Lab Data Configuration by ID.")
+    .Accepts<DeleteAssetRequest>("application/json")
+    .Produces(StatusCodes.Status204NoContent)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
+
 // -------------------------
 // Water Process Configurations (FIX for frontend 404: /api/section4/water-process-configurations)
 // -------------------------
@@ -3244,6 +3753,132 @@ section4.MapGet("/water-process-configurations", async (
     .WithDescription("Lists Section 4 Water Process Configurations with optional siteId filter and limit.")
     .Produces<IReadOnlyList<WaterProcessConfigurationDto>>(StatusCodes.Status200OK)
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+section4.MapPost("/water-process-configurations", async (
+        CreateWaterProcessConfigurationRequest request,
+        Section4Repository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("Section4.CreateWaterProcessConfiguration");
+
+        RequestValidation.ValidateAndThrow(request, nameof(CreateWaterProcessConfigurationRequest));
+
+        try
+        {
+            var created = await repository.CreateWaterProcessConfigurationAsync(request, cancellationToken);
+            return Results.Created($"/api/section4/water-process-configurations/{created.WaterProcessConfigurationId}", created);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "CreateWaterProcessConfiguration failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            logger.LogWarning(ex, "CreateWaterProcessConfiguration failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("Section4_CreateWaterProcessConfiguration")
+    .WithSummary("Create water process configuration")
+    .WithDescription("Creates a Section 4 Water Process Configuration.")
+    .Accepts<CreateWaterProcessConfigurationRequest>("application/json")
+    .Produces<WaterProcessConfigurationDto>(StatusCodes.Status201Created)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
+
+section4.MapPut("/water-process-configurations/{waterProcessConfigurationId:long}", async (
+        long waterProcessConfigurationId,
+        UpdateWaterProcessConfigurationRequest request,
+        Section4Repository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("Section4.UpdateWaterProcessConfiguration");
+
+        RequestValidation.ValidateAndThrow(request, nameof(UpdateWaterProcessConfigurationRequest));
+
+        try
+        {
+            var updated = await repository.UpdateWaterProcessConfigurationAsync(waterProcessConfigurationId, request, cancellationToken);
+            return updated is null ? Results.NotFound() : Results.Ok(updated);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "UpdateWaterProcessConfiguration failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("Section4_UpdateWaterProcessConfiguration")
+    .WithSummary("Update water process configuration")
+    .WithDescription("Updates a Section 4 Water Process Configuration by ID.")
+    .Accepts<UpdateWaterProcessConfigurationRequest>("application/json")
+    .Produces<WaterProcessConfigurationDto>(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable);
+
+section4.MapDelete("/water-process-configurations/{waterProcessConfigurationId:long}", async (
+        long waterProcessConfigurationId,
+        [FromBody] DeleteAssetRequest request,
+        Section4Repository repository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("Section4.DeleteWaterProcessConfiguration");
+
+        RequestValidation.ValidateAndThrow(request, nameof(DeleteAssetRequest));
+
+        try
+        {
+            var deleted = await repository.DeleteWaterProcessConfigurationAsync(
+                waterProcessConfigurationId,
+                modifiedBy: request.ModifiedBy,
+                correlationId: request.CorrelationId,
+                cancellationToken: cancellationToken);
+
+            return deleted ? Results.NoContent() : Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "DeleteWaterProcessConfiguration failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            logger.LogWarning(ex, "DeleteWaterProcessConfiguration failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .RequireAuthorization("AdminOnly")
+    .WithName("Section4_DeleteWaterProcessConfiguration")
+    .WithSummary("Delete water process configuration")
+    .WithDescription("Soft-deletes a Section 4 Water Process Configuration by ID.")
+    .Accepts<DeleteAssetRequest>("application/json")
+    .Produces(StatusCodes.Status204NoContent)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
 
 // ---------------------------------------------------------------------
 // BRD §9 Legacy/Observed API inventory endpoints (compatibility shims)

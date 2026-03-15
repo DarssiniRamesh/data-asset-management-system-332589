@@ -2875,6 +2875,87 @@ public sealed class AssetRepository
 
     // PUBLIC_INTERFACE
     /// <summary>
+    /// Gets a throughput scalar under a throughput equation scope (returns null if not found/under equation).
+    /// </summary>
+    public async Task<ThroughputScalarDto?> GetThroughputScalarByIdAsync(
+        long throughputEquationId,
+        long throughputScalarId,
+        CancellationToken cancellationToken)
+    {
+        await using var conn = await _connectionFactory.OpenAsync(cancellationToken);
+
+        const string sql = """
+            SELECT
+                throughput_scalar_id,
+                throughput_equation_id,
+                scalar_type,
+                scalar_table,
+                scalar_id,
+                scalar_value,
+                scalar_basis,
+                created_by,
+                created_at,
+                modified_by,
+                modified_at,
+                is_deleted,
+                correlation_id
+            FROM throughput_scalar
+            WHERE throughput_scalar_id = @throughput_scalar_id
+              AND throughput_equation_id = @throughput_equation_id
+              AND is_deleted = FALSE;
+            """;
+
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        AddParam(cmd, "throughput_equation_id", throughputEquationId);
+        AddParam(cmd, "throughput_scalar_id", throughputScalarId);
+
+        await using var reader = await cmd.ExecuteReaderAsync(System.Data.CommandBehavior.SingleRow, cancellationToken);
+        if (!await reader.ReadAsync(cancellationToken))
+        {
+            return null;
+        }
+
+        return ReadThroughputScalar(reader);
+    }
+
+    // PUBLIC_INTERFACE
+    /// <summary>
+    /// Soft-deletes a throughput scalar under a throughput equation scope.
+    /// Returns false when not found/under equation (or already deleted).
+    /// </summary>
+    public async Task<bool> DeleteThroughputScalarAsync(
+        long throughputEquationId,
+        long throughputScalarId,
+        string modifiedBy,
+        string correlationId,
+        CancellationToken cancellationToken)
+    {
+        await using var conn = await _connectionFactory.OpenAsync(cancellationToken);
+
+        const string sql = """
+            UPDATE throughput_scalar
+            SET
+                is_deleted = TRUE,
+                modified_by = @modified_by,
+                modified_at = now(),
+                correlation_id = @correlation_id
+            WHERE throughput_scalar_id = @throughput_scalar_id
+              AND throughput_equation_id = @throughput_equation_id
+              AND is_deleted = FALSE;
+            """;
+
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        AddParam(cmd, "throughput_equation_id", throughputEquationId);
+        AddParam(cmd, "throughput_scalar_id", throughputScalarId);
+        AddParam(cmd, "modified_by", modifiedBy);
+        AddParam(cmd, "correlation_id", correlationId);
+
+        var updated = await cmd.ExecuteNonQueryAsync(cancellationToken);
+        return updated > 0;
+    }
+
+    // PUBLIC_INTERFACE
+    /// <summary>
     /// Updates a throughput scalar under a throughput equation scope (returns null if not found/under equation).
     /// </summary>
     public async Task<ThroughputScalarDto?> UpdateThroughputScalarAsync(

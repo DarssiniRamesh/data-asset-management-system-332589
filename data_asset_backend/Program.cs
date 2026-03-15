@@ -468,9 +468,12 @@ app.UseSwaggerUi(config =>
     // Serve Swagger UI at /docs.
     config.Path = "/docs";
 
-    // Explicitly set the OpenAPI endpoint used by the UI. Without this, the UI index.html
-    // can default to /swagger/v1/swagger.json and render blank if the route does not match
-    // the published OpenAPI document in this app.
+    // Explicitly set the OpenAPI endpoint used by the UI.
+    //
+    // IMPORTANT:
+    // Use root-anchored absolute paths so the UI does NOT try to resolve the spec relative
+    // to a computed base path (which in some proxy setups can become `/v1`, causing a
+    // failing GET `/v1`).
     config.SwaggerRoutes.Clear();
     config.SwaggerRoutes.Add(new NSwag.AspNetCore.SwaggerUiRoute("/openapi.json", "v1"));
 });
@@ -581,6 +584,19 @@ app.MapPost("/api/auth/login", (DevLoginRequest request, JwtTokenService tokenSe
     .Accepts<DevLoginRequest>("application/json")
     .Produces<DevLoginResponse>(StatusCodes.Status200OK)
     .ProducesValidationProblem(StatusCodes.Status400BadRequest);
+
+// Compatibility redirect:
+// Some Swagger UI configurations (or older cached `/docs` assets) may try to fetch `/v1` as the
+// OpenAPI document. In this service, `/v1` is not an API prefix and is protected by the fallback
+// auth policy, so that request fails with 401 and breaks the UI.
+// We redirect it to the actual OpenAPI document endpoint.
+app.MapGet("/v1", () => Results.Redirect("/openapi.json", permanent: false))
+   .AllowAnonymous()
+   .WithName("OpenApiLegacyV1Redirect")
+   .WithTags("OpenAPI")
+   .WithSummary("Legacy OpenAPI redirect")
+   .WithDescription("Compatibility redirect so Swagger UI never breaks if it attempts to load the spec from /v1. Redirects to /openapi.json.")
+   .Produces(StatusCodes.Status302Found);
 
 // Health check endpoints
 // Note: the platform/preview health probe expects `/healthz`.

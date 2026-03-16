@@ -14,7 +14,7 @@ public sealed class DbBackedDependencySafeDeleteTests : IClassFixture<DbTestAppF
         _factory = factory;
     }
 
-    [Fact]
+    [DbFact]
     public async Task Delete_asset_is_persistent_and_subsequent_get_returns_404()
     {
         using var client = _factory.CreateAuthedClient();

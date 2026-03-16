@@ -14,7 +14,7 @@ public sealed class DbBackedAssetLifecycleTests : IClassFixture<DbTestAppFactory
         _factory = factory;
     }
 
-    [Fact]
+    [DbFact]
     public async Task Create_then_get_asset_roundtrips_through_database()
     {
         using var client = _factory.CreateAuthedClient();

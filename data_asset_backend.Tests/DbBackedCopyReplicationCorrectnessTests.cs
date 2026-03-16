@@ -24,7 +24,7 @@ public sealed class DbBackedCopyReplicationCorrectnessTests : IClassFixture<DbTe
         _factory = factory;
     }
 
-    [Fact]
+    [DbFact]
     public async Task Copy_asset_replicates_input_subtree_with_new_ids_and_preserves_source()
     {
         using var client = _factory.CreateAuthedClient();

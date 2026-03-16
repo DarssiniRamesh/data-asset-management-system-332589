@@ -14,7 +14,7 @@ public sealed class DbBackedCopyAndLineageTests : IClassFixture<DbTestAppFactory
         _factory = factory;
     }
 
-    [Fact]
+    [DbFact]
     public async Task Copy_asset_creates_lineage_records_persisted_in_db()
     {
         using var client = _factory.CreateAuthedClient();

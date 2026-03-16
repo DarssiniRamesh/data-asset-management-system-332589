@@ -20,7 +20,7 @@ public sealed class DbBackedUniquenessAndHierarchyIntegrityTests : IClassFixture
         _factory = factory;
     }
 
-    [Fact]
+    [DbFact]
     public async Task Create_asset_with_duplicate_permit_eu_id_returns_409()
     {
         using var client = _factory.CreateAuthedClient();
@@ -52,7 +52,7 @@ public sealed class DbBackedUniquenessAndHierarchyIntegrityTests : IClassFixture
         Assert.Equal(HttpStatusCode.Conflict, second.StatusCode);
     }
 
-    [Fact]
+    [DbFact]
     public async Task Update_asset_to_duplicate_permit_eu_id_returns_409()
     {
         using var client = _factory.CreateAuthedClient();
@@ -101,7 +101,7 @@ public sealed class DbBackedUniquenessAndHierarchyIntegrityTests : IClassFixture
         Assert.Equal(HttpStatusCode.Conflict, update.StatusCode);
     }
 
-    [Fact]
+    [DbFact]
     public async Task Reporting_attribute_mapping_duplicate_combination_for_same_asset_returns_400()
     {
         using var client = _factory.CreateAuthedClient();
@@ -147,7 +147,7 @@ public sealed class DbBackedUniquenessAndHierarchyIntegrityTests : IClassFixture
         Assert.Equal(HttpStatusCode.BadRequest, second.StatusCode);
     }
 
-    [Fact]
+    [DbFact]
     public async Task Hierarchy_integrity_rejects_self_parent_and_cycles_400()
     {
         using var client = _factory.CreateAuthedClient();

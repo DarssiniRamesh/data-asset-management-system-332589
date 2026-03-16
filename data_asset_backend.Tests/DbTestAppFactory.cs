@@ -91,16 +91,12 @@ public sealed class DbTestAppFactory : WebApplicationFactory<Program>, IAsyncLif
             .Create(b => b.AddConsole())
             .CreateLogger<DbTestAppFactory>();
 
-        DbTestDatabaseResolution resolution;
-        try
-        {
-            resolution = await DbTestDatabaseProvisioning.ProvisionAsync(logger);
-        }
-        catch (SkipException)
-        {
-            // Let xUnit mark tests as skipped (cleanly) with the provided message.
-            throw;
-        }
+        // Note: xUnit's SkipException is not a stable public API across versions.
+        // This test project targets xUnit 2.7.0 and previously used members that do not exist,
+        // which broke compilation. We therefore avoid SkipException entirely.
+        //
+        // If DB provisioning isn't possible, ProvisionAsync will throw an XunitException with a clear reason.
+        DbTestDatabaseResolution resolution = await DbTestDatabaseProvisioning.ProvisionAsync(logger);
 
         _connectionString = resolution.ConnectionString;
         _postgres = resolution.Container;
@@ -248,13 +244,16 @@ public sealed class DbTestAppFactory : WebApplicationFactory<Program>, IAsyncLif
 
         private static void ThrowSkipWithReason(string reason)
         {
-            // Ensure the reason is visible even if the runner collapses skip messages.
+            // Ensure the reason is visible in CI logs.
             // stderr is captured by `dotnet test` and by most CI systems.
             Console.Error.WriteLine(reason);
 
-            // xUnit 2.7.0's SkipException does not have a (string) ctor.
-            // It *does* support SkipReason, which the runner uses for reporting.
-            throw new SkipException { SkipReason = reason };
+            // We deliberately avoid Xunit.Sdk.SkipException here because its constructor/properties
+            // are not stable across xUnit versions and previously broke compilation.
+            //
+            // Throwing XunitException will fail the DB-backed tests when DB is unavailable, but keeps
+            // the reason explicit and unblocks compilation/execution in environments where DB is available.
+            throw new XunitException(reason);
         }
 
         private static bool IsDockerAvailable()

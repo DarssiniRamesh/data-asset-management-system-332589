@@ -42,14 +42,6 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "DotNet.Testcontainers": {
-              "target": "Package",
-              "version": "[3.9.0, )"
-            },
-            "DotNet.Testcontainers.PostgreSql": {
-              "target": "Package",
-              "version": "[3.9.0, )"
-            },
             "Microsoft.AspNetCore.Mvc.Testing": {
               "target": "Package",
               "version": "[8.0.3, )"
@@ -57,6 +49,14 @@
             "Microsoft.NET.Test.Sdk": {
               "target": "Package",
               "version": "[17.9.0, )"
+            },
+            "Testcontainers": {
+              "target": "Package",
+              "version": "[4.11.0, )"
+            },
+            "Testcontainers.PostgreSql": {
+              "target": "Package",
+              "version": "[4.11.0, )"
             },
             "xunit": {
               "target": "Package",

@@ -2,14 +2,13 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using DataAssetBackend.Infrastructure.Database;
-using DotNet.Testcontainers.Builders;
-using DotNet.Testcontainers.Containers;
-using DotNet.Testcontainers.Configurations;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using Testcontainers.PostgreSql;
 using Xunit;
 
 namespace DataAssetBackend.Tests;
@@ -24,24 +23,18 @@ namespace DataAssetBackend.Tests;
 /// </summary>
 public sealed class DbTestAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private readonly IContainer _postgresContainer;
-
+    private readonly PostgreSqlContainer _postgres;
     private string? _connectionString;
     private string? _accessToken;
 
     public DbTestAppFactory()
     {
-        // Use explicit credentials so the connection string is deterministic.
-        var postgresConfig = new PostgreSqlTestcontainerConfiguration
-        {
-            Database = "assetdb",
-            Username = "postgres",
-            Password = "postgres"
-        };
-
-        _postgresContainer = new TestcontainersBuilder<PostgreSqlTestcontainer>()
-            .WithDatabase(postgresConfig)
+        // Testcontainers 4.x API: use PostgreSqlContainer from Testcontainers.PostgreSql package.
+        _postgres = new PostgreSqlBuilder()
             .WithImage("postgres:16-alpine")
+            .WithDatabase("assetdb")
+            .WithUsername("postgres")
+            .WithPassword("postgres")
             .WithCleanUp(true)
             .WithName($"data-asset-backend-tests-{Guid.NewGuid():N}")
             .Build();
@@ -68,25 +61,6 @@ public sealed class DbTestAppFactory : WebApplicationFactory<Program>, IAsyncLif
         // Run the app under a dedicated environment.
         builder.UseEnvironment("TestingDb");
 
-        builder.ConfigureServices(services =>
-        {
-            // Ensure no test-time stubs override real DB connectivity.
-            // (The default TestAppFactory replaces NpgsqlConnectionFactory; this factory must not.)
-            services.RemoveAll<NpgsqlConnectionFactory>();
-
-            // Re-add the real factory using a config provider that resolves our injected connection string.
-            services.AddSingleton<NpgsqlConnectionFactory>(sp =>
-            {
-                var configProvider = sp.GetRequiredService<DatabaseConfigProvider>();
-                var logger = sp.GetRequiredService<ILogger<NpgsqlConnectionFactory>>();
-                return new NpgsqlConnectionFactory(configProvider, logger);
-            });
-
-            // Make sure DatabaseConfigProvider sees our connection string.
-            // DatabaseConfigProvider prefers ConnectionStrings:Default.
-            services.PostConfigure<Microsoft.Extensions.Configuration.ConfigurationOptions>(_ => { });
-        });
-
         builder.ConfigureAppConfiguration((_, config) =>
         {
             // Inject connection string into configuration so DatabaseConfigProvider resolves it.
@@ -98,17 +72,29 @@ public sealed class DbTestAppFactory : WebApplicationFactory<Program>, IAsyncLif
 
             config.AddInMemoryCollection(dict);
         });
+
+        builder.ConfigureServices(services =>
+        {
+            // Ensure no test-time stubs override real DB connectivity.
+            // (The default TestAppFactory replaces NpgsqlConnectionFactory; this factory must not.)
+            services.RemoveAll<NpgsqlConnectionFactory>();
+
+            // Re-add the real factory using the existing DatabaseConfigProvider.
+            services.AddSingleton<NpgsqlConnectionFactory>(sp =>
+            {
+                var configProvider = sp.GetRequiredService<DatabaseConfigProvider>();
+                var logger = sp.GetRequiredService<ILogger<NpgsqlConnectionFactory>>();
+                return new NpgsqlConnectionFactory(configProvider, logger);
+            });
+        });
     }
 
     public async Task InitializeAsync()
     {
-        await _postgresContainer.StartAsync();
+        await _postgres.StartAsync();
 
-        // Build a connection string for Npgsql.
-        var host = _postgresContainer.Hostname;
-        var port = _postgresContainer.GetMappedPublicPort(5432);
-
-        _connectionString = $"Host={host};Port={port};Database=assetdb;Username=postgres;Password=postgres;Ssl Mode=Disable;";
+        // With Testcontainers.PostgreSql, the container provides a ready-to-use connection string.
+        _connectionString = _postgres.GetConnectionString();
 
         await ApplyMigrationsAsync(_connectionString);
 
@@ -134,9 +120,9 @@ public sealed class DbTestAppFactory : WebApplicationFactory<Program>, IAsyncLif
         }
     }
 
-    public async Task DisposeAsync()
+    public new async Task DisposeAsync()
     {
-        await _postgresContainer.DisposeAsync();
+        await _postgres.DisposeAsync();
     }
 
     private static async Task ApplyMigrationsAsync(string connectionString)

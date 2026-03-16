@@ -21,8 +21,8 @@
     </PackageReference>
 
     <!-- DB-backed BRD coverage tests (ephemeral Postgres via Testcontainers) -->
-    <PackageReference Include="DotNet.Testcontainers" Version="3.9.0" />
-    <PackageReference Include="DotNet.Testcontainers.PostgreSql" Version="3.9.0" />
+    <PackageReference Include="Testcontainers" Version="4.11.0" />
+    <PackageReference Include="Testcontainers.PostgreSql" Version="4.11.0" />
   </ItemGroup>
 
 </Project>

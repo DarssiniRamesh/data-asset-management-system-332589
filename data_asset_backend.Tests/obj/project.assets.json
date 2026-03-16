@@ -3680,6 +3680,8 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "DotNet.Testcontainers >= 3.9.0",
+      "DotNet.Testcontainers.PostgreSql >= 3.9.0",
       "Microsoft.AspNetCore.Mvc.Testing >= 8.0.3",
       "Microsoft.NET.Test.Sdk >= 17.9.0",
       "dotnet >= 1.0.0",
@@ -3728,6 +3730,14 @@
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
+          "DotNet.Testcontainers": {
+            "target": "Package",
+            "version": "[3.9.0, )"
+          },
+          "DotNet.Testcontainers.PostgreSql": {
+            "target": "Package",
+            "version": "[3.9.0, )"
+          },
           "Microsoft.AspNetCore.Mvc.Testing": {
             "target": "Package",
             "version": "[8.0.3, )"
@@ -3766,5 +3776,25 @@
         "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.122/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1102",
+      "level": "Error",
+      "message": "Unable to find package DotNet.Testcontainers with version (>= 3.9.0)\n  - Found 201 version(s) in nuget.org [ Nearest version: 1.7.0-beta.2269 ]",
+      "libraryId": "DotNet.Testcontainers",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
+      "code": "NU1101",
+      "level": "Error",
+      "message": "Unable to find package DotNet.Testcontainers.PostgreSql. No packages exist with this id in source(s): nuget.org",
+      "libraryId": "DotNet.Testcontainers.PostgreSql",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }

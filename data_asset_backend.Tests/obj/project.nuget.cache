@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "dgSpecHash": "/X1wT0m/rGE35uoAc+0hH/XhC+iZY+I0VNPQUuBBwxNjMKuyC7362CZntK5m8TVlxOp0aczhDE0uyhs6N/Zirg==",
-  "success": true,
+  "dgSpecHash": "qWth9KfZhX3e8/30u1mlwLbKKkMLL5GJuv66tINWfU/YMIoOAJVuPVco6spQEMIFPVOPTuycBX1PZttRvn9V/A==",
+  "success": false,
   "projectFilePath": "/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/DataAssetBackend.Tests.csproj",
   "expectedPackageFiles": [
     "/home/kavia/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/8.0.0/microsoft.aspnetcore.authentication.jwtbearer.8.0.0.nupkg.sha512",
@@ -77,5 +77,24 @@
     "/home/kavia/.nuget/packages/xunit.runner.visualstudio/2.5.7/xunit.runner.visualstudio.2.5.7.nupkg.sha512",
     "/home/kavia/.nuget/packages/yamldotnet/16.3.0/yamldotnet.16.3.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1102",
+      "level": "Error",
+      "message": "Unable to find package DotNet.Testcontainers with version (>= 3.9.0)\n  - Found 201 version(s) in nuget.org [ Nearest version: 1.7.0-beta.2269 ]",
+      "libraryId": "DotNet.Testcontainers",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
+      "code": "NU1101",
+      "level": "Error",
+      "message": "Unable to find package DotNet.Testcontainers.PostgreSql. No packages exist with this id in source(s): nuget.org",
+      "libraryId": "DotNet.Testcontainers.PostgreSql",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }

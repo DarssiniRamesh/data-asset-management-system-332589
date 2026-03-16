@@ -65,6 +65,34 @@ public static class AssetParentPseudoValidation
                         errors[nameof(CreateAssetRequest.ParentPseudoAssetId)] =
                             new[] { $"parentPseudoAssetId must reference an existing, non-deleted asset (id={parentPseudoAssetId.Value})." };
                     }
+                    else if (assetIdBeingUpdated.HasValue)
+                    {
+                        // Hierarchy integrity: prevent cycles (A->B->...->A) when updating.
+                        // We only need to check this when the "child" asset already exists (update path).
+                        var visited = new HashSet<long> { assetIdBeingUpdated.Value };
+                        long? currentId = parentPseudoAssetId;
+
+                        while (currentId is not null)
+                        {
+                            // If we ever see the updating asset again, we'd create a cycle.
+                            if (!visited.Add(currentId.Value))
+                            {
+                                errors[nameof(CreateAssetRequest.ParentPseudoAssetId)] =
+                                    new[] { "parentPseudoAssetId would create a cycle in the parent pseudo asset hierarchy." };
+                                break;
+                            }
+
+                            var current = await repository.GetByIdAsync(currentId.Value, cancellationToken);
+                            if (current is null)
+                            {
+                                errors[nameof(CreateAssetRequest.ParentPseudoAssetId)] =
+                                    new[] { "parentPseudoAssetId chain contains a missing or deleted asset." };
+                                break;
+                            }
+
+                            currentId = current.ParentPseudoAssetId;
+                        }
+                    }
                 }
             }
         }

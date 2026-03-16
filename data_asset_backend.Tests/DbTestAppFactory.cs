@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -15,7 +16,11 @@ namespace DataAssetBackend.Tests;
 
 /// <summary>
 /// DB-backed in-memory test host for DataAssetBackend minimal API.
-/// Spins up an ephemeral Postgres container, applies SQL migrations, and configures the API to use it.
+///
+/// Flow / selection contract:
+/// - Prefer DATABASE_URL (Neon / managed Postgres) when present.
+/// - Otherwise, if Docker is available, provision Postgres via Testcontainers.
+/// - Otherwise, cleanly skip DB-dependent tests with a clear reason.
 ///
 /// This factory is intentionally separate from <see cref="TestAppFactory"/>:
 /// - TestAppFactory stays DB-independent (fast validation tests).
@@ -23,22 +28,11 @@ namespace DataAssetBackend.Tests;
 /// </summary>
 public sealed class DbTestAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private readonly PostgreSqlContainer _postgres;
+    private const string TestingDbEnvironmentName = "TestingDb";
+
+    private PostgreSqlContainer? _postgres;
     private string? _connectionString;
     private string? _accessToken;
-
-    public DbTestAppFactory()
-    {
-        // Testcontainers 4.x API: use PostgreSqlContainer from Testcontainers.PostgreSql package.
-        _postgres = new PostgreSqlBuilder()
-            .WithImage("postgres:16-alpine")
-            .WithDatabase("assetdb")
-            .WithUsername("postgres")
-            .WithPassword("postgres")
-            .WithCleanUp(true)
-            .WithName($"data-asset-backend-tests-{Guid.NewGuid():N}")
-            .Build();
-    }
 
     /// <summary>
     /// Returns a client that includes Authorization + correlation header defaults (caller can override).
@@ -59,12 +53,13 @@ public sealed class DbTestAppFactory : WebApplicationFactory<Program>, IAsyncLif
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         // Run the app under a dedicated environment.
-        builder.UseEnvironment("TestingDb");
+        builder.UseEnvironment(TestingDbEnvironmentName);
 
         builder.ConfigureAppConfiguration((_, config) =>
         {
-            // Inject connection string into configuration so DatabaseConfigProvider resolves it.
-            // IMPORTANT: Use .NET config key for connection strings.
+            // IMPORTANT:
+            // The application prefers ConnectionStrings:Default (standard .NET) when provided.
+            // We always inject this to ensure the DB path is exercised for DB-backed tests.
             var dict = new Dictionary<string, string?>
             {
                 ["ConnectionStrings:Default"] = _connectionString
@@ -76,7 +71,7 @@ public sealed class DbTestAppFactory : WebApplicationFactory<Program>, IAsyncLif
         builder.ConfigureServices(services =>
         {
             // Ensure no test-time stubs override real DB connectivity.
-            // (The default TestAppFactory replaces NpgsqlConnectionFactory; this factory must not.)
+            // (TestAppFactory replaces NpgsqlConnectionFactory; this factory must not.)
             services.RemoveAll<NpgsqlConnectionFactory>();
 
             // Re-add the real factory using the existing DatabaseConfigProvider.
@@ -91,11 +86,18 @@ public sealed class DbTestAppFactory : WebApplicationFactory<Program>, IAsyncLif
 
     public async Task InitializeAsync()
     {
-        await _postgres.StartAsync();
+        var logger = LoggerFactory.Create(b => b.AddConsole()).CreateLogger<DbTestAppFactory>();
 
-        // With Testcontainers.PostgreSql, the container provides a ready-to-use connection string.
-        _connectionString = _postgres.GetConnectionString();
+        var resolution = await DbTestDatabaseProvisioning.ProvisionAsync(logger);
 
+        _connectionString = resolution.ConnectionString;
+        if (string.IsNullOrWhiteSpace(_connectionString))
+        {
+            // Should be unreachable given the ProvisionAsync contract.
+            throw new InvalidOperationException("DB test setup failed: no connection string was produced.");
+        }
+
+        // Ensure schema exists for whichever DB provider we chose.
         await ApplyMigrationsAsync(_connectionString);
 
         // Create a real token using the API's dev login endpoint.
@@ -122,7 +124,10 @@ public sealed class DbTestAppFactory : WebApplicationFactory<Program>, IAsyncLif
 
     public new async Task DisposeAsync()
     {
-        await _postgres.DisposeAsync();
+        if (_postgres is not null)
+        {
+            await _postgres.DisposeAsync();
+        }
     }
 
     private static async Task ApplyMigrationsAsync(string connectionString)
@@ -159,5 +164,143 @@ public sealed class DbTestAppFactory : WebApplicationFactory<Program>, IAsyncLif
             };
             await cmd.ExecuteNonQueryAsync();
         }
+    }
+
+    /// <summary>
+    /// Reusable flow that deterministically resolves how DB-backed tests get a Postgres connection string.
+    /// </summary>
+    private static class DbTestDatabaseProvisioning
+    {
+        /// <summary>
+        /// Attempts to provision a DB for DB-backed tests.
+        ///
+        /// Contract:
+        /// - Inputs: a logger.
+        /// - Outputs: a resolution containing a usable connection string.
+        /// - Errors: throws <see cref="SkipException"/> when DB tests should be skipped with a clear reason.
+        /// - Side effects: may start a Docker container (Testcontainers) when using container provider.
+        /// </summary>
+        public static async Task<DbTestDatabaseResolution> ProvisionAsync(ILogger logger)
+        {
+            // 1) Prefer Neon-style DATABASE_URL.
+            var dbUrl = GetFirstNonEmpty(
+                Environment.GetEnvironmentVariable("DATABASE_URL"),
+                Environment.GetEnvironmentVariable("database_url"));
+
+            dbUrl = NormalizeEnvValue(dbUrl);
+
+            if (!string.IsNullOrWhiteSpace(dbUrl))
+            {
+                try
+                {
+                    var ado = DatabaseUrlParser.ToAdoLikeConnectionString(dbUrl);
+                    logger.LogInformation("DbTestDatabaseProvisioning: using DATABASE_URL (managed Postgres).");
+                    return DbTestDatabaseResolution.FromManaged(ado);
+                }
+                catch (Exception ex)
+                {
+                    // If DATABASE_URL is present but invalid, fail fast rather than silently falling back.
+                    throw new InvalidOperationException("DATABASE_URL is set but could not be parsed into a Postgres connection string.", ex);
+                }
+            }
+
+            // 2) Fall back to Testcontainers if Docker is available.
+            if (!IsDockerAvailable())
+            {
+                var reason =
+                    "Skipping DB-backed tests: DATABASE_URL not set and Docker is not available (cannot start Testcontainers). " +
+                    "Set DATABASE_URL to a Neon/managed Postgres URL to run DB-backed tests.";
+                throw new SkipException(reason);
+            }
+
+            logger.LogInformation("DbTestDatabaseProvisioning: DATABASE_URL not set; using Testcontainers Postgres.");
+
+            var container = new PostgreSqlBuilder()
+                .WithImage("postgres:16-alpine")
+                .WithDatabase("assetdb")
+                .WithUsername("postgres")
+                .WithPassword("postgres")
+                .WithCleanUp(true)
+                .WithName($"data-asset-backend-tests-{Guid.NewGuid():N}")
+                .Build();
+
+            await container.StartAsync();
+
+            return DbTestDatabaseResolution.FromTestcontainer(container, container.GetConnectionString());
+        }
+
+        private static bool IsDockerAvailable()
+        {
+            try
+            {
+                // Deterministic check without requiring Docker SDKs:
+                // - if "docker" executable is missing -> not available
+                // - if docker fails -> not available
+                var psi = new ProcessStartInfo
+                {
+                    FileName = "docker",
+                    Arguments = "version --format '{{.Server.Version}}'",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+
+                using var proc = Process.Start(psi);
+                if (proc is null)
+                {
+                    return false;
+                }
+
+                // Hard timeout so tests don't hang.
+                if (!proc.WaitForExit(2500))
+                {
+                    try { proc.Kill(entireProcessTree: true); } catch { /* ignore */ }
+                    return false;
+                }
+
+                return proc.ExitCode == 0;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static string? GetFirstNonEmpty(params string?[] candidates)
+        {
+            foreach (var c in candidates)
+            {
+                if (!string.IsNullOrWhiteSpace(c))
+                {
+                    return c;
+                }
+            }
+
+            return null;
+        }
+
+        private static string? NormalizeEnvValue(string? value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return value;
+            }
+
+            // Trim whitespace and optional surrounding quotes that sometimes appear in env/.env injection.
+            return value.Trim().Trim('"').Trim('\'');
+        }
+    }
+
+    private sealed record DbTestDatabaseResolution(
+        string Provider,
+        string ConnectionString,
+        PostgreSqlContainer? Container)
+    {
+        public static DbTestDatabaseResolution FromManaged(string connectionString)
+            => new("Managed/DATABASE_URL", connectionString, null);
+
+        public static DbTestDatabaseResolution FromTestcontainer(PostgreSqlContainer container, string connectionString)
+            => new("Testcontainers", connectionString, container);
     }
 }

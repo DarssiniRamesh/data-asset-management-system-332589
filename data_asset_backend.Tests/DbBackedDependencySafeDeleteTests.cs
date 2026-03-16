@@ -4,6 +4,7 @@ using Xunit;
 
 namespace DataAssetBackend.Tests;
 
+[RequiresDatabase]
 public sealed class DbBackedDependencySafeDeleteTests : IClassFixture<DbTestAppFactory>
 {
     private readonly DbTestAppFactory _factory;

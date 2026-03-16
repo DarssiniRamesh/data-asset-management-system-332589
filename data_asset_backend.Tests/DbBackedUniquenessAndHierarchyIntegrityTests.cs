@@ -10,6 +10,7 @@ namespace DataAssetBackend.Tests;
 /// - Reporting attribute mapping uniqueness per asset
 /// - Parent pseudo hierarchy integrity (no self-parent, no cycles)
 /// </summary>
+[RequiresDatabase]
 public sealed class DbBackedUniquenessAndHierarchyIntegrityTests : IClassFixture<DbTestAppFactory>
 {
     private readonly DbTestAppFactory _factory;

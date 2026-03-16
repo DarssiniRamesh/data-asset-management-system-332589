@@ -14,6 +14,7 @@ namespace DataAssetBackend.Tests;
 ///   - throughput_equation + throughput_scalar
 ///   - data_input_value
 /// </summary>
+[RequiresDatabase]
 public sealed class DbBackedCopyReplicationCorrectnessTests : IClassFixture<DbTestAppFactory>
 {
     private readonly DbTestAppFactory _factory;

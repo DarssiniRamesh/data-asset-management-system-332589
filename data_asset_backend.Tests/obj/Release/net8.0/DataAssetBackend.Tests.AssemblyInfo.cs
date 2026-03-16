@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DataAssetBackend.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8ec9bd5abf8c2fb1b35d180bb3e6c27b8c7eeec3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+29abc53f48c3e164d2a1f360266c9f35689bde66")]
 [assembly: System.Reflection.AssemblyProductAttribute("DataAssetBackend.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DataAssetBackend.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

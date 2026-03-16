@@ -226,7 +226,8 @@ public sealed class DbTestAppFactory : WebApplicationFactory<Program>, IAsyncLif
                 var reason =
                     "Skipping DB-backed tests: DATABASE_URL not set and Docker is not available (cannot start Testcontainers). " +
                     "Set DATABASE_URL to a Neon/managed Postgres URL to run DB-backed tests.";
-                throw new SkipException(reason);
+
+                ThrowSkipWithReason(reason);
             }
 
             logger.LogInformation("DbTestDatabaseProvisioning: DATABASE_URL not set; using Testcontainers Postgres.");
@@ -243,6 +244,17 @@ public sealed class DbTestAppFactory : WebApplicationFactory<Program>, IAsyncLif
             await container.StartAsync();
 
             return DbTestDatabaseResolution.FromTestcontainer(container, container.GetConnectionString());
+        }
+
+        private static void ThrowSkipWithReason(string reason)
+        {
+            // Ensure the reason is visible even if the runner collapses skip messages.
+            // stderr is captured by `dotnet test` and by most CI systems.
+            Console.Error.WriteLine(reason);
+
+            // xUnit 2.7.0's SkipException does not have a (string) ctor.
+            // It *does* support SkipReason, which the runner uses for reporting.
+            throw new SkipException { SkipReason = reason };
         }
 
         private static bool IsDockerAvailable()

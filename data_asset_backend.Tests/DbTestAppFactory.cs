@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Testcontainers.PostgreSql;
 using Xunit;
+using Xunit.Sdk;
 
 namespace DataAssetBackend.Tests;
 
@@ -86,16 +87,31 @@ public sealed class DbTestAppFactory : WebApplicationFactory<Program>, IAsyncLif
 
     public async Task InitializeAsync()
     {
-        var logger = LoggerFactory.Create(b => b.AddConsole()).CreateLogger<DbTestAppFactory>();
+        var logger = LoggerFactory
+            .Create(b => b.AddConsole())
+            .CreateLogger<DbTestAppFactory>();
 
-        var resolution = await DbTestDatabaseProvisioning.ProvisionAsync(logger);
+        DbTestDatabaseResolution resolution;
+        try
+        {
+            resolution = await DbTestDatabaseProvisioning.ProvisionAsync(logger);
+        }
+        catch (SkipException)
+        {
+            // Let xUnit mark tests as skipped (cleanly) with the provided message.
+            throw;
+        }
 
         _connectionString = resolution.ConnectionString;
+        _postgres = resolution.Container;
+
         if (string.IsNullOrWhiteSpace(_connectionString))
         {
             // Should be unreachable given the ProvisionAsync contract.
             throw new InvalidOperationException("DB test setup failed: no connection string was produced.");
         }
+
+        logger.LogInformation("DbTestAppFactory: DB provider selected: {Provider}", resolution.Provider);
 
         // Ensure schema exists for whichever DB provider we chose.
         await ApplyMigrationsAsync(_connectionString);

@@ -248,12 +248,12 @@ public sealed class DbTestAppFactory : WebApplicationFactory<Program>, IAsyncLif
             // stderr is captured by `dotnet test` and by most CI systems.
             Console.Error.WriteLine(reason);
 
-            // We deliberately avoid Xunit.Sdk.SkipException here because its constructor/properties
-            // are not stable across xUnit versions and previously broke compilation.
+            // xUnit v2 provides a stable, public skipping API:
+            //   Xunit.Skip.If(condition, reason)
             //
-            // Throwing XunitException will fail the DB-backed tests when DB is unavailable, but keeps
-            // the reason explicit and unblocks compilation/execution in environments where DB is available.
-            throw new XunitException(reason);
+            // This marks tests as skipped (instead of failed) when DB infrastructure
+            // isn't available (no DATABASE_URL and Docker/Testcontainers not usable).
+            Skip.If(condition: true, reason);
         }
 
         private static bool IsDockerAvailable()

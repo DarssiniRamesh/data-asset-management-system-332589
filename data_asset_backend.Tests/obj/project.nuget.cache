@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "hwKZCnfEgW+fymZfVmi1zymvKmejZoDqcDdUT3kKglEyOHD1nH0rhJsilx+3Su6197nisubYh6p2Tvo0PvCI1w==",
+  "dgSpecHash": "KXnzn72SwUz1iIay72kPp0GTMam16ws5Q6Q9ncrKTmE/MmQBhjy6Fj1uf9vDgUNlT/GXqn87L154nd8a+P9cHA==",
   "success": true,
   "projectFilePath": "/home/kavia/workspace/code-generation/data-asset-management-system-332589/data_asset_backend.Tests/DataAssetBackend.Tests.csproj",
   "expectedPackageFiles": [
@@ -74,15 +74,48 @@
     "/home/kavia/.nuget/packages/system.text.json/8.0.0/system.text.json.8.0.0.nupkg.sha512",
     "/home/kavia/.nuget/packages/testcontainers/4.11.0/testcontainers.4.11.0.nupkg.sha512",
     "/home/kavia/.nuget/packages/testcontainers.postgresql/4.11.0/testcontainers.postgresql.4.11.0.nupkg.sha512",
+    "/home/kavia/.nuget/packages/validation/2.6.68/validation.2.6.68.nupkg.sha512",
     "/home/kavia/.nuget/packages/xunit/2.7.0/xunit.2.7.0.nupkg.sha512",
     "/home/kavia/.nuget/packages/xunit.abstractions/2.0.3/xunit.abstractions.2.0.3.nupkg.sha512",
     "/home/kavia/.nuget/packages/xunit.analyzers/1.11.0/xunit.analyzers.1.11.0.nupkg.sha512",
     "/home/kavia/.nuget/packages/xunit.assert/2.7.0/xunit.assert.2.7.0.nupkg.sha512",
     "/home/kavia/.nuget/packages/xunit.core/2.7.0/xunit.core.2.7.0.nupkg.sha512",
-    "/home/kavia/.nuget/packages/xunit.extensibility.core/2.7.0/xunit.extensibility.core.2.7.0.nupkg.sha512",
+    "/home/kavia/.nuget/packages/xunit.extensibility.core/2.8.0/xunit.extensibility.core.2.8.0.nupkg.sha512",
     "/home/kavia/.nuget/packages/xunit.extensibility.execution/2.7.0/xunit.extensibility.execution.2.7.0.nupkg.sha512",
     "/home/kavia/.nuget/packages/xunit.runner.visualstudio/2.5.7/xunit.runner.visualstudio.2.5.7.nupkg.sha512",
+    "/home/kavia/.nuget/packages/xunit.skippablefact/1.5.61/xunit.skippablefact.1.5.61.nupkg.sha512",
     "/home/kavia/.nuget/packages/yamldotnet/16.3.0/yamldotnet.16.3.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1603",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "DataAssetBackend.Tests depends on xunit.extensibility.core (>= 2.7.2) but xunit.extensibility.core 2.7.2 was not found. An approximate best match of xunit.extensibility.core 2.8.0 was resolved.",
+      "libraryId": "xunit.extensibility.core",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
+      "code": "NU1608",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Detected package version outside of dependency constraint: xunit.core 2.7.0 requires xunit.extensibility.core (= 2.7.0) but version xunit.extensibility.core 2.8.0 was resolved.",
+      "libraryId": "xunit.extensibility.core",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
+      "code": "NU1608",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Detected package version outside of dependency constraint: xunit.extensibility.execution 2.7.0 requires xunit.extensibility.core (= 2.7.0) but version xunit.extensibility.core 2.8.0 was resolved.",
+      "libraryId": "xunit.extensibility.core",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }

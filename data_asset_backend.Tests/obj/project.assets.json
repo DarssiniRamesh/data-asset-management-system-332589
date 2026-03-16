@@ -1520,6 +1520,19 @@
           }
         }
       },
+      "Validation/2.6.68": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/_._": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Validation.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "xunit/2.7.0": {
         "type": "package",
         "dependencies": {
@@ -1572,7 +1585,7 @@
           "buildMultiTargeting/xunit.core.targets": {}
         }
       },
-      "xunit.extensibility.core/2.7.0": {
+      "xunit.extensibility.core/2.8.0": {
         "type": "package",
         "dependencies": {
           "xunit.abstractions": "2.0.3"
@@ -1614,6 +1627,23 @@
         },
         "build": {
           "build/net6.0/xunit.runner.visualstudio.props": {}
+        }
+      },
+      "Xunit.SkippableFact/1.5.61": {
+        "type": "package",
+        "dependencies": {
+          "Validation": "2.6.68",
+          "xunit.extensibility.execution": "2.4.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Xunit.SkippableFact.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Xunit.SkippableFact.dll": {
+            "related": ".xml"
+          }
         }
       },
       "YamlDotNet/16.3.0": {
@@ -3751,6 +3781,29 @@
         "testcontainers.postgresql.nuspec"
       ]
     },
+    "Validation/2.6.68": {
+      "sha512": "5mZ+aXsYQnr3Wxz5O2tmbgPaa5kn9R+ZlfnPyGBogXI2sh4uTiHtvU++N4bURtn9vmDYIu2Zu323K9hFz9poXQ==",
+      "type": "package",
+      "path": "validation/2.6.68",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "3rdPartyNotices.txt",
+        "README.md",
+        "lib/net35/Validation.dll",
+        "lib/net35/Validation.xml",
+        "lib/net462/Validation.dll",
+        "lib/net462/Validation.xml",
+        "lib/net8.0/Validation.dll",
+        "lib/net8.0/Validation.xml",
+        "lib/net9.0/Validation.dll",
+        "lib/net9.0/Validation.xml",
+        "lib/netstandard2.0/Validation.dll",
+        "lib/netstandard2.0/Validation.xml",
+        "validation.2.6.68.nupkg.sha512",
+        "validation.nuspec"
+      ]
+    },
     "xunit/2.7.0": {
       "sha512": "KcCI5zxh8zbUfQTeErc4oT7YokViVND2V0p4vDJ2VD4lhF9V5qCYMMDNixme7FdwYy3SwPHF+2xC2Dq4Z9GSlA==",
       "type": "package",
@@ -3839,10 +3892,10 @@
         "xunit.core.nuspec"
       ]
     },
-    "xunit.extensibility.core/2.7.0": {
-      "sha512": "JLnx4PI0vn1Xr1Ust6ydrp2t/ktm2dyGPAVoDJV5gQuvBMSbd2K7WGzODa2ttiz030CeQ8nbsXl05+cvf7QNyA==",
+    "xunit.extensibility.core/2.8.0": {
+      "sha512": "eBJv9xQeY0p5z+C/L1tFjUFYqtl5pQqIEYCGTMl+MbRzA7sOlgYKwJE//vEePBp+mgBh7NjD0Qhz0liZBYM27w==",
       "type": "package",
-      "path": "xunit.extensibility.core/2.7.0",
+      "path": "xunit.extensibility.core/2.8.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -3855,7 +3908,7 @@
         "lib/net452/xunit.runner.utility.net452.dll",
         "lib/netstandard1.1/xunit.core.dll",
         "lib/netstandard1.1/xunit.core.xml",
-        "xunit.extensibility.core.2.7.0.nupkg.sha512",
+        "xunit.extensibility.core.2.8.0.nupkg.sha512",
         "xunit.extensibility.core.nuspec"
       ]
     },
@@ -3901,6 +3954,22 @@
         "xunit.runner.visualstudio.nuspec"
       ]
     },
+    "Xunit.SkippableFact/1.5.61": {
+      "sha512": "ZoahExHGire3U1b9RLUQJuoofMKwJKd6U60cqaomh0llL8ns1evvl8ivXLP1Bw3nPUR0ELfSVZ0giKnMoqPCfQ==",
+      "type": "package",
+      "path": "xunit.skippablefact/1.5.61",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net462/Xunit.SkippableFact.dll",
+        "lib/net462/Xunit.SkippableFact.xml",
+        "lib/netstandard2.0/Xunit.SkippableFact.dll",
+        "lib/netstandard2.0/Xunit.SkippableFact.xml",
+        "xunit.skippablefact.1.5.61.nupkg.sha512",
+        "xunit.skippablefact.nuspec"
+      ]
+    },
     "YamlDotNet/16.3.0": {
       "sha512": "SgMOdxbz8X65z8hraIs6hOEdnkH6hESTAIUa7viEngHOYaH+6q5XJmwr1+yb9vJpNQ19hCQY69xbFsLtXpobQA==",
       "type": "package",
@@ -3936,8 +4005,13 @@
       "Microsoft.NET.Test.Sdk >= 17.9.0",
       "Testcontainers >= 4.11.0",
       "Testcontainers.PostgreSql >= 4.11.0",
+      "Xunit.SkippableFact >= 1.5.61",
       "dotnet >= 1.0.0",
       "xunit >= 2.7.0",
+      "xunit.abstractions >= 2.0.3",
+      "xunit.core >= 2.7.0",
+      "xunit.extensibility.core >= 2.7.2",
+      "xunit.extensibility.execution >= 2.7.0",
       "xunit.runner.visualstudio >= 2.5.7"
     ]
   },
@@ -3998,7 +4072,27 @@
             "target": "Package",
             "version": "[4.11.0, )"
           },
+          "Xunit.SkippableFact": {
+            "target": "Package",
+            "version": "[1.5.61, )"
+          },
           "xunit": {
+            "target": "Package",
+            "version": "[2.7.0, )"
+          },
+          "xunit.abstractions": {
+            "target": "Package",
+            "version": "[2.0.3, )"
+          },
+          "xunit.core": {
+            "target": "Package",
+            "version": "[2.7.0, )"
+          },
+          "xunit.extensibility.core": {
+            "target": "Package",
+            "version": "[2.7.2, )"
+          },
+          "xunit.extensibility.execution": {
             "target": "Package",
             "version": "[2.7.0, )"
           },
@@ -4028,5 +4122,37 @@
         "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.122/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1603",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "DataAssetBackend.Tests depends on xunit.extensibility.core (>= 2.7.2) but xunit.extensibility.core 2.7.2 was not found. An approximate best match of xunit.extensibility.core 2.8.0 was resolved.",
+      "libraryId": "xunit.extensibility.core",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
+      "code": "NU1608",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Detected package version outside of dependency constraint: xunit.core 2.7.0 requires xunit.extensibility.core (= 2.7.0) but version xunit.extensibility.core 2.8.0 was resolved.",
+      "libraryId": "xunit.extensibility.core",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
+      "code": "NU1608",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Detected package version outside of dependency constraint: xunit.extensibility.execution 2.7.0 requires xunit.extensibility.core (= 2.7.0) but version xunit.extensibility.core 2.8.0 was resolved.",
+      "libraryId": "xunit.extensibility.core",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }

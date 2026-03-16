@@ -248,12 +248,13 @@ public sealed class DbTestAppFactory : WebApplicationFactory<Program>, IAsyncLif
             // stderr is captured by `dotnet test` and by most CI systems.
             Console.Error.WriteLine(reason);
 
-            // xUnit v2 provides a stable, public skipping API:
-            //   Xunit.Skip.If(condition, reason)
+            // xUnit (v2) does not have a universally-available public `Skip` API type.
+            // The most compatible way to skip at runtime (especially from shared fixtures /
+            // factories) is to throw an XunitException with the reserved `SKIP:` prefix.
             //
-            // This marks tests as skipped (instead of failed) when DB infrastructure
-            // isn't available (no DATABASE_URL and Docker/Testcontainers not usable).
-            Skip.If(condition: true, reason);
+            // xUnit recognizes this pattern and reports the affected tests as Skipped
+            // (not Failed), while avoiding reliance on internal/non-public skip types.
+            throw new XunitException($"SKIP: {reason}");
         }
 
         private static bool IsDockerAvailable()

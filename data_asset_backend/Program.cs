@@ -959,6 +959,72 @@ app.MapPost("/api/assets/{assetId:long}/copy", async (
     .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
     .ProducesProblem(StatusCodes.Status409Conflict);
 
+// Legacy compatibility: simplified copy payload (generates a fresh unique globalUniqueAssetId for the target).
+app.MapPost("/api/assets/{assetId:long}/copy-legacy", async (
+        long assetId,
+        LegacyCopyAssetRequest request,
+        AssetRepository assetRepository,
+        AssetCopyRepository copyRepository,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken) =>
+    {
+        var logger = loggerFactory.CreateLogger("CopyAssetLegacy");
+
+        try
+        {
+            // Load source asset so we can preserve header fields that legacy request doesn't provide.
+            var source = await AssetFlows.GetAssetAsync(assetId, assetRepository, logger, cancellationToken);
+            if (source.Asset is null)
+            {
+                return Results.NotFound();
+            }
+
+            var canonical = LegacyCopyAssetMapper.ToCanonical(
+                request,
+                source.Asset,
+                actor: "legacy-copy",
+                correlationId: $"corr-{Guid.NewGuid():N}");
+
+            var result = await AssetCopyFlows.CopyAssetAsync(
+                new AssetCopyFlows.CopyAssetFlowRequest(assetId, canonical),
+                copyRepository,
+                logger,
+                cancellationToken);
+
+            return Results.Created($"/api/assets/{result.Response.TargetAsset.AssetId}", result.Response);
+        }
+        catch (AssetRepository.EntityNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning(ex, "CopyAssetLegacy failed: DB not configured.");
+            return Results.Problem(
+                title: "Database not configured",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (PostgresException ex)
+        {
+            logger.LogWarning(ex, "CopyAssetLegacy failed due to database constraint error.");
+            return Results.Problem(
+                title: "Database constraint error",
+                detail: ex.MessageText,
+                statusCode: StatusCodes.Status409Conflict);
+        }
+    })
+    .RequireAuthorization("CanWrite")
+    .WithName("CopyAssetLegacy")
+    .WithTags("Assets")
+    .WithSummary("Copy asset (legacy compatibility)")
+    .WithDescription("Legacy compatibility endpoint for simplified copy requests. Server generates a new unique globalUniqueAssetId for the copied asset to avoid uq_asset_global_unique_asset_id conflicts.")
+    .Accepts<LegacyCopyAssetRequest>("application/json")
+    .Produces<CopyAssetResponse>(StatusCodes.Status201Created)
+    .Produces(StatusCodes.Status404NotFound)
+    .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+    .ProducesProblem(StatusCodes.Status409Conflict);
+
 // ---------------------------------------------------------------------
 // Asset child endpoints (BRD-evidenced asset-scoped child resources)
 // ---------------------------------------------------------------------

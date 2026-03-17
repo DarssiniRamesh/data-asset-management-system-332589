@@ -50,6 +50,10 @@ public static class AssetCopyFlows
             flowRequest.SourceAssetId,
             flowRequest.Request.CopyOperationId);
 
+        // Copy semantics: the target asset must represent a *new* asset.
+        // Enforce uniqueness server-side so the UI/client never has to manually tweak IDs.
+        AssetCopyIdPolicy.ApplyServerGeneratedIdsForCopy(flowRequest.Request, logger);
+
         var result = await copyRepository.CopyAssetAsync(
             flowRequest.SourceAssetId,
             flowRequest.Request,

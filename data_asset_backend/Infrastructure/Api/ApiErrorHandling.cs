@@ -213,8 +213,8 @@ public static class ApiErrorHandling
                     {
                         return (
                             StatusCodes.Status409Conflict,
-                            "Duplicate Global Unique Asset ID",
-                            "globalUniqueAssetId must be unique. A non-deleted asset already exists with the provided globalUniqueAssetId."
+                            "Copy conflict (Global Unique Asset ID)",
+                            "Copy failed due to a uniqueness conflict on globalUniqueAssetId. The server generates a fresh globalUniqueAssetId for copy; please retry the copy request. If the issue persists, contact support with the traceId."
                         );
                     }
 
@@ -222,8 +222,8 @@ public static class ApiErrorHandling
                     {
                         return (
                             StatusCodes.Status409Conflict,
-                            "Duplicate Permit EU ID",
-                            "permitEuId must be unique. A non-deleted asset already exists with the provided permitEuId."
+                            "Copy conflict (Permit EU ID)",
+                            "Copy failed due to a uniqueness conflict on permitEuId. The server generates a fresh permitEuId for copy; please retry the copy request. If the issue persists, contact support with the traceId."
                         );
                     }
 
